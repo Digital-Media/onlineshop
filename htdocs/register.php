@@ -1,4 +1,6 @@
 <?php
+use onlineshop\src\exercises\Register;
+
 /**
  * Einbinden der define-Angaben für den OnlineShop
  */

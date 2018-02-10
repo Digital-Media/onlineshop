@@ -1,4 +1,13 @@
 <?php
+namespace onlineshop\src\exercises;
+
+use AbstractNormForm;
+use DBAccess;
+use GenericParameter;
+use PostParameter;
+use Utilities;
+use View;
+
 /**
  * Class Shop implementiert die Startseite (index.php) des OnlineShop
  *

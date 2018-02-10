@@ -1,4 +1,13 @@
 <?php
+namespace onlineshop\src\exercises;
+
+use AbstractNormForm;
+use DBAccess;
+use GenericParameter;
+use PostParameter;
+use Utilities;
+use View;
+
 /*
  * Das  Registrier-Formular setzt die Registrierung im OnlineShop um.
  *
