@@ -1,18 +1,20 @@
 <?php
+session_start();
 /**
  * Einbinden der define-Angaben für den OnlineShop
  */
-require_once 'src/defines.inc.php';
+require_once '../src/defines.inc.php';
 require_once UTILITIES;
 /**
  * Einbinden der Klasse TNormform, die die Formularabläufe festlegt.
  */
+require_once SMARTY;
 require_once TNORMFORM;
 /**
  * Einbinden der Datenbank-Klasse  DBAccess, die die Datenbankzugriffe implementiert
  */
 require_once DBACCESS;
-require_once 'src/dbdemo.php';
+require_once '../src/exercises/shop.php';
 
 /* --- This is the main call of the norm form process
  *
@@ -22,15 +24,15 @@ require_once 'src/dbdemo.php';
  */
 try {
     // Defines a new view that specifies the template and the parameters that are passed to the template
-    $view = new View("dbdemoMain.tpl", [
-        new PostParameter(DBDemo::PTYPE)
+    $view = new View("indexMain.tpl", [
+        new PostParameter(Shop::SEARCH)
     ]);
-    // Creates a new Product object and triggers the NormForm process
-    $dbdemo = new DBDemo($view);
-    $dbdemo->normForm();
+    // Creates a new Shop object and triggers the NormForm process
+    $shop = new Shop($view);
+    $shop->normForm();
 } catch (Exception $e) {
     if (DEBUG) {
-        echo "An error occured in file " . $e->getFile() ." on line " . $e->getLine() .":" . $e->getMessage();
+        echo $e->getMessage();
     } else {
         echo "<h2>Something went wrong</h2>";
     }

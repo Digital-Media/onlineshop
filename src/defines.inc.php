@@ -18,11 +18,15 @@ if (DEBUG) {
 /**
  * Pfade zu inkludierten Dateien
  */
-define("NORM_DIR", "vendor/normform/");
-define("UTILITIES", "src/Utilities.php");
+/**
+ * @var string NORM_DIR The Path to the NormForm library.
+ */
+define("SMARTY", "../vendor/smarty/smarty/libs/Smarty.class.php");
+define("NORM_DIR", "../vendor/normform/");
+define("UTILITIES", "../src/Utilities.php");
 define("TNORMFORM", NORM_DIR . "AbstractNormform.php");
 define("CSS_DIR", "css");
-define("DBACCESS", "src/DBAccess.php");
+define("DBACCESS", "../src/DBAccess.php");
 
 /**
  * @var string IS_LOGGED_IN Key for the session field which remembers that a user is currently logged in.
