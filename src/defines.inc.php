@@ -21,7 +21,7 @@ if (DEBUG) {
 define("NORM_DIR", "vendor/normform/");
 define("UTILITIES", "src/Utilities.php");
 define("TNORMFORM", NORM_DIR . "AbstractNormform.php");
-define("CSS_DIR", NORM_DIR . "css");
+define("CSS_DIR", "css");
 define("DBACCESS", "src/DBAccess.php");
 
 /**
