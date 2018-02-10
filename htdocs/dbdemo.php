@@ -1,4 +1,6 @@
 <?php
+use onlineshop\src\DBDemo;
+
 /**
  * Einbinden der define-Angaben für den OnlineShop
  */

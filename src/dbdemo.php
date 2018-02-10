@@ -1,4 +1,13 @@
 <?php
+namespace onlineshop\src;
+
+use AbstractNormForm;
+use DBAccess;
+use GenericParameter;
+use PostParameter;
+use Utilities;
+use View;
+
 /**
  * Class DBDEmo implementiert eine Demoseite für die Normform zusammen mit der Datenbankklasse DBAccess des OnlineShop
  *

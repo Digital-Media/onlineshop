@@ -1,4 +1,13 @@
 <?php
+namespace onlineshop\src\exercises;
+
+use AbstractNormForm;
+use DBAccess;
+use GenericParameter;
+use PostParameter;
+use Utilities;
+use View;
+
 /*
  * Das Warenkorbformular zeigt den Inhalte des Warenkorbs im OnlineShop an und läßt eine Änderung der Bestellmenge zu.
  *

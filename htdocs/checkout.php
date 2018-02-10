@@ -1,4 +1,6 @@
 <?php
+use onlineshop\src\exercises\Checkout;
+
 session_start();
 /**
  * Einbinden der define-Angaben für den OnlineShop
