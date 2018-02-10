@@ -3,17 +3,18 @@ session_start();
 /**
  * Einbinden der define-Angaben für den OnlineShop
  */
-require_once 'src/defines.inc.php';
+require_once '../src/defines.inc.php';
 require_once UTILITIES;
 /**
  * Einbinden der Klasse TNormform, die die Formularabläufe festlegt.
  */
+require_once SMARTY;
 require_once TNORMFORM;
 /**
  * Einbinden der Datenbank-Klasse DBAccess, die die Datenbankzugriffe implementiert
  */
 require_once DBACCESS;
-require_once 'src/exercises/product.php';
+require_once '../src/exercises/product.php';
 
 /* --- This is the main call of the norm form process
  *
