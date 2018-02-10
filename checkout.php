@@ -13,7 +13,7 @@ require_once TNORMFORM;
  * Einbinden der Datenbank-Klasse  DBAccess, die die Datenbankzugriffe implementiert
  */
 require_once DBACCESS;
-require_once 'src/excercises/checkout.php';
+require_once 'src/exercises/checkout.php';
 /* --- This is the main call of the norm form process
  *
  * Datenbank-Exceptions werden erst hier abgefangen und eine formatierte DEBUG-Seite mit den Fehlermeldungen

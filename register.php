@@ -12,7 +12,7 @@ require_once TNORMFORM;
  * Einbinden der Datenbank-Klasse  DBAccess, die die Datenbankzugriffe implementiert
  */
 require_once DBACCESS;
-require_once 'src/excercises/register.php';
+require_once 'src/exercises/register.php';
 
 /* --- This is the main call of the norm form process
  *

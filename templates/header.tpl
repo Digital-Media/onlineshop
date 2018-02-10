@@ -13,7 +13,7 @@
     <div class="Header Header--small">
         <div class="Header-titles">
             <h1 class="Header-title"><i class="fa fa-shopping-bag" aria-hidden="true"></i>OnlineShop</h1>
-            <p class="Header-subtitle">For Database Excercises</p>
+            <p class="Header-subtitle">For Database Exercises</p>
         </div>
         {if isset($smarty.session.IS_LOGGED_IN)}
         <div class="Header-logout">
