@@ -98,7 +98,7 @@ final class Shop extends AbstractNormForm
     {
         parent::__construct($defaultView, $templateDir, $compileDir);
         /*--
-        require '../onlineshopsolution/index/construct.inc.php';
+        require '../../onlineshopsolution/index/construct.inc.php';
         //*/
         // Add the images to our view since we can't do this from outside the object
         $this->currentView->setParameter(new GenericParameter("startKey", self::START));
@@ -125,7 +125,7 @@ final class Shop extends AbstractNormForm
     protected function isValid(): bool
     {
         /*--
-        require '../onlineshopsolution/index/isValid.inc.php';
+        require '../../onlineshopsolution/index/isValid.inc.php';
         //*/
 
         $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
@@ -206,7 +206,7 @@ final class Shop extends AbstractNormForm
                                               'price' => 100000,00));
         //*/
         /*--
-        require '../onlineshopsolution/index/fillpageArray.inc.php';
+        require '../../onlineshopsolution/index/fillpageArray.inc.php';
         return $this->dbAccess->fetchResultset();
         //*/
     }
@@ -312,7 +312,7 @@ final class Shop extends AbstractNormForm
         $this->pagecount = 2;
         //*/
         /*--
-        require '../onlineshopsolution/index/setPageCount.inc.php';
+        require '../../onlineshopsolution/index/setPageCount.inc.php';
         //*/
     }
 
@@ -474,7 +474,7 @@ final class Shop extends AbstractNormForm
         return true;
         //*/
         /*--
-        require '../onlineshopsolution/index/isValidPid.inc.php';
+        require '../../onlineshopsolution/index/isValidPid.inc.php';
         if ($count['count'] === "1") {
             return true;
         } else {
@@ -501,7 +501,7 @@ final class Shop extends AbstractNormForm
         return true;
         //*/
         /*--
-        require '../onlineshopsolution/index/addToCart.inc.php';
+        require '../../onlineshopsolution/index/addToCart.inc.php';
         //*/
     }
 }

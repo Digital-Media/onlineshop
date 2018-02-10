@@ -58,7 +58,7 @@ final class MyCart extends AbstractNormForm
     {
         parent::__construct($defaultView, $templateDir, $compileDir);
         /*--
-        require '../onlineshopsolution/mycart/construct.inc.php';
+        require '../../onlineshopsolution/mycart/construct.inc.php';
         //*/
         // Add the images to our view since we can't do this from outside the object
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
@@ -80,7 +80,7 @@ final class MyCart extends AbstractNormForm
     protected function isValid(): bool
     {
         /*--
-        require '../onlineshopsolution/mycart/isValid.inc.php';
+        require '../../onlineshopsolution/mycart/isValid.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
         return (count($this->errorMessages) === 0);
@@ -145,7 +145,7 @@ final class MyCart extends AbstractNormForm
                                  'quantity' => 1));
         //*/
         /*--
-        require '../onlineshopsolution/mycart/fillpageArray.inc.php';
+        require '../../onlineshopsolution/mycart/fillpageArray.inc.php';
         $this->pageArray = $this->dbAccess->fetchResultset();
         return $this->pageArray;
         //*/
@@ -168,7 +168,7 @@ final class MyCart extends AbstractNormForm
     private function changeCart()
     {
         /*--
-        require '../onlineshopsolution/mycart/changeCart.inc.php';
+        require '../../onlineshopsolution/mycart/changeCart.inc.php';
         //*/
     }
 
@@ -182,7 +182,7 @@ final class MyCart extends AbstractNormForm
     private function deleteFromCart($delete_array)
     {
         /*--
-        require '../onlineshopsolution/mycart/deleteFromCart.inc.php';
+        require '../../onlineshopsolution/mycart/deleteFromCart.inc.php';
         //*/
     }
 
@@ -198,7 +198,7 @@ final class MyCart extends AbstractNormForm
     private function updateCart($update_array)
     {
         /*--
-        require '../onlineshopsolution/mycart/updateCart.inc.php';
+        require '../../onlineshopsolution/mycart/updateCart.inc.php';
         //*/
     }
 }

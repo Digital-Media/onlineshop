@@ -62,7 +62,7 @@ final class Register extends AbstractNormForm
     {
         parent::__construct($defaultView, $templateDir, $compileDir);
         /*--
-        require '../onlineshopsolution/register/construct.inc.php';
+        require '../../onlineshopsolution/register/construct.inc.php';
         //*/
     }
 
@@ -86,7 +86,7 @@ final class Register extends AbstractNormForm
     protected function isValid(): bool
     {
         /*--
-        require '../onlineshopsolution/register/isValid.inc.php';
+        require '../../onlineshopsolution/register/isValid.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
         return (count($this->errorMessages) === 0);
@@ -124,7 +124,7 @@ final class Register extends AbstractNormForm
         return true;
         //*/
         /*--
-        require '../onlineshopsolution/register/isUniqueEmail.inc.php';
+        require '../../onlineshopsolution/register/isUniqueEmail.inc.php';
         if (count($rows) === 0) {
             return true;
         } else {
@@ -159,7 +159,7 @@ final class Register extends AbstractNormForm
         return true;
         //*/
         /*--
-        require '../onlineshopsolution/register/addUser.inc.php';
+        require '../../onlineshopsolution/register/addUser.inc.php';
         //*/
     }
 }
