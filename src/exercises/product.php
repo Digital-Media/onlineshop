@@ -2,10 +2,10 @@
 namespace onlineshop\src\exercises;
 
 use AbstractNormForm;
-use DBAccess;
+use onlineshop\src\DBAccess;
 use GenericParameter;
 use PostParameter;
-use Utilities;
+use onlineshop\src\Utilities;
 use View;
 
 /*

@@ -1,4 +1,9 @@
 <?php
+namespace onlineshop\src;
+
+use \PDOException;
+use \PDO;
+
 /*
  * Einbinden der Klasse für die Datenbankexception
  */

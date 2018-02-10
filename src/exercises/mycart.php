@@ -2,10 +2,10 @@
 namespace onlineshop\src\exercises;
 
 use AbstractNormForm;
-use DBAccess;
+use onlineshop\src\DBAccess;
 use GenericParameter;
 use PostParameter;
-use Utilities;
+use onlineshop\src\Utilities;
 use View;
 
 /*
@@ -34,6 +34,8 @@ use View;
  */
 final class MyCart extends AbstractNormForm
 {
+    // make trait Utilities accessible via $this->
+    use Utilities;
     /**
      *  Konstante für ein HTML Attribute <input name='quantity' id='quantity' ... >,
      * <label for='quantity' ... > --> $_POST[QUANTITY].

@@ -1,4 +1,5 @@
 <?php
+namespace onlineshop\src;
 
 /**
  * Offers static helper methods for often used tasks.

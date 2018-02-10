@@ -1,5 +1,6 @@
 <?php
 use onlineshop\src\exercises\Checkout;
+use onlineshop\src\Utilities;
 
 session_start();
 /**

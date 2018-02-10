@@ -1,5 +1,5 @@
 <?php
-namespace onlineshop;
+namespace onlineshop\src;
 
 use Exception;
 

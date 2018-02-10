@@ -2,10 +2,10 @@
 namespace onlineshop\src\exercises;
 
 use AbstractNormForm;
-use DBAccess;
+use onlineshop\src\DBAccess;
 use GenericParameter;
 use PostParameter;
-use Utilities;
+use onlineshop\src\Utilities;
 use View;
 
 /**
@@ -25,6 +25,8 @@ use View;
  */
 final class Login extends AbstractNormForm
 {
+    // make trait Utilities accessible via $this->
+    use Utilities;
     /**
      *  Konstanten für ein HTML Attribute <input name='email' id='email' ... >,
      *  <label for='email' ... > --> $_POST[EMAIL].
