@@ -2,10 +2,10 @@
 namespace onlineshop\src\exercises;
 
 use AbstractNormForm;
-use DBAccess;
+use onlineshop\src\DBAccess;
 use GenericParameter;
 use PostParameter;
-use Utilities;
+use onlineshop\src\Utilities;
 use View;
 
 /**
@@ -28,7 +28,8 @@ use View;
  */
 final class Shop extends AbstractNormForm
 {
-
+    // make trait Utilities accessible via $this->
+    use Utilities;
     /**
      * Konstanten für ein HTML Attribute in <input name='pname' id='pname' ... >, <label for='pname' ... >
      * --> $_POST[PNAME] und GET-Parameter für Shop::addToCart() bzw. das Blättern

@@ -2,10 +2,10 @@
 namespace onlineshop\src\exercises;
 
 use AbstractNormForm;
-use DBAccess;
+use onlineshop\src\DBAccess;
 use GenericParameter;
 use PostParameter;
-use Utilities;
+use onlineshop\src\Utilities;
 use View;
 
 /*
@@ -24,6 +24,8 @@ use View;
  */
 final class Register extends AbstractNormForm
 {
+    // make trait Utilities accessible via $this->
+    use Utilities;
     /**
      *  Konstanten für ein HTML Attribute <input name='firstname' id='firstname' ... >,
      * <label for='firstname' ... > --> $_POST[FIRSTNAME].
