@@ -52,7 +52,7 @@ final class Product extends AbstractNormForm
     {
         parent::__construct($defaultView, $templateDir, $compileDir);
         /*--
-        require '../onlineshopsolution/product/construct.inc.php';
+        require '../../onlineshopsolution/product/construct.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("ptypeArray", $this->autofillPTypeArray()));
     }
@@ -75,7 +75,7 @@ final class Product extends AbstractNormForm
     protected function isValid(): bool
     {
         /*--
-        require '../onlineshopsolution/product/isValid.inc.php';
+        require '../../onlineshopsolution/product/isValid.inc.php';
         //*/
         $this->currentView->setParameter(
             new GenericParameter("selected", Utilities::sanitizeFilter($_POST[self::PTYPE]))
@@ -98,7 +98,7 @@ final class Product extends AbstractNormForm
     {
         $this->addProduct();
         /*--
-        require '../onlineshopsolution/product/business.inc.php';
+        require '../../onlineshopsolution/product/business.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
         $this->currentView->setParameter(new GenericParameter("ptypeArray", $this->autofillPTypeArray()));
@@ -127,7 +127,7 @@ final class Product extends AbstractNormForm
                       2 => array('product_category_name' => 'Yes, you should!'));
         //*/
         /*--
-        require '../onlineshopsolution/product/autofillPTypeArray.inc.php';
+        require '../../onlineshopsolution/product/autofillPTypeArray.inc.php';
         return $this->dbAccess->fetchResultset();
         //*/
     }
@@ -145,7 +145,7 @@ final class Product extends AbstractNormForm
         return true;
         //*/
         /*--
-        require '../onlineshopsolution/product/isValidPType.inc.php';
+        require '../../onlineshopsolution/product/isValidPType.inc.php';
         if (count($rows) !== 0) {
             return true;
         } else {
@@ -168,7 +168,7 @@ final class Product extends AbstractNormForm
         return true;
         //*/
         /*--
-        require '../onlineshopsolution/product/isUniquePName.inc.php';
+        require '../../onlineshopsolution/product/isUniquePName.inc.php';
         if (count($rows) !== 0) {
             return false;
         } else {
@@ -186,7 +186,7 @@ final class Product extends AbstractNormForm
     private function addProduct()
     {
         /*--
-        require '../onlineshopsolution/product/addProduct.inc.php';
+        require '../../onlineshopsolution/product/addProduct.inc.php';
         $this->dbAccess->executeStmt($params);
         //*/
     }

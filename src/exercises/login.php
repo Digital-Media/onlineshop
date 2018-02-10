@@ -50,7 +50,7 @@ final class Login extends AbstractNormForm
     {
         parent::__construct($defaultView, $templateDir, $compileDir);
         /*--
-        require '../onlineshopsolution/login/construct.inc.php';
+        require '../../onlineshopsolution/login/construct.inc.php';
         //*/
     }
 
@@ -68,7 +68,7 @@ final class Login extends AbstractNormForm
     protected function isValid(): bool
     {
         /*--
-        require '../onlineshopsolution/login/isValid.inc.php';
+        require '../../onlineshopsolution/login/isValid.inc.php';
         //*/
         //##
         $this->authenticateUser();
@@ -137,7 +137,7 @@ final class Login extends AbstractNormForm
         return true;
         //*/
         /*--
-        require '../onlineshopsolution/login/updateCart.inc.php';
+        require '../../onlineshopsolution/login/updateCart.inc.php';
         //*/
     }
 }
