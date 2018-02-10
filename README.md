@@ -1,4 +1,4 @@
-﻿# MH_DBA-DAB_OnlineShop 2016.0
+﻿# onlineshop 2018.0
 Der Onlineshop stellt das Grundgerüst für Übungen im Datenbankbereich zur Verfügung.
 
 Templates und CSS werden vollständig zur Verfügung gestellt, weil dies in anderen Vorlesungs- und Übungsblöcken
