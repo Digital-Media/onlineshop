@@ -15,7 +15,7 @@
             <h1 class="Header-title"><i class="fa fa-shopping-bag" aria-hidden="true"></i>OnlineShop</h1>
             <p class="Header-subtitle">For Database Exercises</p>
         </div>
-        {if isset($smarty.session.IS_LOGGED_IN)}
+        {if isset($smarty.session.isloggedin)}
         <div class="Header-logout">
             You are logged in as  {$smarty.session.first_name} {$smarty.session.last_name}. <a href="logout.php" class="Button u-spaceLM">Logout</a>
         </div>
