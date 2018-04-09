@@ -141,7 +141,7 @@ trait Utilities
      */
     public static function isEmptyString(string $string): bool
     {
-        return (strlen(trim($string)) === 0);
+        return (mb_strlen(trim($string)) === 0);
     }
 
     /**
@@ -169,7 +169,7 @@ trait Utilities
             "ß" => "ss",
             " " => "_"
         ];
-        return strtr($string, $charReplace);
+        return mb_strtr($string, $charReplace);
     }
 
     /**
