@@ -43,7 +43,7 @@ Durch Ein- und Auskommentieren der Lösung kann sowohl die Funktionalität der V
 demonstriert werden. Diese Abschnitte können für die Lösung ignoriert oder vollständig gelöscht werden.
 Das Umschalten erfolgt über Linux Shell-Scripten, die im Lösungsrepository liegen und dazu GNU sed nutzen. 
 
-Codeteile die wie folgt auskommentiert sind, dienen dazu die Vorlage ohne PHP-Fehler lauffähig zu machen.
+Codeteile die wie folgt gekennzeichnet sind, dienen dazu die Vorlage ohne PHP-Fehler lauffähig zu machen.
      
      ``//##``
      ``return true;``
