@@ -1,12 +1,12 @@
 <?php
-namespace onlineshop\src\exercises;
+namespace Exercises;
 
-use AbstractNormForm;
-use onlineshop\src\DBAccess;
-use GenericParameter;
-use PostParameter;
-use onlineshop\src\Utilities;
-use View;
+use Fhooe\NormForm\Core\AbstractNormForm;
+use Fhooe\NormForm\Parameter\GenericParameter;
+use Fhooe\NormForm\Parameter\PostParameter;
+use Fhooe\NormForm\View\View;
+use DBAccess\DBAccess;
+use Utilities\Utilities;
 
 /**
  * Das  Login-Formular implementiert das Einloggen in den OnlineShop.
@@ -89,7 +89,7 @@ final class Login extends AbstractNormForm
      *
      * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
      */
-    protected function business()
+    protected function business(): void
     {
         isset($_SESSION[REDIRECT]) ? $redirect= $_SESSION['redirect'] : $redirect='index.php';
         View::redirectTo($redirect);
@@ -119,7 +119,29 @@ final class Login extends AbstractNormForm
         //*/
         // copy solution from onlineshopsolution/login/authenticateUser.inc.php here to make solution work.
         // require doesn't work in this case
-
+        $query = <<<SQL
+                 SELECT iduser, first_name, last_name, password 
+                 FROM user 
+                 WHERE email=:email 
+                 AND active IS NULL
+SQL;
+        $this->dbAccess->prepareQuery($query);
+        $this->dbAccess->executeStmt(array(':email' => $_POST[self::EMAIL]));
+        $rows = $this->dbAccess->fetchResultset();
+        if (count($rows) === 1 && password_verify($_POST[self::PASSWORD], $rows[0]['password'])) {
+            // TODO Optional, Warenkorb über session_regenerate_id() hinweg erhalten
+            $old_session_id = session_id();
+            session_regenerate_id();
+            $this->updateCart($old_session_id, session_id());
+            // End optional
+            $_SESSION['iduser']=$rows[0]['iduser'];
+            $_SESSION[IS_LOGGED_IN] = Utilities::generateLoginHash();
+            $_SESSION['first_name']=$rows[0]['first_name'];
+            $_SESSION['last_name']=$rows[0]['last_name'];
+            return true;
+        } else {
+            return false;
+        }
         //
     }
 

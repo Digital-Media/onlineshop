@@ -1,0 +1,15 @@
+<!-- Styles not needed for NormFormDemo, therefore not in css. So its easier to reuse NormFormDemo -->
+<style type="text/css">
+        .Navigation {
+            text-align: left;
+        }
+</style>
+<div class="Header Navigation">
+    <nav class="Container">
+        <span class="u-spaceRS" > {%  if not(_server.SCRIPT_NAME is same as ('/code/onlineshop/htdocs/index.php')) %} <a href="index.php">Home</a> {% endif %} </span>
+        <span class="u-spaceRS" > {%  if not(_server.SCRIPT_NAME is same as ('/code/onlineshop/htdocs/register.php')) %} <a href="register.php">Register</a> {% endif %} </span>
+        <span class="u-spaceRS" > {%  if not(_server.SCRIPT_NAME is same as ('/code/onlineshop/htdocs/product.php')) %} <a href="product.php">Add Products</a> {% endif %} </span>
+        <span class="u-spaceRS" > {%  if not(_server.SCRIPT_NAME is same as ('/code/onlineshop/htdocs/mycart.php')) %} <a href="mycart.php">My Cart</a> {% endif %} </span>
+        <span class="u-spaceRS" > {%  if not(_server.SCRIPT_NAME is same as ('/code/onlineshop/htdocs/dbdemo.php')) %} <a href="dbdemo.php">DEMO</a> {% endif %} </span>
+    </nav>
+</div>

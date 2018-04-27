@@ -1,0 +1,18 @@
+<div id="Pagination">
+    <hr>
+    {% if pagecount > 1 %}
+        {% if current_page != 1 %}
+            <a href="{{ server.SCRIPT_NAME }}?start={{ startprevious }}">Previous</a>
+        {% endif %}
+        {% for pageno,i in pagenumber %}{#foreach from=$pagenumber item=$i key=$pageno#}
+            {% if pageno != current_page %}
+                <a href="{{ _server.SCRIPT_NAME }}?start={{ i }}">{{ pageno }}</a>
+            {% else  %}
+                {{ pageno }}
+            {% endif %}
+        {% endfor %}
+        {% if current_page != pagecount  %}
+            <a href="{{ _server.SCRIPT_NAME }}?start={{ startnext }}">Next</a>
+        {% endif %}
+    {% endif %}
+</div>

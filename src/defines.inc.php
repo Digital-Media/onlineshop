@@ -9,24 +9,12 @@ define('DEBUG', true);
 if (DEBUG) {
     echo "<br>WARNING: Debugging is enabled. Set DEBUG to false for production use in " . __FILE__;
     echo "<br>Connect via SSH and send tail -f /var/log/apache2/error.log";
-    echo "to see errors not displayed in Browser<br><br>";
+    echo " to see errors not displayed in Browser<br><br>";
     error_reporting(E_ALL);
     ini_set('html_errors', 1);
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
 }
-/**
- * Pfade zu inkludierten Dateien
- */
-/**
- * @var string NORM_DIR The Path to the NormForm library.
- */
-define("SMARTY", "../vendor/smarty/smarty/libs/Smarty.class.php");
-define("NORM_DIR", "../vendor/normform/");
-define("UTILITIES", "../src/Utilities.php");
-define("TNORMFORM", NORM_DIR . "AbstractNormform.php");
-define("CSS_DIR", "css");
-define("DBACCESS", "../src/DBAccess.php");
 
 /**
  * @var string IS_LOGGED_IN Key for the session field which remembers that a user is currently logged in.

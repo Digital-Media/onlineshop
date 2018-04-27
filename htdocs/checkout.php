@@ -1,23 +1,18 @@
 <?php
-use onlineshop\src\exercises\Checkout;
-use onlineshop\src\Utilities;
 
-session_start();
+require "../vendor/autoload.php";
+
 /**
  * Einbinden der define-Angaben für den OnlineShop
  */
 require_once '../src/defines.inc.php';
-require_once UTILITIES;
-/**
- * Einbinden der Klasse TNormform, die die Formularabläufe festlegt.
- */
-require_once SMARTY;
-require_once TNORMFORM;
-/**
- * Einbinden der Datenbank-Klasse  DBAccess, die die Datenbankzugriffe implementiert
- */
-require_once DBACCESS;
-require_once '../src/exercises/checkout.php';
+
+session_start();
+
+use Exercises\Checkout;
+use Fhooe\NormForm\View\View;
+use Utilities\Utilities;
+
 /* --- This is the main call of the norm form process
  *
  * Datenbank-Exceptions werden erst hier abgefangen und eine formatierte DEBUG-Seite mit den Fehlermeldungen
@@ -33,7 +28,9 @@ try {
     }
     // Defines a new view that specifies the template and the parameters that are passed to the template
     $view = new View(
-        "checkoutMain.tpl",
+        "checkoutMain.html.twig",
+        "../templates",
+        "../templates_c",
         [
         ]
     );

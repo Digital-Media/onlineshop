@@ -1,0 +1,44 @@
+{% include "header.html.twig" %}
+{% include "navigation.html.twig" %}
+<main class="Site-content">
+    <section class="Section">
+        <div class="Container">
+            {% include "errorMessages.html.twig" %}
+            {% include "statusMessage.html.twig" %}
+                <form action="{{ _server.SCRIPT_NAME }}" method="post">
+                    <div class="InputCombo Grid-full">
+                        <label for="{{ ptype.getName() }}" class="InputCombo-label">Product Category:</label>
+                        <input type="search" id="{{ ptype.getName() }}" name="{{ ptype.getName() }}" value="{{ ptype.getValue() }}" class="InputCombo-field">
+                    </div>
+                    <div class="Grid-full">
+                        <button type="submit" class="Button">Add Product Category</button>
+                    </div>
+                </form>
+            <br>
+            <h2 class="Section-heading">List of Product Categories</h2>
+            <div class="InputCombo Grid-full">
+                    {% include "tablestyles.html.twig" %}
+                    <table>
+                        <tr>
+                            <th>PTypeID</th>
+                            <th>Product_Type</th>
+                        </tr>
+                        {% if pageArray is defined %}
+                            {% for key, value in pageArray %}
+                            <tr>
+                                <td> {{ pageArray[key]['idproduct_category'] }} </td>
+                                <td> {{ pageArray[key]['product_category_name'] }} </td>
+                            </tr>
+                            {% else %}
+                                <tr>
+                                    <td> No products found in search </td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+             </div>
+        </div>
+    </section>
+</main>
+{% include "footer.html.twig" %}

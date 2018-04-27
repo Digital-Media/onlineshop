@@ -1,12 +1,12 @@
 <?php
-namespace onlineshop\src\exercises;
+namespace Exercises;
 
-use AbstractNormForm;
-use onlineshop\src\DBAccess;
-use GenericParameter;
-use PostParameter;
-use onlineshop\src\Utilities;
-use View;
+use Fhooe\NormForm\Core\AbstractNormForm;
+use Fhooe\NormForm\Parameter\GenericParameter;
+use Fhooe\NormForm\Parameter\PostParameter;
+use Fhooe\NormForm\View\View;
+use DBAccess\DBAccess;
+use Utilities\Utilities;
 
 /*
  * Das Warenkorbformular zeigt den Inhalte des Warenkorbs im OnlineShop an und läßt eine Änderung der Bestellmenge zu.
@@ -101,7 +101,7 @@ final class MyCart extends AbstractNormForm
      * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
      *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
      */
-    protected function business()
+    protected function business(): void
     {
         $this->changeCart();
         if (isset($_POST['update'])) {

@@ -1,12 +1,12 @@
 <?php
-namespace onlineshop\src\exercises;
+namespace Exercises;
 
-use AbstractNormForm;
-use onlineshop\src\DBAccess;
-use GenericParameter;
-use PostParameter;
-use onlineshop\src\Utilities;
-use View;
+use Fhooe\NormForm\Core\AbstractNormForm;
+use Fhooe\NormForm\Parameter\GenericParameter;
+use Fhooe\NormForm\Parameter\PostParameter;
+use Fhooe\NormForm\View\View;
+use DBAccess\DBAccess;
+use Utilities\Utilities;
 
 /**
  * Die  Checkoutseite implementiert die finale Bestellung im OnlineShop.
@@ -97,7 +97,7 @@ final class Checkout extends AbstractNormForm
      * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
      *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
      */
-    protected function business()
+    protected function business(): void
     {
         /*--
         require '../../onlineshopsolution/checkout/business.inc.php';
@@ -126,7 +126,7 @@ final class Checkout extends AbstractNormForm
     {
         // TODO Umschreiben, dass das Array ptypeArray aus der Datenbank befüllt wird
         //##
-        $pageArray = array( 0 => array('product_idproduct' => 1,
+        return $pageArray = array( 0 => array('product_idproduct' => 1,
                                        'product_name' => 'Passivhaus',
                                        'price' => 300000,00, 'quantity' => 1),
                             1 => array('product_idproduct' => 2,
@@ -138,8 +138,9 @@ final class Checkout extends AbstractNormForm
         //*/
         /*--
         require '../../onlineshopsolution/checkout/fillpageArray.inc.php';
-        //*/
         return $pageArray;
+        //*/
+
     }
 
     /**

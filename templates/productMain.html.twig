@@ -1,0 +1,49 @@
+{% include "header.html.twig" %}
+{% include "navigation.html.twig" %}
+<main class="Site-content">
+    <section class="Section">
+        <div class="Container">
+            <h2 class="Section-heading">Add Product</h2>
+            {% include "errorMessages.html.twig" %}
+            {% include "statusMessage.html.twig" %}
+            <form action="{{ _server.SCRIPT_NAME }}" method="post" enctype="multipart/form-data">
+                <div class="InputCombo Grid-full">
+                    <label for="{{ pname.getName() }}" class="InputCombo-label">Product Name*:</label>
+                    <input type="text" id="{{ pname.getName() }}" name="{{ pname.getName() }}" value="{{ pname.getValue() }}" placeholder="Choose a unique Product Name" class="InputCombo-field">
+                </div>
+                <div class="InputCombo Grid-full">
+                    <label for="{{ price.getName() }}" class="InputCombo-label">Price*:</label>
+                    <input type="text" id="{{ price.getName() }}" name="{{ price.getName() }}" value="{{ price.getValue() }}" size="10" maxlength="10"  placeholder="0,00" class="InputCombo-field">
+                </div>
+                <div class="InputCombo Grid-full">
+                    <label for="{{ ptype.getName() }}" class="InputCombo-label">Product Type*:</label>
+                    <select name="{{ ptype.getName() }}" id="{{ ptype.getName() }}" size="1" class="InputCombo-field">
+                         {% for key,value in ptypeArray %}
+                            <option {% if selected is defined %} {% if selected is same as (ptypeArray[key]['product_category_name'])  %} selected="selected" {% endif %} {% endif %}> {{ ptypeArray[key]['product_category_name'] }} </option>
+                            {% else %}
+                            <option>Nothing to select so far</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="InputCombo Grid-full">
+                    <label for="{{ active.getName() }}" class="InputCombo-label">Active*</label><span>&nbsp;</span>
+                    <input type="radio" name="{{ active.getName() }}"  value="1" {% if active.getValue() == '1' %} checked="checked" {% endif %}><span>&nbsp;</span>
+                    <label for="{{ active.getName() }}" class="InputCombo-label">Inactive*</label><span>&nbsp;</span>
+                    <input type="radio" name="{{ active.getName() }}"  value="0" {% if active.getValue() == '0' %} checked="checked" {% endif %}><span>&nbsp;</span>
+                </div>
+                <div class="InputCombo Grid-full">
+                    <label for="{{ shortdesc.getName() }}" class="InputCombo-label">Short Description*:</label>
+                    <textarea name="{{ shortdesc.getName() }}" id="{{ shortdesc.getName() }}" cols="40" rows="5"  class="InputCombo-field">{{ shortdesc.getValue() }}</textarea>
+                </div>
+                <div class="InputCombo Grid-full">
+                    <label for="{{ longdesc.getName() }}" class="InputCombo-label">Long Description*:</label>
+                    <textarea name="{{ longdesc.getName() }}" id="{{ longdesc.getName() }}" cols="40" rows="15"  class="InputCombo-field">{{ longdesc.getValue() }}</textarea>
+                </div>
+                <div class="Grid-full">
+                    <button type="submit" class="Button">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+{% include "footer.html.twig" %}
