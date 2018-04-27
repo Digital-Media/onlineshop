@@ -1,12 +1,12 @@
 <?php
-namespace onlineshop\src\exercises;
+namespace Exercises;
 
-use AbstractNormForm;
-use onlineshop\src\DBAccess;
-use GenericParameter;
-use PostParameter;
-use onlineshop\src\Utilities;
-use View;
+use Fhooe\NormForm\Core\AbstractNormForm;
+use Fhooe\NormForm\Parameter\GenericParameter;
+use Fhooe\NormForm\Parameter\PostParameter;
+use Fhooe\NormForm\View\View;
+use DBAccess\DBAccess;
+use Utilities\Utilities;
 
 /*
  * Das  Registrier-Formular setzt die Registrierung im OnlineShop um.
@@ -24,8 +24,6 @@ use View;
  */
 final class Register extends AbstractNormForm
 {
-    // make trait Utilities accessible via $this->
-    use Utilities;
     /**
      *  Konstanten für ein HTML Attribute <input name='firstname' id='firstname' ... >,
      * <label for='firstname' ... > --> $_POST[FIRSTNAME].
@@ -103,7 +101,7 @@ final class Register extends AbstractNormForm
      * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
      *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
      */
-    protected function business()
+    protected function business(): void
     {
         $this->addUser();
         View::redirectTo('index.php');
@@ -120,9 +118,6 @@ final class Register extends AbstractNormForm
      */
     private function isUniqueEmail()
     {
-        //##
-        return true;
-        //*/
         /*--
         require '../../onlineshopsolution/register/isUniqueEmail.inc.php';
         if (count($rows) === 0) {
@@ -130,6 +125,9 @@ final class Register extends AbstractNormForm
         } else {
             return false;
         }
+        //*/
+        //##
+        return true;
         //*/
     }
 
@@ -155,11 +153,11 @@ final class Register extends AbstractNormForm
      */
     private function addUser()
     {
-        //##
-        return true;
-        //*/
         /*--
         require '../../onlineshopsolution/register/addUser.inc.php';
+        //*/
+        //##
+        return true;
         //*/
     }
 }

@@ -1,21 +1,18 @@
 <?php
-use onlineshop\src\exercises\Register;
+
+require "../vendor/autoload.php";
 
 /**
  * Einbinden der define-Angaben für den OnlineShop
  */
 require_once '../src/defines.inc.php';
-require_once UTILITIES;
-/**
- * Einbinden der Klasse TNormform, die die Formularabläufe festlegt.
- */
-require_once SMARTY;
-require_once TNORMFORM;
-/**
- * Einbinden der Datenbank-Klasse  DBAccess, die die Datenbankzugriffe implementiert
- */
-require_once DBACCESS;
-require_once '../src/exercises/register.php';
+
+session_start();
+
+use Exercises\Register;
+use Fhooe\NormForm\Parameter\PostParameter;
+use Fhooe\NormForm\View\View;
+
 
 /* --- This is the main call of the norm form process
  *
@@ -25,7 +22,11 @@ require_once '../src/exercises/register.php';
  */
 try {
     // Creates a new Product object and triggers the NormForm process
-    $view = new View("registerMain.tpl", [
+    $view = new View(
+        "registerMain.html.twig",
+        "../templates",
+        "../templates_c",
+        [
         new PostParameter(Register::FIRSTNAME),
         new PostParameter(Register::LASTNAME),
         new PostParameter(Register::NICKNAME),

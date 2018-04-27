@@ -1,12 +1,12 @@
 <?php
-namespace onlineshop\src\exercises;
+namespace Exercises;
 
-use AbstractNormForm;
-use onlineshop\src\DBAccess;
-use GenericParameter;
-use PostParameter;
-use onlineshop\src\Utilities;
-use View;
+use Fhooe\NormForm\Core\AbstractNormForm;
+use Fhooe\NormForm\Parameter\GenericParameter;
+use Fhooe\NormForm\Parameter\PostParameter;
+use Fhooe\NormForm\View\View;
+use DBAccess\DBAccess;
+use Utilities\Utilities;
 
 /*
  * Das  Produkt-Formular ermöglicht es ein Produkt im OnlineShop anzulegen.
@@ -90,11 +90,10 @@ final class Product extends AbstractNormForm
      * Ruft Product::addProduct(), um die validieren Benutzereingaben in die Tabelle onlineshop.product zu schreiben
      * Befüllt im Gutfall die Statusmeldung $this->statusMessage,
      * die Feedback über das erfolgreich angelegte Produkt gibt
-     * und alle Daten nochmals auflistet außer short_description und long_description.
      * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
      *
      */
-    protected function business()
+    protected function business(): void
     {
         $this->addProduct();
         /*--
