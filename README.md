@@ -1,40 +1,72 @@
-# NormForm-Skeleton
+﻿# OnlineShop
+Der *OnlineShop* stellt das Grundgerüst für Übungen im Datenbankbereich zur Verfügung.
 
-An example application or skeleton for the for getting started with [*NormForm*](https://github.com/Digital-Media/normform), the simple template application for PHP form processing developed for PHP classes in the program [Media Technology and Design](https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/media-technology-and-design/) at the [University of Applied Sciences Upper Austria](https://www.fh-ooe.at/en/hagenberg-campus/). This skeleton and the library behind it are primarily designed for educational purposes (learning object oriented PHP, form processing and templating languages). Use it for "public" applications at your own risk.
+Templates und CSS werden vollständig zur Verfügung gestellt, weil dies in anderen Vorlesungs- und Übungsblöcken
+vermittelt wird. Dadurch soll es möglich sein, sich auf den eigentlichen Lerninhalt Datenbankzugriff von PHP aus
+zu konzentrieren.
 
-## Creating a NormForm Application
+Besuchen sie uns unter https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/media-technology-and-design/
 
-Use Composer to create a new project containing the skeleton files:
+Verwendete Technologien und Vorraussetzungen
 
-    composer create-project fhooe/normform-skeleton path/to/install
+Für das Übungsscenario wurde mit [Vagrant](https://www.vagrantup.com/) und [Virtualbox](https://www.virtualbox.org/) entwickelt. 
+Ein passendes [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev-base) findet sich ebenfalls auf GitHub.
+Der *OnlineShop* lässt sich aber auch unter anderen Umgebungen installieren.
 
-Composer will create a project in the specified `path/to/install` directory.
+PHP 7.1 ist die Mindestvoraussetzung, damit die Implentierung lauffähig ist.
 
-## Basic Usage
+* [HTML5](https://www.w3.org/TR/html5/)
+* [CSS3](https://www.w3.org/Style/CSS/specs)
+* [PHP 7.0](http://php.net/manual/en/migration70.new-features.php)
+* [PHP 7.1](http://php.net/manual/en/migration71.new-features.php)
+* [MariaDB](https://mariadb.org/)
+* [PDO-Datenbankschnittstelle](http://php.net/manual/en/book.pdo.php)
+* [TNormform](https://github.com/Digital-Media/normform)
+* [Smarty Templates](http://www.smarty.net/)
+* [CSS3 Flexbox](https://www.w3.org/TR/css-flexbox-1/)
+* [PHP-FIG PSR: PHP Standards Recommendations](https://www.php-fig.org/psr/)
 
-- Edit `templates/normFormDemo.html.twig` to modify the HTML (add/remove form fields, etc.).
-- Modify `src/NormFormDemo.php` to change the form validation behavior (method `isValid()`) and the business logic that is executed one the form is filled out correctly (method `business()`)). Create constants with the names of your form fields here for easier referencing.
-- Adapt `htdocs/index.php` whenever if you have edited your form. Supply `PostParameter` istances to the `View` object so that the form data can be processed and displayed accordingly.
 
-If you prefer your form without all the ([SUIT CSS](https://suitcss.github.io/) inspired) CSS, start working with `htdocs/index_simple.php` and `templates/normFormDemoSimple.html.twig` instead.
+Die Übungen, die umzusetzen sind, liegen in einem Unterverzeichnis von src/exercises. 
+Für jede Übung gibt es ein eigenes Unterverzeichnis. Nur an den Files in diesem Verzeichnis sind Änderungen vorzunehmen.
 
-## Browsing the Application
+Musterlösungen werden mit require aus einem privaten Repository eingebunden.
+Diese Abschnitte können für die Lösung ignoriert oder vollständig gelöscht werden.
+Statt diese Files einzubinden ist direkt in den Vorlagenfiles eine eigene Lösung an Hand der TODOs zu erstellen.
 
-For taking a quick look you can use the PHP built-in web server:
+Zum Beispiel:  
+    
+    ``/*--``
+    ``require '<path-to-solution>/index/construct.inc.php';``
+    ``//*/``
 
-    cd path/to/install
-    composer start
+Vorgegebene Codeteile die wie folgt gekennzeichnet sind, dienen dazu die Vorlage ohne PHP-Fehler lauffähig zu machen.
+     
+     ``//##``
+     ``return true;``
+     ``//*/``
+     
+Zum Beispiel wird eine erfolgreiche Authentifizierung vorgetäuscht, damit ein Login auch ohne Datenbankzugriff bereits für
+den Erfolgsfall funktioniert. Diese Codeteile müssen behalten werden, an der richtige Stelle im eigenen Code verwendet
+oder entsprechend angepasst werden, damit sie der Aufgabenstellung entsprechen.
 
-Navigate to <http://localhost:8888/index.php> or <http://localhost:8888/index_simple.php> in your browser to see the application in action.
+Durch Ein- und Auskommentieren der Lösung bzw. der vorgegebenen Codeteile kann sowohl die Funktionalität der 
+Vorlage als auch der Lösung einfach demonstriert werden. 
+Das Umschalten erfolgt über Linux Shell-Scripten, die im Lösungsrepository liegen und dazu GNU sed nutzen. 
 
-## Contributing
 
-If you'd like to contribute, please refer to [CONTRIBUTING](https://github.com/Digital-Media/normform-skeleton/blob/master/CONTRIBUTING.md) for details.
+## Structure of this Repository
 
-## License
+Folder | Description
+--- | ---
+``htdocs`` |Frontend stuff. Files called by Webserver, that create the objects with the real implementation, templates and css
+``htdocs/css`` | A set of predefined styles to be used with *NormForm*. Include ``main.css`` to use it.
+``htdocs/templates`` | HTML templates for the Smarty template engine used in ``/src/*.php``.
+``htdocs/templates_c`` | Output folder for Smarty's compiled templates.
+``src`` | Classes implemented for *OnlineShop*. Including a dbdemo for [NormForm](https://github.com/Digital-Media/normform) and DBAccess.  The Trait Utilities provides static helper method to be used in any context.
+``src/exercises`` | Classes to be implemented for *OnlineShop* exercises.
+``vendor`` | Third party libraries installed with composer: [TNormform](https://github.com/Digital-Media/normform), [Smarty Templates](http://www.smarty.net/), Javascript Libraries ...
 
-NormForm is licensed under the MIT license. See [LICENSE](https://github.com/Digital-Media/normform-skeleton/blob/master/LICENSE) for more information.
+Ein grobes Klassendiagramm für den OnlineShop (erstellt mit http://www.umlet.com/umletino/
 
-## More Information
-
-- [API Documentation](https://digital-media.github.io/normform-skeleton/)
+![OnlineShop Klassendiagramm](src/KlassenDiagrammOnlineShop.png "OnlineShop Klassendiagramm")
