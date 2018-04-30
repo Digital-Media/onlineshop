@@ -22,7 +22,7 @@ PHP 7.1 ist die Mindestvoraussetzung, damit die Implentierung lauffähig ist.
 * [MariaDB](https://mariadb.org/)
 * [PDO-Datenbankschnittstelle](http://php.net/manual/en/book.pdo.php)
 * [TNormform](https://github.com/Digital-Media/normform)
-* [Smarty Templates](http://www.smarty.net/)
+* [TWIG Templates](https://twig.symfony.com/)
 * [CSS3 Flexbox](https://www.w3.org/TR/css-flexbox-1/)
 * [PHP-FIG PSR: PHP Standards Recommendations](https://www.php-fig.org/psr/)
 
@@ -36,15 +36,15 @@ Statt diese Files einzubinden ist direkt in den Vorlagenfiles eine eigene Lösun
 
 Zum Beispiel:  
     
-    ``/*--``
-    ``require '<path-to-solution>/index/construct.inc.php';``
-    ``//*/``
+    /*--
+    require '<path-to-solution>/index/construct.inc.php';
+    //*/
 
 Vorgegebene Codeteile die wie folgt gekennzeichnet sind, dienen dazu die Vorlage ohne PHP-Fehler lauffähig zu machen.
      
-     ``//##``
-     ``return true;``
-     ``//*/``
+     //##
+     return true;
+     //*/
      
 Zum Beispiel wird eine erfolgreiche Authentifizierung vorgetäuscht, damit ein Login auch ohne Datenbankzugriff bereits für
 den Erfolgsfall funktioniert. Diese Codeteile müssen behalten werden, an der richtige Stelle im eigenen Code verwendet
