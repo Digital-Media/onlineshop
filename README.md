@@ -9,7 +9,7 @@ Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/med
 # Used technologies and requirements
 
 The exercises have been developed with [Vagrant](https://www.vagrantup.com/) and [Virtualbox](https://www.virtualbox.org/). 
-A [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev-base) with the installation of the web environment is also hosted on GitHub.
+A [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev-base) with the installation of the web environment is hosted on GitHub.
 But *OnlineShop* can also be installed in a different environment.
 
 PHP 7.1 is required to run the examples.
