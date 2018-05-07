@@ -8,11 +8,11 @@ Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/med
 
 # Used technologies and requirements
 
-Für das Übungsscenario wurde mit [Vagrant](https://www.vagrantup.com/) und [Virtualbox](https://www.virtualbox.org/) entwickelt. 
-Ein passendes [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev-base) findet sich ebenfalls auf GitHub.
-Der *OnlineShop* lässt sich aber auch unter anderen Umgebungen installieren.
+The exercises have been developed with [Vagrant](https://www.vagrantup.com/) and [Virtualbox](https://www.virtualbox.org/). 
+A [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev-base) with the installation of the web environment is also hosted on GitHub.
+But *OnlineShop* can also be installed in a different environment.
 
-PHP 7.1 ist die Mindestvoraussetzung, damit die Implentierung lauffähig ist.
+PHP 7.1 is required to run the examples.
 
 * [HTML5](https://www.w3.org/TR/html5/)
 * [CSS3](https://www.w3.org/Style/CSS/specs)
@@ -66,6 +66,6 @@ Folder | Description
 ``src/exercises`` | Classes to be implemented for *OnlineShop* exercises.
 ``vendor`` | Third party libraries installed with composer: [TNormform](https://github.com/Digital-Media/normform), [Smarty Templates](http://www.smarty.net/), Javascript Libraries ...
 
-Ein grobes Klassendiagramm für den OnlineShop (erstellt mit http://www.umlet.com/umletino/
+A basic class diagramm for OnlineShop (built with http://www.umlet.com/umletino/
 
-![OnlineShop Klassendiagramm](src/KlassenDiagrammOnlineShop.png "OnlineShop Klassendiagramm")
+![OnlineShop Klassendiagramm](src/KlassenDiagrammOnlineShop.png "OnlineShop Class Diagram")
