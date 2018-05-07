@@ -1,13 +1,12 @@
 ﻿# OnlineShop
-Der *OnlineShop* stellt das Grundgerüst für Übungen im Datenbankbereich zur Verfügung.
+*OnlineShop* provides a basic skeleton for database exercises.
 
-Templates und CSS werden vollständig zur Verfügung gestellt, weil dies in anderen Vorlesungs- und Übungsblöcken
-vermittelt wird. Dadurch soll es möglich sein, sich auf den eigentlichen Lerninhalt Datenbankzugriff von PHP aus
-zu konzentrieren.
+Templates and CSS are complete, because this part is taught in different lessons. So these exercises can focus on
+database access with PHP Libaries.
 
-Besuchen sie uns unter https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/media-technology-and-design/
+Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/media-technology-and-design/
 
-Verwendete Technologien und Vorraussetzungen
+# Used technologies and requirements
 
 Für das Übungsscenario wurde mit [Vagrant](https://www.vagrantup.com/) und [Virtualbox](https://www.virtualbox.org/) entwickelt. 
 Ein passendes [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev-base) findet sich ebenfalls auf GitHub.
