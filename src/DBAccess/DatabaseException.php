@@ -4,20 +4,33 @@ namespace DBAccess;
 use Exception;
 
 /**
- * Definiert eine eigene Exception Klasse für Datenbankexceptions
+ * Implements an exception used for file access errors.
+ *
+ * This exception can be used whenever database access problems occur. This might be in the case when using wrong
+ * user credentials or writing SQL, that is syntactically not valid.
+ *
+ * @author  Wolfgang Hochleitner <wolfgang.hochleitner@fh-hagenberg.at>
+ * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
+ * @version 2018
  */
 class DatabaseException extends Exception
 {
     /**
-     * Der Konstruktur wird umdefiniert, so dass $message nicht mehr optional ist
+     * Creates a new DatabaseException. The constructor is redefined in order to make the message parameter mandatory.
+     *
+     * @param string         $message  The exception message.
+     * @param int            $code     An optional exception code.
+     * @param Exception|null $previous The previous exception used for the exception chaining.
      */
-    public function __construct($message, $code = 0, Exception $previous = null)
+    public function __construct(string $message, int $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
 
     /**
-     * Erzeugen einer string Representaion des Objects
+     * Creates a string representation of this exception.
+     *
+     * @return string The string representation.
      */
     public function __toString()
     {
