@@ -5,49 +5,49 @@ use \PDOException;
 use \PDO;
 
 /*
- * Einbinden der Klasse für die Datenbankexception
+ * Including class for Database Exceptions
  */
 require_once 'DatabaseException.php';
 
 /**
- * Die objektorientierte Datenbankklasse beruht auf PDO/MariaDB und setzt prepared statements um.
+ * The class DBAccess uses object orientated PHP, PDO for access to MariaDB and implements prepared statements.
  *
- * Der PDO-Treiber für MySQL und MariaDB ist vorerst indentisch. Man kann also MariaDB stattt MySQL installieren und
- * den gleichen Treiber verwenden.
- * Umgesetzt sind alle für die Übungen notwendigen Basisfunktionen des Datenbankzugriffs um CRUD-Operationen ausführen
- * zu können.
+ * The PDO driver for MySQL and MariaDB are identically at the moment.
+ * You can use either MariaDB or MySQL for projects using this class.
+ * All api functions for CRUD operations are implemented using prepared statements.
+ * All PDOExceptions are enclosed by a Database Exception for easier debugging with a comprehensive error page.
+ *
  * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package onlineshop
- * @version 2016
+ * @version 2018
  */
 class DBAccess
 {
 
     /**
-     * Variablen für die Datenbankklasse DBAccess
+     * Properties for the class DBAccess
      *
-     * @var string $dbh DatenBankHandler
-     * $var string $stmt Statementhandler für Datenbankanfragen
-     * $var bool $alreadyset Hilfsvariable um die Mehrfachausgabe beim Debuggen von SQL-Statements zu verhindern
-     * $var string $query contains the current query sent to prepareQuery
+     * @var string $dbh Database handler
+     * $var string $stmt Statement handler for database queries
      */
     private $dbh;
     private $stmt;
 
     /**
-     * Erzeugt ein neues Datenbankobjekt.
+     * Constructor for DBAccess.
      *
-     * Die Verbindung zur Datenbank wird mit den übergebenen Parametern hergestellt.
-     * Die Datenbankverbindung ist persistent
-     * PDO wird in den ErrorMode mit Exceptions statt Errors gesetzt
+     * The database connection $dbh is set up using the given credentials
+     * The connection to the database is persistent.
+     * PDO is configured for using the ErrorMode Exceptions instead of Errors.
      *
-     * @param string $dsn Data Source Name inluding Databasetype, Host, Port, Databasename
+     * @param string $dsn Data Source Name including Database Type, Host, Port, Database Name
      * @param string $mysqlUser Database User to connect with
      * @param string $mysqlPwd Password for Database User
      * @param string $names Characterset for Database Connection, Default utf8
      * @param string $collate Collation for Characterset, Default utf8_general_ci
      *
-     * @return handle $dbh Gibt den Datenbankhandler für die Datenbankzugriffe zurück
+     *
+     * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
 
     public function __construct(
@@ -59,8 +59,8 @@ class DBAccess
     ) {
         $charsetAttr="SET NAMES $names COLLATE $collate";
         $options = array(
-            // Für persistente Verbindungen wird bei Abbruch der Datenbankverbindung ein Warning ausgegeben.
-            // Dieses Warning wird, wenn in der php.ini error_reporting=E_ALL gesetzt ist, auf der Webseite angezeigt
+            // A warning is given for persistent connections in case of a interrupted database connection.
+            // This warning is shown on the web page if error_reporting=E_ALL is set in php.ini
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -75,17 +75,20 @@ class DBAccess
     }
 
     /**
-     * Prepare Aufruf für SQL-Statements
-     * Diese Phase umfasst parsen auf Syntax-Schlüsselwörter (SELECT, INSERT, WHERE, ...), Prüfung
-     * auf Schemakonformität (Tabellennamen, Spaltennamenm, ...), Erstellung und Optimierung des
-     * Ausführungsplanes (Verwendung von Indizes, ...)
+     * Prepare the SQL statement
      *
-     * @param string $query beinhaltet das SQL-Statement, das von der Datenbank aufbereitet (prepare) werden soll.
+     * Creates the statement handler for the execution step
+     * This step covers
+     * syntax parsing of keywords (SELECT, INSERT, WHERE, ...),
+     * checking schema compliance (table names, column names, ...),
+     * creating and optimizing the execution plan (using indexes, ...)
      *
-     * @return mixed $stmt Gibt den Statementhandler für die weitere Ausführung zurück
-     * @throws DatabaseException $e reicht eine aufbereitete PDOExeption an das PHP-Exceptionhandling weiter
+     * @param string $query Contains the SQL statement, that is prepared by the database.
+     * @param bool $debug If true the SQL statement is returned to the browser
+     *
+     * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
-    public function prepareQuery(string $query, bool $debug = false)
+    public function prepareQuery(string $query, bool $debug = false):void
     {
         try {
             if ($this->dbh) {
@@ -101,21 +104,19 @@ class DBAccess
     }
 
     /**
-     * Implementiert die Bind-Phase bei der Abarbeitung eines SQL-Statements
+     * Bind the given parameters to the parsed SQL statement for the execution step
      *
-     * bindValueByType() benötigt man nur, wenn man die Parameter nicht als Array direkt an execute() geben möchte
-     * Man kann die Parameter in dieser Methode einzeln einen Typ zuweisen
-     * Es gibt nur Zuweisungen für die unten aufgeführten Datentypen.
-     * Es fehlen unter anderem FLOAT, DECIMAL, LOBs, DATE, ...
-     * Als Array direkt an execute() übergeben werden alle Datentypen als PDO::PARAM_STR (string) behandelt.
+     * bindValueByType() is only needed when parameters are not passed directly to execute() with an array.
+     * If parameters are sent to execute() directly with an array, all parameters are of type PDO::PARAM_STR (string).
+     * This method can be used to give an type explicitly.
+     * There are only data types for INT, BOOL, STRING and NULL.
+     * FLOAT, DECIMAL, LOBs, DATE, ... are not available.
      *
-     * @param string $param Name des SQL named parameter
-     * @param string $value Value des SQL named parameter, der zugewiesen wird
-     * @param null $type Typ des Parameters: PDO::PARAM_STR, PDO::PARAM_INT, PDO::PARAM_BOOL, PDO::PARAM_NULL
-     *
-     * @return mixed $stmt Statementhandler für die weitere Verarbeitung des SQL-Statements
+     * @param string $param Name of the SQL named parameter
+     * @param string $value Value of the SQL named parameter, that is assigned
+     * @param null $type type of the parameter: PDO::PARAM_STR, PDO::PARAM_INT, PDO::PARAM_BOOL, PDO::PARAM_NULL
      */
-    public function bindValueByType($param, $value, $type = null)
+    public function bindValueByType($param, $value, $type = null):void
     {
         if (is_null($type)) {
             switch (true) {
@@ -132,38 +133,39 @@ class DBAccess
                     $type = PDO::PARAM_STR;
             }
         }
-        // bindValue() wird statt bindParam() verwendet,
-        // weil bindParam nur notwendig ist bei INPUT/OUTPUT-Parametern z.B. bei Stored Procedures
-        // Für bindParam() können Werte zwischen bind() und der execute() noch überschrieben werden.
-        // Wollen wir hier nicht zulassen.
+        // bindValue() is used instead of bindParam(),
+        // because bindParam() is only needed for INPUT/OUTPUT parameters f.e. used in stored procedures
+        // With bindParam() values can be overwritten between bind() and execute().
+        // That is not, what we need in our use cases.
         $this->stmt->bindValue($param, $value, $type);
     }
 
     /**
-     * Führt die execute Phase für die Abarbeitung des SQL-Statements aus
+     * Executes the SQL statement
      *
-     * Es sind zwei Varianten implementiert.
-     *      1. Mit Übergabe der Parameter in einem Array
-     *      2. Ohne Übergabe der Parameter in einem Array, das den Aufruf von
-     *         @method bindValueByType() im Vorfeld erfordert
-     * Im Fehlerfall wird das SQL-Statement mit debugDumpParams() ausgegeben
+     * Two versions are implemented.
+     *      1. Parameters are given in an assigned array, while calling execute()
+     *      2. No array is handed during execute() call, which requires the call of
+     *         @method bindValueByType() before calling execute()
+     * In case of an Error the SQL statement is dumped with debugDumpParams()
      *
-     * @param array $params Array mit den named Parametern des SQL-Statements
+     * @param array $params Array with the named parameters of the SQL statement
      *
-     * @return bool Gibt true zurück, wenn das Statement ausgeführt werden konnte
-     * @throws DatabaseException $e reicht eine PDOExeption an das PHP-Exceptionhandling weiter
+     * @return bool Returns true if the statement could be executed
+     * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
-    public function executeStmt($params = null)
+    public function executeStmt($params = null):bool
     {
         try {
             if (isset($params)) {
-                // Wenn execute() mit Parametern aufgerufen wird, werden alle Werte als PDO::PARAM_STR behandelt.
+                // If execute() is called with a parameter array, all values are of type PDO::PARAM_STR.
                 return $this->stmt->execute($params);
             } else {
-                // Es gibt kein PDO::PARAM_FLOAT/DECIMAL/DATE, PDO::PARAM_INT ist nur relevant für PK/FK.
-                // Man kann also bindValue weglassen, weil der default Type in $stmt->execute() PDO::PARAM_STR ist
-                // siehe executeStmt($params) im then-Zweig
-                // Dieser Zweig ist hier zu Demonstrattionszwecken implementiert
+                // PDO::PARAM_FLOAT/DECIMAL/DATE are not available
+                // PDO::PARAM_INT is mostly relevant for PK/FK.
+                // Databases implicitly convert the data type
+                // Therefore bindValue() can be omitted, although the default type in $stmt->execute() is PDO::PARAM_STR
+                // The else branch is for statements using bindValue() or not using SQL named parameters.
                 return $this->stmt->execute();
             }
         } catch (PDOException $e) {
@@ -173,14 +175,14 @@ class DBAccess
     }
 
     /**
-     * Holt alle Treffer des mit @method executeStmt() ausgeführten SQL-Statements ab und gibt sie zurück
+     * Fetches all rows returned by @method executeStmt()
      *
-     * Im Fehlerfall wird das SQL-Statement mit debugDumpParams() ausgegeben
+     * In case of an error the SQL statement is dumped with debugDumpParams()
      *
-     * @return mixed Resultset des SQL-Statements
-     * @throws DatabaseException $e reicht eine PDOExeption an das PHP-Exceptionhandling weiter
+     * @return array Nested array with the result set of the SQL statement, if multiple rows are found
+     * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
-    public function fetchResultset()
+    public function fetchResultset():array
     {
         try {
             return $this->stmt->fetchAll();
@@ -191,14 +193,14 @@ class DBAccess
     }
 
     /**
-     * Holt einen einzelnen Datensatz aus der Datenbank ab.
+     * Fetches a single row from the database.
      *
-     * Im Fehlerfall wird das SQL-Statement mit debugDumpParams() ausgegeben
+     * In case of an error the SQL statement is dumped with debugDumpParams()
      *
-     * @return mixed Gibt
-     * @throws DatabaseException $e reicht eine PDOExeption an das PHP-Exceptionhandling weiter
+     * @return array Plain array with the result set of the SQL statement, if result is only a single row.
+     * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
-    public function fetchSingle()
+    public function fetchSingle():array
     {
         try {
             return $this->stmt->fetch();
@@ -209,14 +211,14 @@ class DBAccess
     }
 
     /**
-     * Zählt die Treffer in einem Resultset
+     * Counts the rows in a result set
      *
-     * Im Fehlerfall wird das SQL-Statement mit debugDumpParams() ausgegeben
+     * In case of an error the SQL statement is dumped with debugDumpParams()
      *
-     * @return mixed Anzahl der Treffer
-     * @throws DatabaseException $e reicht eine PDOExeption an das PHP-Exceptionhandling weiter
+     * @return int row count
+     * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
-    public function rowCount()
+    public function rowCount():int
     {
         try {
             return $this->stmt->rowCount();
@@ -227,15 +229,14 @@ class DBAccess
     }
 
     /**
-     * Gibt den vom Autoincrement vergebenen Primärschlüssel des zuletzt in dieser Session
-     * ausgeführten insert-Statements zurück
+     * Returns the AutoincrementID value of the PK assigned in the most recent insert of the current session
      *
-     * Im Fehlerfall wird das SQL-Statement mit debugDumpParams() ausgegeben
+     * In case of an error the SQL statement is dumped with debugDumpParams()
      *
-     * @return string AutoincrementID des letzten Insert
-     * @throws DatabaseException $e reicht eine PDOExeption an das PHP-Exceptionhandling weiter
+     * @return string AutoincrementID of the last insert
+     * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
-    public function lastInsertId()
+    public function lastInsertId():string
     {
         try {
             return $this->dbh->lastInsertId();
@@ -246,14 +247,14 @@ class DBAccess
     }
 
     /**
-     * Startet eine Datenbanktransaktion
+     * Starts a database transaction
      *
-     * Im Fehlerfall wird das SQL-Statement mit debugDumpParams() ausgegeben
+     * In case of an error the SQL statement is dumped with debugDumpParams()
      *
-     * @return bool TRUE im Gutfall, FALSE im Fehlerfall
-     * @throws DatabaseException $e reicht eine PDOExeption an das PHP-Exceptionhandling weiter
+     * @return bool TRUE if it worked, else FALSE
+     * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
-    public function beginTransaction()
+    public function beginTransaction():bool
     {
         try {
             return $this->dbh->beginTransaction();
@@ -264,14 +265,14 @@ class DBAccess
     }
 
     /**
-     * Beendet eine Datenbanktransaktion mit commit. Die Ergebnisse werden in der Datenbank gespeichert
+     * The current transaction is commited. The results are persisted in the database.
      *
-     * Im Fehlerfall wird das SQL-Statement mit debugDumpParams() ausgegeben
+     * In case of an error the SQL statement is dumped with debugDumpParams()
      *
-     * @return mixed
-     * @throws DatabaseException $e reicht eine PDOExeption an das PHP-Exceptionhandling weiter
+     * @return bool TRUE if it worked, else FALSE
+     * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
-    public function commitTransaction()
+    public function commitTransaction():bool
     {
         try {
             return $this->dbh->commit();
@@ -282,15 +283,15 @@ class DBAccess
     }
 
     /**
-     * Beendet eine Datenbanktransaktion mit rollback.
-     * Die Datenbank wird in den Zustand zu Beginn der Transaktion (@method beginTransaction) zurückgesetzt.
+     * A database transaction is rolled back.
+     * The database returns to the state at the begin of the transaction (@method beginTransaction).
      *
-     * Im Fehlerfall wird das SQL-Statement mit debugSQL() ausgegeben
+     * In case of an error the SQL statement is dumped with debugDumpParams()
      *
-     * @return bool
-     * @throws DatabaseException $e reicht eine PDOExeption an das PHP-Exceptionhandling weiter
+     * @return bool TRUE if it worked, else FALSE
+     * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
-    public function rollbackTransaction()
+    public function rollbackTransaction():bool
     {
         try {
             return $this->dbh->rollBack();
@@ -301,52 +302,48 @@ class DBAccess
     }
 
     /**
-     * Für die MySQL/MariaDB-Fehlerausgabe in einer statischen DEBUG Error Page formatieren
-     * wird die MySQL/MariaDB Fehler Meldung etwas schöner,
-     * vergeben Namen für die Werte und ergänzen sie um das SQL-Statement und den PHP Call Stack
+     * Building a formatted DEBUG Error Page using HTML
      *
-     *
-     * @return string $formatedError Gibt bei DEBUG = TRUE eine formatierte Errorpage
-     *                               mit dem fehlerhaften SQL-Statement, der SQL-Fehlermeldung
-     *                               und dem PHP Call Stack zurück.
+     * @return string $formatedError Returns a formatted error page if DEBUG = TRUE
+     *                               including the faulty SQL statement, the SQL error message,
+     *                               the PHP Call Stack and some additional information useful for debugging.
      */
-    public function debugSQL($PDOError = null)
+    public function debugSQL($PDOError = null):string
     {
         if ($this->stmt) {
-            // PDO SQL Error Array auf mehrere Variablen aufteilen,
-            // damit sie später in HTML besser formatiert werden können
+            // Split the PDO SQL Error Array to multiple variables.
+            // This makes formatting them in HTML easier.
             $err_info   = $this->stmt->errorInfo();
             $sqlerror =  $err_info[2];
             $sqlerrormessage = $err_info[1];
             $ansisqlstate = $err_info[0];
-            // PDO SQL Statement vom Ausgabepuffer in eine Zwischenvariable schreiben und diesen leeren,
-            // sodass nichts mehr direkt in den Browser ausgegeben wird
+            // Write the PDO SQL Statement from the output buffer to a PHP variable and empty it afterwards.
+            // No direct output to the browser occurs in this case.
             ob_start();
             $this->stmt->debugDumpParams();
             $out1 = ob_get_contents();
             ob_clean();
-            // Das Ganze noch etwas lesbarer formatieren
+            // Do some formatting for easier reading
             $out1 = str_replace(']', ']<br><br>', $out1);
             $out1 = str_replace(PHP_EOL, '<br>', $out1);
             $debugdumpparams = str_replace('Params', '<br><br><b>SQL Prepared Statement Parameters</b><br><br>', $out1);
         } else {
-            // Variablen initialisieren, die nicht belegt sind,
-            // wenn der Fehler schon bei der Verbindung zur Datenbank auftritt
+            // initialize variables, that are not set, if the error occurs in the constructor
             $sqlerror = null;
             $sqlerrormessage = null;
             $ansisqlstate = null;
             $debugdumpparams = null;
         }
-        // PHP Call Stack vom Ausgabepuffer in eine Zwischenvariable schreiben und leeren,
-        // sodass nichts mehr direkt in den Browser ausgegeben wird
+        // Write the PHP Call Stack from the output buffer to a PHP variable and empty it afterwards.
+        // No direct output to the browser occurs in this case.
         ob_start();
         debug_print_backtrace();
         $out2 = ob_get_contents();
-        // Das Ganze noch etwas lesbarer formatieren
+        // Do some formatting for easier reading
         $phpcallstack = str_replace('#', '<br>#', $out2);
         ob_clean();
-        // Statische DEBUG Error Page erstellen, die statt des Smarty Templates ausgegeben wird
-        /*        $formatedError = <<<ERRORPAGE
+        // Create a static DEBUG Error Page, that is displayed in the browser instead of the HTML template
+        $formatedError = <<<ERRORPAGE
                 <!DOCTYPE html>
                     <html lang="en">
                         <head>
@@ -356,7 +353,7 @@ class DBAccess
                         <body>
                             <div>
                                 <h2> DEBUG Error Page for $_SERVER[SCRIPT_NAME] </h2>
-                                    <p><b> To hide error messages and redirect to errorpage.html set DEBUG = FALSE in normform/define.inc.php </b></p>
+                                    <p><b> To hide error messages and redirect to an error page set DEBUG = FALSE </b></p>
                                     <b style='color: #FF0000;'> Please correct the following Database Error </b><br>
                                     <p style='color: #FF0000;'>$sqlerror$PDOError</p>
                                     <b>MariaDB ErrorCode: </b> $sqlerrormessage
@@ -371,30 +368,13 @@ class DBAccess
                             </div>
                         </body>
                     </html>
-        ERRORPAGE;
-//*/
-        $formatedError = <<<ERRORPAGE
-                    <div>
-                        <h2> DEBUG Error Page for $_SERVER[SCRIPT_NAME] </h2>
-                            <p><b> To hide error messages and redirect to errorpage.html set DEBUG = FALSE in normform/define.inc.php </b></p>
-                            <b style='color: #FF0000;'> Please correct the following Database Error </b><br>
-                            <p style='color: #FF0000;'>$sqlerror$PDOError</p>
-                            <b>MariaDB ErrorCode: </b> $sqlerrormessage
-                            <b>ANSI SQLSTATE: </b> $ansisqlstate
-                            <br><b>For more Information see:</b> 
-                            <a href='https://mariadb.com/kb/en/mariadb/mariadb-error-codes/' target='_blank'>MariaDB Error Codes</a> <b> or </b>
-                            <a href='http://dev.mysql.com/doc/refman/5.7/en/error-messages-client.html' target='_blank'>MySQL Client Error Codes</a>
-                            <p><b> SQL Statement </b><p>
-                            $debugdumpparams
-                            <br><br><b>PHP Call Stack:</b><br>
-                            $phpcallstack
-                    </div>
 ERRORPAGE;
 
-        // In error_log schreiben, um Fehler nicht im Browser anzuzeigen
+        // Write to error_log, to document errors even if DEBUG = FALSE
         error_log($formatedError, 0);
-        // Fehlerbeschreibung an catch-Block weiterreichen.
-        // Wird mit throw im catch-Block nochmals als DatabaseException weitergereicht und dann mit echo ausgegeben
+        // Pass error description to catch block.
+        // This error message is returned by the Database Exception thrown in the catch block of the method called,
+        // and can be used to send it to the browser with echo in the catch block of a project using DBAccess
         return $formatedError;
     }
 }
