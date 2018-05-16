@@ -8,71 +8,75 @@ use Fhooe\NormForm\View\View;
 use Utilities\Utilities;
 
 /**
- * Class DBDEmo implementiert eine Demoseite für die Normform zusammen mit der Datenbankklasse DBAccess des OnlineShop
+ * Class DBDEmo implements a demo page for the class AbstractNormForm combined with the class DBAccess of OnlineShop
  *
- * Die Seite dbdemo.php setzt auf der ojectorientieren Klasse AbstractNormForm und den Smarty-Templates auf.
- * Weiters benötigt es die Klasse DBAccess für Datenbankzugriffe, die die Klasse FileAccess ersetzt.
- * Durch die Verwendung von PDO Prepared Statements sind keine weiteren Maßnahmen gegen SQL-Injection notwendig.
- * XSS wird von der Klasse View verhindert für mit POST abgeschickte Eingabefelder
+ * This class is initialized by htdocs/dbdemo.php, is derived from the class AbstractNormForm and uses TWIG templates.
+ * Additionally the class DBAccess is used for database access.
+ * DBAccess replaces the class FileAccess of the project PHPintro.
+ * Due to the usage of PDO Prepared Statements no further steps are necessary to avoid SQL Injection in this use case.
+ * XSS is prevented by the TWIG template engine, that escapes variables sent to a template automatically.
  *
- * Diese Seite listet die Produktkategorien des OnlineShops auf.
- * Über die Konstante DISPLAY (@see src/defines.inc.php) wird gesteuert,
- * wieviele Produkte pro Seite angezeigt werden.
- * Über DBDemo::addPType() wird die Produktkategorie in der Tabelle onlineshop.product_category angelegt.
+ * This page lists the content of onlineshop.product_category and adds additional categories.
  *
- * Die Klasse ist final, da es keinen Sinn macht, davon noch weitere Klassen abzuleiten.
+ * Class DBAccess is final, because it makes no sense to derive a class from it.
  *
  * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package onlineshop
- * @version 2016
+ * @version 2018
  */
 final class DBDemo extends AbstractNormForm
 {
     // make trait Utilities accessible via $this->
     use Utilities;
     /**
-     * Konstante für ein HTML Attribute in <input name='ptype' id='ptype' ... >, <label for='ptype' ... >
+     * Constant for a HTML attribute in <input name='ptype' id='ptype' ... >, <label for='ptype' ... >
      * --> $_POST[self::PTYPE]
      */
     const PTYPE = 'ptype';
 
     /**
-     * @var string $dbAccess Datenbankhandler für den Datenbankzugriff
+     * @var string $dbAccess  Database handler for access to database
      */
     private $dbAccess;
 
     /**
      * Shop Constructor.
      *
-     * Ruft den Constructor der Klasse TNormform auf.
-     * Erzeugt den Datenbankhandler mit der Datenbankverbindung
-     * Die übergebenen Konstanten finden sich in src/defines.inc.php
+     * Calls constructor of class AbstractNormForm.
+     * Creates a database handler for the database connection.
+     * The assigned constants can be found in src/defines.inc.php
+     *
+     * @param View $defaultView Holds the initial @View object used for displaying the form.
+     *
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
-    public function __construct(View $defaultView, $templateDir = "templates", $compileDir = "templates_c")
+    public function __construct(View $defaultView)
     {
-        parent::__construct($defaultView, $templateDir, $compileDir);
+        parent::__construct($defaultView);
         $this->dbAccess = new DBAccess(DSN, DB_USER, DB_PWD, DB_NAMES, DB_COLLATION);
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
         // uncomment following lines to demonstrate error_handling
-        // PHP Warning sichtbar im Browser bei display_errors=1
+        // PHP Warning is visible in browser with display_errors=1
         //$x=1/0;
-        // PHP Notice sichtbar im Browser bei display_errors=1
+        // PHP Notice visible in browser with display_errors=1
         //$this->hugo;
-        // HTTP Status: 500 Page not Working, nur in /var/log/apache2/error.log zu sehen, bei log_errors=On
+        // HTTP Status: 500 Page not Working, only visible in /var/log/apache2/error.log with log_errors=On
         //§this->hugo;
     }
 
     /**
-     * Validiert den Benutzerinput
+     * Validates the user input
      *
-     * Die Produktkategorie ptype wird gegen einen regulären Ausdruck geprüft,
-     * der in Utilities::isSingleWord() festgelegt wird
-     * Kann wegen use Utilities zu Beginn der Klassendeklaration auch mit $this->isSingleWord() aufgerufen werden.
-     * Fehlermeldungen werden im Array $errorMessages[] gesammelt.
+     * The product category ptype is tested if it is empty.
+     * Additionally it is validated with a regex given by Utilities::isSingleWord().
+     * Due to "use Utilities" at the begin of this class, $this->isSingleWord() is also possible.
+     * The trait is part of the current class then.
+     * Error messages are written to the array $errorMessages[].
      *
-     * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
+     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      *
-     * @return bool true, wenn $errorMessages leer ist. Ansonsten false
+     * @return bool true, if $errorMessages is empty, else false
      */
     protected function isValid(): bool
     {
@@ -87,15 +91,16 @@ final class DBDemo extends AbstractNormForm
     }
 
     /**
-     * Verarbeitet die Benutzereingaben, die mit POST geschickt wurden
+     * Process the user input, sent with a POST request
      *
-     * Über Shop::addPType() wird die Produktkategorie in die Tabelle onlineshop.product_category gespeichert.
-     * Im Gutfall wird in $this->statusMsg eine Rückmeldung gegeben, das die Schreiboperation erfolgreich war.
+     * Shop::addPType() stores a new category in onlineshop.product_category.
+     * If this works $this->statusMsg is set and displayed in the template.
+     * All categories are read from onlineshop.product_category and displayed in the template.
      *
-     * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
+     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      *
-     * @throws DatabaseException wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     protected function business(): void
     {
@@ -107,12 +112,10 @@ final class DBDemo extends AbstractNormForm
     }
 
     /**
-     * Befüllt das Array um alle Produktkategorien aufzulisten, die auf der aktuellen Seite angezeigt werden.
+     * Returns an array to display all entries of onlineshop.product_category on the current page.
      *
-     * Es werden so viele Sätze gelesen, wie in der Konstante DISPLAY festgelegt. @see src/defines.inc.php
-     *
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function fillpageArray()
     {
@@ -128,10 +131,10 @@ SQL;
 
 
     /**
-     * Schreibt die validierten Benutzereingabe in die Tabelle onlineshop.product_category.
+     * Writes validated user input to the table onlineshop.product_category.
      *
-     * @throws DatabaseException wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception Diese wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function addPType()
     {
@@ -140,8 +143,8 @@ SQL;
                  SET product_category_name = :ptype
 SQL;
         $this->dbAccess->prepareQuery($query, DEBUG);
-        // The next to lines do the same due to use Utilities at the begin of the class declaration
-        //$params = array(':ptype' => Utilities::sanitizeFilter($_POST[self::PTYPE]));
+        // The next two lines do the same due to "use Utilities" at the begin of the class declaration
+        // $params = array(':ptype' => Utilities::sanitizeFilter($_POST[self::PTYPE]));
         $params = array(':ptype' => $this->sanitizeFilter($_POST[self::PTYPE]));
         $this->dbAccess->executeStmt($params);
     }
