@@ -25,8 +25,8 @@ use Utilities\Utilities;
 final class Register extends AbstractNormForm
 {
     /**
-     *  Konstanten für ein HTML Attribute <input name='firstname' id='firstname' ... >,
-     * <label for='firstname' ... > --> $_POST[FIRSTNAME].
+     * Constants for a HTML attribute in <input name='ptype' id='ptype' ... >, <label for='ptype' ... >
+     * --> $_POST[self::PTYPE]
      */
     const FIRSTNAME = "firstname";
     const LASTNAME = "lastname";
@@ -37,35 +37,34 @@ final class Register extends AbstractNormForm
     const EMAIL = "email";
     const PASSWORD = "password";
     const PASSWORDREPEAT = "passwordrepeat";
-    /*
-     * Konstante für die Umlenkung auf die Login-Seite.
-     * Nach erfolgreicher Registrierung wird man zur Loginseite weitergeleitet
-     */
-    const LOGIN = "login.php";
 
     /**
-     * @var string $dbAccess Datenbankhandler für den Datenbankzugriff
+     * @var string $dbAccess  Database handler for access to database
      */
     private $dbAccess;
 
     /**
      * Register Constructor.
      *
-     * Ruft den Constructor der Klasse TNormform auf.
-     * Erzeugt den Datenbankhandler mit der Datenbankverbindung
-     * Die übergebenen Konstanten finden sich in src/defines.inc.php
-
+     * Calls constructor of class AbstractNormForm.
+     * Creates a database handler for the database connection.
+     * The assigned constants can be found in src/defines.inc.php
+     *
+     * @param View $defaultView Holds the initial @View object used for displaying the form.
+     *
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
-    public function __construct(View $defaultView, $templateDir = "templates", $compileDir = "templates_c")
+    public function __construct(View $defaultView)
     {
-        parent::__construct($defaultView, $templateDir, $compileDir);
+        parent::__construct($defaultView);
         /*--
         require '../../onlineshopsolution/register/construct.inc.php';
         //*/
     }
 
     /**
-     * Validiert den Benutzerinput
+     * Validates the user input
      *
      * email wird gegen einen regulären Ausdruck geprüft, der in Utilities::isEmail() festgelegt wird
      * Browser lässt bei type="email" einiges durch, das durch isEmail gefiltert wird
@@ -77,9 +76,9 @@ final class Register extends AbstractNormForm
      * Die restlichen Felder sind Pflichtfelder. Das wird mit TNormform::isEmptyPostField sichergestellt
      * Fehlermeldungen werden im Array $errorMessages[] gesammelt.
      *
-     * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
+     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      *
-     * @return bool true, wenn $errorMessages leer ist. Ansonsten false
+     * @return bool true, if $errorMessages is empty, else false
      */
     protected function isValid(): bool
     {
@@ -91,15 +90,15 @@ final class Register extends AbstractNormForm
     }
 
     /**
-     * Verarbeitet die Benutzereingaben, die mit POST geschickt wurden
+     * Process the user input, sent with a POST request
      *
      * Schreibt mit addUser() die eingegebenen Daten in die Tabelle onlineshop.user
-     * Wenn keine Exception auftritt wird mit Utilities::redirectTo(LOGIN) auf die Seite login.php weitergeleitet
+     * Wenn keine Exception auftritt wird mit View::redirectTo() auf die Seite index.php weitergeleitet
      *
-     * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
+     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      *
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     protected function business(): void
     {
@@ -113,8 +112,8 @@ final class Register extends AbstractNormForm
      * ob sie dort bereits vorhanden ist.
      * @return bool true, wenn email nocht nicht vorhanden ist.
      *              false, wenn bereits ein Eintrag mit dieser email existiert
-     * @throws DatabaseException wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function isUniqueEmail()
     {
@@ -148,8 +147,8 @@ final class Register extends AbstractNormForm
      * beim neuen Datensatz bei Feld onlineshop.user.active das Häkchen für NULL setzen.
      *
      * @return bool true, wenn das Schreiben in die Tabelle onlineshop.user erfolgreich ist.
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function addUser()
     {

@@ -40,7 +40,7 @@ final class DBDemo extends AbstractNormForm
     private $dbAccess;
 
     /**
-     * Shop Constructor.
+     * DBDemo Constructor.
      *
      * Calls constructor of class AbstractNormForm.
      * Creates a database handler for the database connection.

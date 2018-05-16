@@ -37,26 +37,31 @@ final class MyCart extends AbstractNormForm
     // make trait Utilities accessible via $this->
     use Utilities;
     /**
-     *  Konstante für ein HTML Attribute <input name='quantity' id='quantity' ... >,
-     * <label for='quantity' ... > --> $_POST[QUANTITY].
+     * Constant for a HTML attribute in <input name='ptype' id='ptype' ... >, <label for='ptype' ... >
+     * --> $_POST[self::PTYPE]
      */
     const QUANTITY = 'quantity';
 
     /**
-     * @var string $dbAccess Datenbankhandler für den Datenbankzugriff
+     * @var string $dbAccess  Database handler for access to database
      */
     private $dbAccess;
 
     /**
-     * MyCart Constructor.
+     * MyCart constructor.
      *
-     * Ruft den Constructor der Klasse TNormform auf.
-     * Erzeugt den Datenbankhandler mit der Datenbankverbindung
-     * Die übergebenen Konstanten finden sich in src/defines.inc.php
+     * Calls constructor of class AbstractNormForm.
+     * Creates a database handler for the database connection.
+     * The assigned constants can be found in src/defines.inc.php
+     *
+     * @param View $defaultView Holds the initial @View object used for displaying the form.
+     *
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
-    public function __construct(View $defaultView, $templateDir = "templates", $compileDir = "templates_c")
+    public function __construct(View $defaultView)
     {
-        parent::__construct($defaultView, $templateDir, $compileDir);
+        parent::__construct($defaultView);
         /*--
         require '../../onlineshopsolution/mycart/construct.inc.php';
         //*/
@@ -65,7 +70,7 @@ final class MyCart extends AbstractNormForm
     }
 
     /**
-     * Validiert den Benutzerinput
+     * Validates the user input
      *
      * Das Array $_POST[self::QUANTITY] wird durchgegangen und jede pid mit Utilities::isInt() geprüft
      * Fehlermeldungen werden im Array $errorMessages[] gesammelt.
@@ -73,9 +78,9 @@ final class MyCart extends AbstractNormForm
      * Optional kann hier die callback-Funktion array_map()
      * für die Prüfung des gesamten Arrays auf Utilites::isInt() verwendet werden.
      *
-     * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
+     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      *
-     * @return bool true, wenn $errorMessages leer ist. Ansonsten false.
+     * @return bool true, if $errorMessages is empty, else false
      */
     protected function isValid(): bool
     {
@@ -87,7 +92,7 @@ final class MyCart extends AbstractNormForm
     }
 
     /**
-     * Verarbeitet die Benutzereingaben, die mit POST geschickt wurden
+     * Process the user input, sent with a POST request
      *
      * Schreibt über MyCart::changeCart() Änderungen der Quantity bei einem Produkt in die Tabelle onlineshop.cart.
      * Falls der Button "Change Cart" <input name='update' ... > gedrückt wurde,
@@ -96,10 +101,10 @@ final class MyCart extends AbstractNormForm
      * Wenn der Button "Go To Checkout" <inpurt name='checkout' ... > gedrückt wurde,
      * wird im Erfolgsfall auf die Seite checkout.php weitergeleitet.
      *
-     * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
+     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      *
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     protected function business(): void
     {
@@ -126,8 +131,8 @@ final class MyCart extends AbstractNormForm
      *
      * @return array|mixed $pageArray mit allen Einträgen der Tabelle onlineshop.cart für die aktuelle Session.
      * Ein leeres Array, wenn keine Einträge vorhanden sind. false im Fehlerfall.
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function fillpageArray()
     {
@@ -162,8 +167,8 @@ final class MyCart extends AbstractNormForm
      * Alle anderen in das Array $update_array['pid'] und an MyCart::deleteFromCart() bzw.
      * MyCart::updateCart() übergeben.
      *
-     * @throws DatabaseException wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception Diese wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function changeCart()
     {
@@ -176,8 +181,8 @@ final class MyCart extends AbstractNormForm
      * Löst alle Einträge aus dem Array $delete_array aus der Tabelle onlineshop.cart für die aktuelle Session.
      *
      * @param array $delete_array  beinhaltet alle pids für Löschanforderungen für quantity=0.
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function deleteFromCart($delete_array)
     {
@@ -192,8 +197,8 @@ final class MyCart extends AbstractNormForm
      * MyCart::updateCart() nutzt aus, dass prepared Statements pro prepare mehrfach ausgeführt werden können.
      *
      * @param array $update_array beinhaltet alle pids für Änderungsanforderungen für quantity!=0.
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function updateCart($update_array)
     {
