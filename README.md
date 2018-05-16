@@ -2,7 +2,7 @@
 *OnlineShop* provides a basic skeleton for database exercises, that use PDO for accessing MariaDB from PHP.
 
 Templates and CSS are complete, because this part is taught in different lessons. So these exercises can focus on
-database access with PHP Libaries.
+database access with PHP Libraries.
 
 Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/media-technology-and-design/
 
@@ -10,7 +10,7 @@ Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/med
 
 The exercises have been developed with [Vagrant](https://www.vagrantup.com/) and [Virtualbox](https://www.virtualbox.org/). 
 A [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev-base) with the installation of the web environment is hosted on GitHub.
-But *OnlineShop* can also be installed in a different environment.
+But *OnlineShop* can be installed in a different environment as well.
 
 PHP 7.1 is required to run the examples.
 
@@ -26,8 +26,9 @@ PHP 7.1 is required to run the examples.
 * [PHP-FIG PSR: PHP Standards Recommendations](https://www.php-fig.org/psr/)
 
 
-The files, that have to be completed for the exercises, are stored in the subfolder src/exercises.
-Each lesson has its own subfolder. For one exercise only files in this directory have to be completed. All other files are for reference.
+The files, that have to be completed for the exercises, are stored in the subdirectory src/exercises.
+Each lesson has its own subdirectory. For one exercise only files in this subdirectory have to be completed.
+All other files are for reference.
 
 Sample solutions are included with require from a solution folder. The git repostitory, that holds the solution is private.
 These parts can be ignored for your own solution or deleted completely.
