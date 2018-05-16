@@ -50,7 +50,8 @@ For example a fake login is implemented in a way, that you can login without giv
 To complete the solution you have to implement the database access to validate the given user credentials.
 Keep these parts of the code, they can be part of your final solution, if you put them on the right place in your own code.
 
-To demonstrate, how the skeleton works, the comments are set, as seen in the examples avove.
+To demonstrate, how the skeleton works, the comments are set, as seen in the examples above.
+
 If you have access to the solution repository you can demonstrate, how the pattern solution works.
 In this case the comments are switched to
 
@@ -65,20 +66,20 @@ and
      //*/
 
 Shell scripts are used to switch comments. They are stored in a private git repository, that holds the solution. 
-They use GNU sed to replace the comments.
+They use GNU sed to toggle the commenting of both blocks between /* and //.
 
 
 ## Structure of this Repository
 
 Folder | Description
 --- | ---
-``htdocs`` |Frontend stuff. Files called by Webserver, that create the objects with the real implementation, templates and css
+``htdocs`` |Frontend stuff. Files accessed by the web server. They initialize the classes with the actual implementation. CSS
 ``htdocs/css`` | A set of predefined styles to be used with *NormForm*. Include ``main.css`` to use it.
-``htdocs/templates`` | HTML templates for the Smarty template engine used in ``/src/*.php``.
-``htdocs/templates_c`` | Output folder for Smarty's compiled templates.
-``src`` | Classes implemented for *OnlineShop*. Including a dbdemo for [NormForm](https://github.com/Digital-Media/normform) and DBAccess.  The Trait Utilities provides static helper methods to be used in any context.
+``templates`` | HTML templates for the TWIG template engine used in ``/src/*.php``.
+``templates_c`` | Output folder for compiled TWIG templates.
+``src`` | Classes implemented for *OnlineShop*, including a DBDemo for [NormForm](https://github.com/Digital-Media/normform) and DBAccess.  The Trait Utilities provides static helper methods to be used in any context.
 ``src/exercises`` | Classes to be implemented for *OnlineShop* exercises.
-``vendor`` | Third party libraries installed with composer: [TNormform](https://github.com/Digital-Media/normform), [Smarty Templates](http://www.smarty.net/), Javascript Libraries ...
+``vendor`` | Third party libraries installed with composer: [NormForm](https://github.com/Digital-Media/normform), [TWIG Templates](https://twig.symfony.com/), Javascript Libraries ...
 
 A basic class diagramm for OnlineShop (built with http://www.umlet.com/umletino/
 
