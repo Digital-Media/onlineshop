@@ -36,21 +36,27 @@ final class Checkout extends AbstractNormForm
 {
     // make trait Utilities accessible via $this->
     use Utilities;
+
     /**
-     * @var string $dbAccess Datenbankhandler für den Datenbankzugriff
+     * @var string $dbAccess  Database handler for access to database
      */
     private $dbAccess;
 
     /**
-     * Checkout Constructor.
+     * Checkout constructor.
      *
-     * Ruft den Constructor der Klasse TNormform auf.
-     * Erzeugt den Datenbankhandler mit der Datenbankverbindung
-     * Die übergebenen Konstanten finden sich in src/defines.inc.php
+     * Calls constructor of class AbstractNormForm.
+     * Creates a database handler for the database connection.
+     * The assigned constants can be found in src/defines.inc.php
+
+     * @param View $defaultView Holds the initial @View object used for displaying the form.
+     *
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
-    public function __construct(View $defaultView, $templateDir = "templates", $compileDir = "templates_c")
+    public function __construct(View $defaultView)
     {
-        parent::__construct($defaultView, $templateDir, $compileDir);
+        parent::__construct($defaultView);
         /*--
         require '../../onlineshopsolution/checkout/construct.inc.php';
         //*/
@@ -59,7 +65,7 @@ final class Checkout extends AbstractNormForm
     }
 
     /**
-     * Validiert den Benutzerinput
+     * Validates the user input
      *
      * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
      * @see normform/TNormform.class.php
@@ -75,7 +81,7 @@ final class Checkout extends AbstractNormForm
     }
 
     /**
-     * Verarbeitet die Benutzereingaben, die mit POST geschickt wurden
+     * Process the user input, sent with a POST request
      *
      * Schreibt die Bestellungen aus dem Warenkorb Tabelle onlineshop.cart in die Bestelltabellen onlineshop.orders
      * und onlineshop.order_item
@@ -90,12 +96,11 @@ final class Checkout extends AbstractNormForm
      * wird hier keines benötigt.
      * Im Falle einer Exception setzt die Datenbank die Transaktion automatisch zurück.
      *
-     * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
-     * @see normform/TNormform.class.php
+     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      *
      * @return mixed
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     protected function business(): void
     {
@@ -119,8 +124,8 @@ final class Checkout extends AbstractNormForm
      *
      * @return array|mixed $pageArray, wenn das Datensätze in der Tablle onlineshop.cart vorhanden sind.
      *                                 Ein leeres Array, wenn keine Einträge vorhanden sind. false im Fehlerfall.
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     protected function fillpageArray()
     {
@@ -149,8 +154,8 @@ final class Checkout extends AbstractNormForm
      * Basis für die Berechnung ist die Tabelle onlineshop.cart
      *
      * @return mixed $result['totalsum'] Die Gesamtsumme der Bestellung
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function totalSum()
     {
@@ -172,8 +177,8 @@ final class Checkout extends AbstractNormForm
      * weil "order" in SQL ein reserviertes Wort ist.
      *
      * @return bool true, wenn der Eintrag erfolgreich geschrieben wurde.
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
 
     private function addOrder()
@@ -194,8 +199,8 @@ final class Checkout extends AbstractNormForm
      * die die von Checkout::addOrder() erzeugt wurde.
      *
      * @return bool true, wenn die Einträge erfolgreich geschrieben wurden.
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function addItems()
     {
@@ -209,8 +214,8 @@ final class Checkout extends AbstractNormForm
      * aus der Tabelle onlineshop.cart.
      *
      * @return bool
-     * @throws DatabaseException wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function deleteWholeCart()
     {

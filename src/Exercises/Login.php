@@ -28,42 +28,47 @@ final class Login extends AbstractNormForm
     // make trait Utilities accessible via $this->
     use Utilities;
     /**
-     *  Konstanten für ein HTML Attribute <input name='email' id='email' ... >,
-     *  <label for='email' ... > --> $_POST[EMAIL].
+     * Constants for a HTML attribute in <input name='ptype' id='ptype' ... >, <label for='ptype' ... >
+     * --> $_POST[self::PTYPE]
      */
     const EMAIL = "email";
     const PASSWORD = "password";
 
     /**
-     * @var handler dbAccess Datenbankhandler für den Datenbankzugriff
+     * @var string $dbAccess  Database handler for access to database
      */
     private $dbAccess;
 
     /**
-     * Login Constructor.
+     * Login constructor.
      *
-     * Ruft den Constructor der Klasse TNormform auf.
-     * Erzeugt den Datenbankhandler mit der Datenbankverbindung
-     * Die übergebenen Konstanten finden sich in src/defines.inc.php
+     * Calls constructor of class AbstractNormForm.
+     * Creates a database handler for the database connection.
+     * The assigned constants can be found in src/defines.inc.php
+     *
+     * @param View $defaultView Holds the initial @View object used for displaying the form.
+     *
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
-    public function __construct(View $defaultView, $templateDir = "templates", $compileDir = "templates_c")
+    public function __construct(View $defaultView)
     {
-        parent::__construct($defaultView, $templateDir, $compileDir);
+        parent::__construct($defaultView);
         /*--
         require '../../onlineshopsolution/login/construct.inc.php';
         //*/
     }
 
     /**
-     * Validiert den Benutzerinput
+     * Validates the user input
      *
      * Pflichtfelder email, password
      * Die Kombination email + password wird gegen die Datenbank geprüft @see Login::authenitcateUser()
      * Fehlermeldungen werden im Array $errorMessages[] gesammelt.
      *
-     * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
+     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      *
-     * @return bool true, wenn $errorMessages leer ist. Ansonsten false
+     * @return bool true, if $errorMessages is empty, else false
      */
     protected function isValid(): bool
     {
@@ -78,16 +83,14 @@ final class Login extends AbstractNormForm
     }
 
     /**
-     * Verarbeitet die Benutzereingaben, die mit POST geschickt wurden
+     * Process the user input, sent with a POST request
      *
      * Die eingegebenen Daten werden nur validiert @see Login::isValid().
      * Daher erfolgt hier bei erfolgreicher Überprüfung von email+password nur noch die
      * Rückleitung auf Seiten, die durch ein Login geschützt sind, und daher User,
      * die noch nicht eingeloggt sind auf login.php weiterleiten.
      *
-     * @see src/defines.inc.php REDIRECT_PAGES.
-     *
-     * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
+     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      */
     protected function business(): void
     {
@@ -105,8 +108,8 @@ final class Login extends AbstractNormForm
      *
      * @return bool true, wenn email+password einem Datensatz in onlineshop.user entsprechen. false, wenn das
      *                    nicht der Fall ist.
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function authenticateUser()
     {
@@ -150,8 +153,8 @@ SQL;
      * die session_ids neu generiert wurden.
      *
      * @return bool true, wenn das update gut gegangen ist. false, wenn das nicht der Fall ist.
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function updateCart($old_session_id, $new_session_id)
     {

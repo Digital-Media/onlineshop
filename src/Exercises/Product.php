@@ -26,8 +26,8 @@ use Utilities\Utilities;
 final class Product extends AbstractNormForm
 {
     /**
-     *  Konstanten für ein HTML Attribute <input name='pname' id='pname' ... >,
-     * <label for='pname' ... > --> $_POST[PNAME].
+     * Constants for a HTML attribute in <input name='ptype' id='ptype' ... >, <label for='ptype' ... >
+     * --> $_POST[self::PTYPE]
      */
     const PNAME = "pname";
     const PTYPE = "ptype";
@@ -37,20 +37,25 @@ final class Product extends AbstractNormForm
     const LONGDESC = "longdesc";
 
     /**
-     * @var string $dbAccess Datenbankhandler für den Datenbankzugriff
+     * @var string $dbAccess  Database handler for access to database
      */
     private $dbAccess;
 
     /**
      * Product constructor.
      *
-     * Ruft den Constructor der Klasse TNormform auf.
-     * Erzeugt den Datenbankhandler mit der Datenbankverbindung
-     * Die übergebenen Konstanten finden sich in src/defines.inc.php
+     * Calls constructor of class AbstractNormForm.
+     * Creates a database handler for the database connection.
+     * The assigned constants can be found in src/defines.inc.php
+     *
+     * @param View $defaultView Holds the initial @View object used for displaying the form.
+     *
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
-    public function __construct(View $defaultView, $templateDir = "templates", $compileDir = "templates_c")
+    public function __construct(View $defaultView)
     {
-        parent::__construct($defaultView, $templateDir, $compileDir);
+        parent::__construct($defaultView);
         /*--
         require '../../onlineshopsolution/product/construct.inc.php';
         //*/
@@ -58,7 +63,7 @@ final class Product extends AbstractNormForm
     }
 
     /**
-     * Validiert den Benutzerinput
+     * Validates the user input
      *
      * Alle Felder sind Pflichtfelder
      * pname wird gegen die Tabelle onlineshop.product geprüft, ob der Produktname eindeutig ist
@@ -68,9 +73,9 @@ final class Product extends AbstractNormForm
      * @see Product::isValidPtype().
      * Fehlermeldungen werden im Array $errorMessages[] gesammelt.
      *
-     * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
+     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      *
-     * @return bool true, wenn $errorMessages leer ist. Ansonsten false
+     * @return bool true, if $errorMessages is empty, else false
      */
     protected function isValid(): bool
     {
@@ -85,12 +90,13 @@ final class Product extends AbstractNormForm
     }
 
     /**
-     * Verarbeitet die Benutzereingaben, die mit POST geschickt wurden
+     * Process the user input, sent with a POST request
      *
      * Ruft Product::addProduct(), um die validieren Benutzereingaben in die Tabelle onlineshop.product zu schreiben
      * Befüllt im Gutfall die Statusmeldung $this->statusMessage,
      * die Feedback über das erfolgreich angelegte Produkt gibt
-     * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
+     *
+     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      *
      */
     protected function business(): void
@@ -114,8 +120,8 @@ final class Product extends AbstractNormForm
      * Gibt alle Einträge der Tabelle onlineshop.product_category in einem Array zurück.
      *
      * @return mixed Array, das die Einträge der Tabelle onlineshop.product_category beinhaltet. false im Fehlerfall
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function autofillPTypeArray()
     {
@@ -135,8 +141,8 @@ final class Product extends AbstractNormForm
      * Prüft ob der im Array $_POST übergebene ptype in der Tabelle onlineshop.product_category vorhanden ist.
      *
      * @return bool true, wenn der ptype-Eintrag vorhanden ist. false, wenn nicht vorhanden.
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function isValidPType()
     {
@@ -158,8 +164,8 @@ final class Product extends AbstractNormForm
      *
      * @return bool true, wenn pname in der Tabelle onlineshop.product nicht vorhanden ist. false,
      * wenn er bereits vorhanden ist.
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function isUniquePName()
     {
@@ -179,8 +185,8 @@ final class Product extends AbstractNormForm
     /**
      * Schreibt die validierten Benutzereingabe in die Tabelle onlineshop.product.
      *
-     * @throws DatabaseException wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception Diese wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
+     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
+     *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
     private function addProduct()
     {
