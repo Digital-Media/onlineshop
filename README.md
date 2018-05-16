@@ -65,7 +65,7 @@ and
      return true;
      //*/
 
-Shell scripts are used to switch comments. They are stored in a private git repository, that holds the solution. 
+Shell scripts are used to toggle comments. They are stored in a private git repository, that holds the solution. 
 They use GNU sed to toggle the commenting of both blocks between /* and //.
 
 
