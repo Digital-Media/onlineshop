@@ -35,7 +35,7 @@ All other files are for reference.
 
 Sample solutions are included with ``require`` from a solution folder. The git repostitory, that holds the solution is private.
 These parts can be ignored for your own solution or deleted completely.
-Do not include these files, but work directly in the files in ``src/exercises`` to complete your solution. ``TODO``s will guide you, what has to be done for completing the solution. For a better understanding read the PHPDoc comments, that describe the classes, methods, properties and constants.
+Do not include these files, but work directly in the files in ``src/exercises`` to complete your solution. ``TODO``s will guide you, what has to be done for completing the solution. For a better understanding read the PHPDoc comments, that describe the classes, methods, properties and constants and have a look at the provided example src/DBAccess/DBDemo.php.
 
 For example:  
     
