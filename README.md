@@ -2,7 +2,7 @@
 *OnlineShop* provides a basic skeleton for database exercises, that use PDO for accessing MariaDB from PHP.
 
 The code is meant only for educational purpose, even though some parts can be used for smaller web projects.
-We try to meet web, coding and security standards as good as possible in these basic lessons.
+We try to meet web, coding and security standards as far as possible in these basic lessons.
 
 Templates and CSS are complete, because this part is taught in different lessons. So these exercises can focus on
 database access with PHP Libraries.

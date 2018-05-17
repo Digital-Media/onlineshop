@@ -9,28 +9,21 @@ use DBAccess\DBAccess;
 use Utilities\Utilities;
 
 /**
- * Die  Checkoutseite implementiert die finale Bestellung im OnlineShop.
+ * The Class Checkout implements the final order.
  *
- * Die Checkout-Seite setzt auf der ojectorientieren Klasse TNormform und den Smarty-Templates auf.
- * Weiters benötigt es die Klasse DBAccess für Datenbankzugriffe, die die Klasse FileAccess ersetzt.
- * Durch die Verwendung von PDO Prepared Statements sind keine weiteren Maßnahmen gegen SQL-Injection notwendig.
- * XSS wird von der Klasse View verhindert für mit POST abgeschickte Eingabefelder
+ * In case your index.php doesn't work,
+ * you can create dummy entries in onlineshop.cart with SessionID=1 for testing purpose.
+ * See /src/onlineshop.sql for a insert command to create some.
  *
- * In der Tabelle onlineshop.cart befinden sich Dummy-Einträge mit SessionID=1,
- * die für Testzwecke genutzt werden können, falls Ihre index.php nicht funktioniert.
- *
- * Beim Klicken des Button "Buy Now" wird die Bestellung abgeschickt.
- * Die Einträge aus der Tabelle onlineshop.cart werden in die Tabelle onlineshop.order_item übertragen
- * und in onlineshop.orders zu einer Bestellung zusammengefasst.
- * Im Erfolgsfall wird die über das Statusfeld "All products will be shipped" angezeigt und die Einträge
- * in der Tabelle onlineshop.cart gelöscht.
- * Eine Bestellung wird über den gleichen Eintrag in der Spalte onlineshop.cart.session_id zusammengefasst.
- *
- * Die Klasse ist final, da es keinen Sinn macht, davon noch weitere Klassen abzuleiten.
+ * With the "Buy Now" button a order is finalized.
+ * The entries in the table onlineshop.cart, that belong to the current session, are transfered to onlineshop.order_item.
+ * An entry, that stands for the whole order, is created in onlineshop.orders.
+ * One order in onlineshop.cart is connected via equal entries in the field onlineshop.cart.session_id.
+ * On success a status message is set and all entries in onlineshop.cart are deleted.
  *
  * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
- * @package dab3
- * @version 2016
+ * @package onlineshop
+ * @version 2.0.2
  */
 final class Checkout extends AbstractNormForm
 {
@@ -47,12 +40,11 @@ final class Checkout extends AbstractNormForm
      *
      * Calls constructor of class AbstractNormForm.
      * Creates a database handler for the database connection.
-     * The assigned constants can be found in src/defines.inc.php
+     * Fills the pageArray sent to the template to display the current orders of onlineshop.cart.
 
      * @param View $defaultView Holds the initial @View object used for displaying the form.
      *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     public function __construct(View $defaultView)
     {
@@ -60,19 +52,17 @@ final class Checkout extends AbstractNormForm
         /*--
         require '../../onlineshopsolution/checkout/construct.inc.php';
         //*/
-        // Add the images to our view since we can't do this from outside the object
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
     }
 
     /**
      * Validates the user input
      *
-     * Abstracte Methode in der Klasse TNormform und muss daher hier implementiert werden
-     * @see normform/TNormform.class.php
+     * The data shown in the browser are are read from onlineshop.cart and not sent back after submit.
+     * The submit only triggers the transfer of the data from onlineshop.cart to onlineshop.order_items
+     * and onlineshop.orders in the method business().
      *
-     * @return bool immer true, weil es keine Eingabefehler gibt. Die Abläufe von TNormform werden trotzdem eingehalten,
-     * weil es einen Submit-Button zur Bestätigung der
-     * ausgegebenen Bestellung gibt, wobei im Folgenden als Verarbeitungschritt in die Datenbank geschrieben wird.
+     * @return bool always true, because there are no input fields.
      */
     protected function isValid(): bool
     {
@@ -81,65 +71,57 @@ final class Checkout extends AbstractNormForm
     }
 
     /**
-     * Process the user input, sent with a POST request
+     * The data from onlineshop.cart are transfered to onlineshop.orders and onlineshop.order_item
      *
-     * Schreibt die Bestellungen aus dem Warenkorb Tabelle onlineshop.cart in die Bestelltabellen onlineshop.orders
-     * und onlineshop.order_item
-     * Weil die Bestellung auf zwei Tabellen aufgeteilt ist, muss das Schreiben der zwei Tabellen mit einer
-     * Transaktionsklammer zusammengefasst werden.
-     * Wenn das Schreiben beider Tabellen gut gegegangen ist, werden die Einträge der aktuellen Session aus der
-     * Tabelle onlineshop.cart gelöscht.
-     * In $this->statusMsg wird eine passende Status-Meldung, dass das Schreiben der Bestellung gut ging geschrieben.
-     * Danach wird ein Commit abgesetzt.
+     * Because the order is split up into two tables, the inserts have to be enclose by "begin transaction" and "commit".
+     * If both inserts succeed, the order is deleted from onlineshop.cart.
+     * The delete also has to be within "begin transaction" and "commit".
+     * After the commit $this->statusMessage is set to appropriate value stating that the order was successful.
      *
-     * Weil es keine Überprüfungen während der Transaktion gibt, die ein Rollback erfordern könnten,
-     * wird hier keines benötigt.
-     * Im Falle einer Exception setzt die Datenbank die Transaktion automatisch zurück.
-     *
-     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
+     * During the transaction there are no validation, that can cause an explicit rollback.
+     * In case of an exception the database automatically rolls back.
+     * Therefore only a commit is needed.
      *
      * @return mixed
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     protected function business(): void
     {
         /*--
         require '../../onlineshopsolution/checkout/business.inc.php';
         //*/
+        $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
     }
 
     /**
-     * Gibt ein Array mit allen Produkten im Warenkorb Tabelle onlineshop.cart,
-     * die vom aktuell eingeloggten User bestellt wurden, zurück.
+     * Returns an array with all products stored in onlineshop.cart, that have been ordered by a logged in user
+     * in the current session.
      *
-     * Identifiziert wird der User hier über die session_id. Ältere Bestellungen,
-     * die nicht abgeschickt wurden, werden in diesem Fall nicht berücksichtigt.
-     * Dazu müsste die Tabelle onlineshop.cart auch eine Spalte user_id beinhalten.
-     * Die Tabelle onlineshop.cart beinhaltet Dummyeinträge mit session_id=1.
-     * Diese können für Testzwecke benutzt werden, falls Ihre index.php und mycart.php nicht funktionieren.
+     * A user is identified with his current session_id. Orders of former sessions are not in the result set.
+     * With a field onlineshop.cart.user_iduser former orders could be considered, if the user logged in before
+     * leaving the site.
      *
-     * Optional kann an das von der Datenbank zurückgegebene Resultset noch eine Zeile
-     * mit einer Trennlinie <hr> und eine Zeile mit der Gesamtsumme angefügt werden.
+     * Adds a line to $pageArray, that holds total_sum.
      *
-     * @return array|mixed $pageArray, wenn das Datensätze in der Tablle onlineshop.cart vorhanden sind.
-     *                                 Ein leeres Array, wenn keine Einträge vorhanden sind. false im Fehlerfall.
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @return array $pageArray, The result set, if valid entries exist in onlineshop.cart
+     *                                 An empty array, if no entries are there.
+     * @throws DatabaseException
      */
-    protected function fillpageArray()
+    protected function fillpageArray(): array
     {
-        // TODO Umschreiben, dass das Array ptypeArray aus der Datenbank befüllt wird
+        // TODO rewrite this code in a way, that the entries are filled from the database.
         //##
-        return $pageArray = array( 0 => array('product_idproduct' => 1,
-                                       'product_name' => 'Passivhaus',
-                                       'price' => 300000,00, 'quantity' => 1),
-                            1 => array('product_idproduct' => 2,
-                                       'product_name' => 'Niedrigenergiehaus',
-                                       'price' => 200000,00, 'quantity' => 1),
-                            2 => array('product_idproduct' => 3,
-                                       'product_name' => 'Almgrundstück',
-                                       'price' => 100000,00, 'quantity' => 1));
+        return $pageArray = array(
+                                0 => array('product_idproduct' => 1,
+                                           'product_name' => 'Passivhaus',
+                                           'price' => 300000,00, 'quantity' => 1),
+                                1 => array('product_idproduct' => 2,
+                                           'product_name' => 'Niedrigenergiehaus',
+                                           'price' => 200000,00, 'quantity' => 1),
+                                2 => array('product_idproduct' => 3,
+                                           'product_name' => 'Almgrundstück',
+                                           'price' => 100000,00, 'quantity' => 1)
+                            );
         //*/
         /*--
         require '../../onlineshopsolution/checkout/fillpageArray.inc.php';
@@ -149,15 +131,12 @@ final class Checkout extends AbstractNormForm
     }
 
     /**
-     * Ermittelt die Gesamtbestellsumme für die aktuelle session_id.
+     * Calculates the total sum for the current session_id from onlineshop.cart.
      *
-     * Basis für die Berechnung ist die Tabelle onlineshop.cart
-     *
-     * @return mixed $result['totalsum'] Die Gesamtsumme der Bestellung
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @return array $result['totalsum']
+     * @throws DatabaseException
      */
-    private function totalSum()
+    private function totalSum(): array
     {
         /*--
         require '../../onlineshopsolution/checkout/totalsum.inc.php';
@@ -166,22 +145,16 @@ final class Checkout extends AbstractNormForm
     }
 
     /**
-     * Schreibt die Bestellung in die Tabelle onlineshop.orders.
+     * Stores the order in the table onlineshop.orders.
      *
-     * Die Spalte onlineshop.orders.iduser wird aus $_SESSION['iduser'] befüllt.
-     * Die Spalte onlineshop.orders.total_sum wird durch ein Subselect aus der Tabelle onlineshop.cart gelesen.
-     * Die Spalte onlineshop.orders.date_ordered wird mit now() mit dem aktuellen Zeitstempel befüllt.
+     * The column onlineshop.orders.iduser is set to $_SESSION['iduser'].
+     * The column onlineshop.orders.total_sum is built with a subselect on the table onlineshop.cart.
+     * The column onlineshop.orders.date_ordered is set to now().
      *
-     *
-     * Hier wird die Namenskonvention "Tabellennamen im Singular" gebrochen,
-     * weil "order" in SQL ein reserviertes Wort ist.
-     *
-     * @return bool true, wenn der Eintrag erfolgreich geschrieben wurde.
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
 
-    private function addOrder()
+    private function addOrder(): void
     {
         /*--
         require '../../onlineshopsolution/checkout/addOrder.inc.php';
@@ -189,20 +162,18 @@ final class Checkout extends AbstractNormForm
     }
 
     /**
-     * Schreibt für jede Zeile in der Tabelle onlineshop.cart mit der session_id der aktuellen Session
-     * einen Eintrag in die Tabelle onlineshop.order_item
+     * All entries in the table onlineshop.cart belonging to the current session are transfered to
+     * onlineshop.order_item
      *
-     * Die Spalten onlineshop.order_item.idproduct, quantity, price werden mittels Subselect aus der
-     * Tabelle onlineshop.cart gelesen.
-     * Dies geschieht für jeden Eintrag, der in onlineshop.cart.sesssion_id die aktuelle SessionID beinhaltet.
-     * Mit dem gleichen Select wird die Spalte onlineshop.order_item.idorder mit last_insert_id() ermittelt,
-     * die die von Checkout::addOrder() erzeugt wurde.
+     * The columns onlineshop.order_item.idproduct, quantity, price are read from the table
+     * onlineshop.cart via subselect. Additionally this subselect determines the PK used for Checkout::addOrder() to
+     * use it in onlineshop.order_item.orders_idorders as FK. --> last_insert_id()
+     * The subselect gathers only entries, where the content of onlineshop.cart.session_id is
+     * equivalent to the current session_id.
      *
-     * @return bool true, wenn die Einträge erfolgreich geschrieben wurden.
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
-    private function addItems()
+    private function addItems(): void
     {
         /*--
         require '../../onlineshopsolution/checkout/addItems.inc.php';
@@ -210,14 +181,11 @@ final class Checkout extends AbstractNormForm
     }
 
     /**
-     * Löscht alle Einträge mit der aktuellen SessionID in der Spalte onlineshop.cart.session_id
-     * aus der Tabelle onlineshop.cart.
+     * The entries in onlineshop.cart belonging to the current session are deleted.
      *
-     * @return bool
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
-    private function deleteWholeCart()
+    private function deleteWholeCart(): void
     {
         /*--
         require_once '../../onlineshopsolution/checkout/deleteWholeCart.inc.php';
