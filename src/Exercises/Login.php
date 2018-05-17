@@ -9,19 +9,14 @@ use DBAccess\DBAccess;
 use Utilities\Utilities;
 
 /**
- * Das  Login-Formular implementiert das Einloggen in den OnlineShop.
+ * The class Login implements the login to OnlineShop.
  *
- * Das Login-Formular setzt auf der ojectorientieren Klasse TNormform und den Smarty-Templates auf.
- * Weiters benötigt es die Klasse DBAccess für Datenbankzugriffe, die die Klasse FileAccess ersetzt.
- * Durch die Verwendung von PDO Prepared Statements sind keine weiteren Maßnahmen gegen SQL-Injection notwendig.
- * XSS wird von der Klasse View verhindert für mit POST abgeschickte Eingabefelder
- * Bei erfolgreichem Login wird $_SESSION[LOGGEDIN] mit einem verschlüsselten Wert belegt.
+ * On success the variable $_SESSION[LOGGEDIN] is filled with a special hash.
+ * User credentials are validated against the table onlineshop.user
  *
- * Die Klasse ist final, da es keinen Sinn macht, davon noch weitere Klassen abzuleiten.
- *
- * @package Onlineshop
- * @version 2018
  * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
+ * @package Onlineshop
+ * @version 2.0.2
  */
 final class Login extends AbstractNormForm
 {
@@ -48,8 +43,7 @@ final class Login extends AbstractNormForm
      *
      * @param View $defaultView Holds the initial @View object used for displaying the form.
      *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     public function __construct(View $defaultView)
     {
@@ -62,11 +56,9 @@ final class Login extends AbstractNormForm
     /**
      * Validates the user input
      *
-     * Pflichtfelder email, password
-     * Die Kombination email + password wird gegen die Datenbank geprüft @see Login::authenitcateUser()
-     * Fehlermeldungen werden im Array $errorMessages[] gesammelt.
-     *
-     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
+     * email and password are required fields.
+     * The combination of email + password is checked against database in @see Login::authenitcateUser()
+     * Error messages are stored in the array $errorMessages[].
      *
      * @return bool true, if $errorMessages is empty, else false
      */
@@ -85,12 +77,9 @@ final class Login extends AbstractNormForm
     /**
      * Process the user input, sent with a POST request
      *
-     * Die eingegebenen Daten werden nur validiert @see Login::isValid().
-     * Daher erfolgt hier bei erfolgreicher Überprüfung von email+password nur noch die
-     * Rückleitung auf Seiten, die durch ein Login geschützt sind, und daher User,
-     * die noch nicht eingeloggt sind auf login.php weiterleiten.
-     *
-     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
+     * If a user called a page, that is protected by login, he will be redirected back to the page he requested.
+     * If he directly requested the login page he is redirected to index.php
+     * A page protected by login has to store its name in $_SESSION['redirect'] to make this redirect possible.
      */
     protected function business(): void
     {
@@ -99,17 +88,14 @@ final class Login extends AbstractNormForm
     }
 
     /**
-     * Validiert email und password
+     * Validates email and password against onlineshop.user
      *
-     * Optional wird die sesssion_id nach erfolgreichem Login neu generiert (session_regenerate_id(),
-     * um Session Highjacking zu erschweren.
-     * Danach müssen die session_ids für die aktuelle Session im Warenkorb (Tabelle onlineshop.cart) ebenfalls
-     * erneuert werden.
+     * After a successful login the session_id is regenerated to make session hijacking more difficult.
+     * session_regenerate_id() is used for that.
+     * After that the session_ids in onlineshop.cart have to be replaced with the new one.
      *
-     * @return bool true, wenn email+password einem Datensatz in onlineshop.user entsprechen. false, wenn das
-     *                    nicht der Fall ist.
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @return bool true, if email+password match a row in onlineshop.user, else false.
+     * @throws DatabaseException
      */
     private function authenticateUser()
     {
@@ -122,39 +108,14 @@ final class Login extends AbstractNormForm
         //*/
         // copy solution from onlineshopsolution/login/authenticateUser.inc.php here to make solution work.
         // require doesn't work in this case
-        $query = <<<SQL
-                 SELECT iduser, first_name, last_name, password 
-                 FROM user 
-                 WHERE email=:email 
-                 AND active IS NULL
-SQL;
-        $this->dbAccess->prepareQuery($query);
-        $this->dbAccess->executeStmt(array(':email' => $_POST[self::EMAIL]));
-        $rows = $this->dbAccess->fetchResultset();
-        if (count($rows) === 1 && password_verify($_POST[self::PASSWORD], $rows[0]['password'])) {
-            // TODO Optional, Warenkorb über session_regenerate_id() hinweg erhalten
-            $old_session_id = session_id();
-            session_regenerate_id();
-            $this->updateCart($old_session_id, session_id());
-            // End optional
-            $_SESSION['iduser']=$rows[0]['iduser'];
-            $_SESSION[IS_LOGGED_IN] = Utilities::generateLoginHash();
-            $_SESSION['first_name']=$rows[0]['first_name'];
-            $_SESSION['last_name']=$rows[0]['last_name'];
-            return true;
-        } else {
-            return false;
-        }
         //
     }
 
     /**
-     * Erneuert die session_ids in der Tabelle onlineshop.cart, wenn bei erfolgreichem Login,
-     * die session_ids neu generiert wurden.
+     * Replaces the session_ids in onlineshop.cart after the session has been regenerated after a successful login.
      *
      * @return bool true, wenn das update gut gegangen ist. false, wenn das nicht der Fall ist.
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     private function updateCart($old_session_id, $new_session_id)
     {
