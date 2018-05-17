@@ -9,19 +9,11 @@ use DBAccess\DBAccess;
 use Utilities\Utilities;
 
 /*
- * Das  Produkt-Formular ermöglicht es ein Produkt im OnlineShop anzulegen.
- *
- * Das Produkt-Formular setzt auf der ojectorientieren Klasse TNormform und den Smarty-Templates auf.
- * Weiters benötigt es die Klasse DBAccess für Datenbankzugriffe, die die Klasse FileAccess von IMAR ersetzt.
- * Im Erfolgsfall werden die Benutzerdaten in der Tabelle onlineshop.users gespeichert.
- * Durch die Verwendung von PDO Prepared Statements sind keine weiteren Maßnahmen gegen SQL-Injection notwendig
- * XSS wird von der Klasse View verhindert für mit POST abgeschickte Eingabefelder
- *
- * Die Klasse ist final, da es keinen Sinn macht, davon noch weitere Klassen abzuleiten.
+ * The class Product stores product data in onlineshop.product.
  *
  * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
- * @package dab3
- * @version 2016
+ * @package onlineshop
+ * @version 2.0.2
  */
 final class Product extends AbstractNormForm
 {
@@ -46,12 +38,10 @@ final class Product extends AbstractNormForm
      *
      * Calls constructor of class AbstractNormForm.
      * Creates a database handler for the database connection.
-     * The assigned constants can be found in src/defines.inc.php
      *
      * @param View $defaultView Holds the initial @View object used for displaying the form.
      *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     public function __construct(View $defaultView)
     {
@@ -65,15 +55,13 @@ final class Product extends AbstractNormForm
     /**
      * Validates the user input
      *
-     * Alle Felder sind Pflichtfelder
-     * pname wird gegen die Tabelle onlineshop.product geprüft, ob der Produktname eindeutig ist
+     * All fields are required.
+     * pname is checked for uniqueness against onlineshop.product.product_name.
      * @see Product::isUniquePName().
-     * Der Preis wird mit Utilities::isPrice() validiert.
-     * ptype wird gegen die Tabelle onlineshop.prdoduct_category geprüft, ob er darin vorhanden ist
+     * Price can be validated with Utilities::isPrice().
+     * ptype is checked against onlineshop.prdoduct_category, if it exists.
      * @see Product::isValidPtype().
-     * Fehlermeldungen werden im Array $errorMessages[] gesammelt.
-     *
-     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
+     * Error messages are stored in the array $errorMessages[].
      *
      * @return bool true, if $errorMessages is empty, else false
      */
@@ -92,12 +80,8 @@ final class Product extends AbstractNormForm
     /**
      * Process the user input, sent with a POST request
      *
-     * Ruft Product::addProduct(), um die validieren Benutzereingaben in die Tabelle onlineshop.product zu schreiben
-     * Befüllt im Gutfall die Statusmeldung $this->statusMessage,
-     * die Feedback über das erfolgreich angelegte Produkt gibt
-     *
-     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
-     *
+     * Calls Product::addProduct(), to store the validated data in the table onlineshop.product.
+     * On success $this->statusMessage is set and sent to the template (setParameter).
      */
     protected function business(): void
     {
@@ -117,11 +101,10 @@ final class Product extends AbstractNormForm
     }
 
     /**
-     * Gibt alle Einträge der Tabelle onlineshop.product_category in einem Array zurück.
+     * Returns all entries of the table onlineshop.product_category in an array.
      *
      * @return mixed Array, das die Einträge der Tabelle onlineshop.product_category beinhaltet. false im Fehlerfall
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     private function autofillPTypeArray()
     {
@@ -138,11 +121,10 @@ final class Product extends AbstractNormForm
     }
 
     /**
-     * Prüft ob der im Array $_POST übergebene ptype in der Tabelle onlineshop.product_category vorhanden ist.
+     * ptype in $_POST is checked against the table onlineshop.product_category, if it already exists.
      *
      * @return bool true, wenn der ptype-Eintrag vorhanden ist. false, wenn nicht vorhanden.
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     private function isValidPType()
     {
@@ -160,12 +142,10 @@ final class Product extends AbstractNormForm
     }
 
     /**
-     * Prüft ob pname in der Tabelle onlineshop.product bereits vorhanden ist.
+     * pname is checked for uniqueness against the table onlineshop.product.
      *
-     * @return bool true, wenn pname in der Tabelle onlineshop.product nicht vorhanden ist. false,
-     * wenn er bereits vorhanden ist.
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @return bool false, if pname in table onlineshop.product already exist, else true.
+     * @throws DatabaseException
      */
     private function isUniquePName()
     {
@@ -183,10 +163,9 @@ final class Product extends AbstractNormForm
     }
 
     /**
-     * Schreibt die validierten Benutzereingabe in die Tabelle onlineshop.product.
+     * Stores the product data in the table onlineshop.product.
      *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     private function addProduct()
     {

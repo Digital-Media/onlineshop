@@ -9,18 +9,13 @@ use DBAccess\DBAccess;
 use Utilities\Utilities;
 
 /*
- * Das  Registrier-Formular setzt die Registrierung im OnlineShop um.
+ * The class Register implements a registration of a user at onlineshop.
  *
- * Das Registrier-Formular setzt auf der ojectorientieren Klasse TNormform und den Smarty-Templates auf.
- * Weiters benötigt es die Klasse DBAccess für Datenbankzugriffe, die die Klasse FileAccess ersetzt.
- * Durch die Verwendung von PDO Prepared Statements sind keine weiteren Maßnahmen gegen SQL-Injection notwendig.
- * Im Erfolgsfall werden die Benutzerdaten in der Tabelle onlineshop.users gespeichert.
- *
- * Die Klasse ist final, da es keinen Sinn macht, davon noch weitere Klassen abzuleiten.
+ * If user credentials are valid, they are stored in the table onlineshop.user.
  *
  * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
- * @package dab3
- * @version 2016
+ * @package onlineshop
+ * @version 2.0.2
  */
 final class Register extends AbstractNormForm
 {
@@ -48,12 +43,10 @@ final class Register extends AbstractNormForm
      *
      * Calls constructor of class AbstractNormForm.
      * Creates a database handler for the database connection.
-     * The assigned constants can be found in src/defines.inc.php
      *
      * @param View $defaultView Holds the initial @View object used for displaying the form.
      *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     public function __construct(View $defaultView)
     {
@@ -66,15 +59,13 @@ final class Register extends AbstractNormForm
     /**
      * Validates the user input
      *
-     * email wird gegen einen regulären Ausdruck geprüft, der in Utilities::isEmail() festgelegt wird
-     * Browser lässt bei type="email" einiges durch, das durch isEmail gefiltert wird
-     * @example m@m Email, die von cliqz-Browser zugelassen wird, von Utilities::isEmail() nicht
-     * zusätzlich wird email gegen die Tabelle onlineshop.user geprüft, ob sie dort bereits vorkommt.
-     * password wird mit einem regulären Ausdruck verglichen der in Utilitie::isPassword festgelegt ist
-     * Von den Feldern phone, mobile und fax muss mindestens eines gefüllt sein.
-     * Wenn befüllt werden sie gegen Utilities::isPhone() geprüft.
-     * Die restlichen Felder sind Pflichtfelder. Das wird mit TNormform::isEmptyPostField sichergestellt
-     * Fehlermeldungen werden im Array $errorMessages[] gesammelt.
+     * email is validated with a regex. You can use Utilities::isEmail() to do so.
+     * Additionally email is checked for uniqueness against onlineshop.user.
+     * password is validated with a regex. You can use Utilitie::isPassword() to do so.
+     * At least one of the fields phone, mobile and fax is required.
+     * If filled they are checked with a regex. You can use Utilities::isPhone() to do so.
+     * All other fields are required. You can use AbstractNormform::isEmptyPostField() for validation.
+     * Error messages are strored in the array $errorMessages[].
      *
      * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      *
@@ -92,13 +83,10 @@ final class Register extends AbstractNormForm
     /**
      * Process the user input, sent with a POST request
      *
-     * Schreibt mit addUser() die eingegebenen Daten in die Tabelle onlineshop.user
-     * Wenn keine Exception auftritt wird mit View::redirectTo() auf die Seite index.php weitergeleitet
+     * Writes the data with addUser() into table onlineshop.user.
+     * On success the user is redirected to index.php with View::redirectTo().
      *
-     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
-     *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     protected function business(): void
     {
@@ -108,12 +96,11 @@ final class Register extends AbstractNormForm
 
 
     /**
-     * Emailadresse aus dem POST-Array wird gegen die Tabelle onlineshop.user geprüft,
-     * ob sie dort bereits vorhanden ist.
-     * @return bool true, wenn email nocht nicht vorhanden ist.
-     *              false, wenn bereits ein Eintrag mit dieser email existiert
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * email of the POST-Array is checked for uniqueness against the table onlineshop.user.
+     *
+     * @return bool true, if email doesn't exist.
+     *              false, if email exists.
+     * @throws DatabaseException
      */
     private function isUniqueEmail()
     {
@@ -131,32 +118,25 @@ final class Register extends AbstractNormForm
     }
 
     /**
-     * Schreibt die eingegebenen Daten in die Tabelle onlineshop.user
+     * Stores the data in the table onlineshop.user
      *
-     * Ins Feld active wird ein MD5-Hash geschrieben, um festzulegen,
-     * dass die Zweiphasenauthentifizierung noch nicht abgeschlossen ist.
-     * Wird active später auf NULL gesetzt, ist die Authentifizierung abgeschlossen und der Benutzer kann sich einloggen
+     * The field active stores a MD5-Hash to determine, that a two-phase authentication has not been finished yet.
+     * If active is set to NULL, when clicking a link with this hash sent via email, the user can log in.
      * @see login.php
-     * role ist mit einem Default-Wert (user) vorbelegt und kann daher auch weggelassen werden
-     * date_registered kann weggelassen werden oder mit NOW() vorbelegt werden, um den aktuellen Zeitstempel einzutragen
-     * phone, mobile und fax sind keine Pflichtfelder und werden einfach mit Utilities::sanitizeFilter()
-     * in die Datenbank geschrieben.
-     * Alle restlichen Felder werden mit Utilities::sanitizeFilter() abgesichert in die Datenbank geschrieben.
+     * role has a default value (user) and can be left empty, if you allow only normal users to register via this form.
+     * date_registered can be omitted or filled with NOW(), to store the current timestamp.
+     * phone, mobile und fax are not required and can be null.
+     * All other fields are directly stored to the table onlineshop.user.
      *
-     * Zum Testen, ob man sich mit login.php einloggen kann, im PHPMyAdmin in onlineshop.user
-     * beim neuen Datensatz bei Feld onlineshop.user.active das Häkchen für NULL setzen.
+     * To test, if a login with login.php works with the current data,
+     * set active to null with PHPMyAdmin in onlineshop.user
      *
-     * @return bool true, wenn das Schreiben in die Tabelle onlineshop.user erfolgreich ist.
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     private function addUser()
     {
         /*--
         require '../../onlineshopsolution/register/addUser.inc.php';
-        //*/
-        //##
-        return true;
         //*/
     }
 }
