@@ -12,7 +12,7 @@ use Utilities\Utilities;
  * The class Product stores product data in onlineshop.product.
  *
  * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
- * @package onlineshop
+ * @package OnlineShop
  * @version 2.0.2
  */
 final class Product extends AbstractNormForm
@@ -46,7 +46,7 @@ final class Product extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
+        //--
         require '../../onlineshopsolution/product/construct.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("ptypeArray", $this->autofillPTypeArray()));
@@ -67,7 +67,7 @@ final class Product extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        /*--
+        //--
         require '../../onlineshopsolution/product/isValid.inc.php';
         //*/
         $this->currentView->setParameter(
@@ -86,7 +86,7 @@ final class Product extends AbstractNormForm
     protected function business(): void
     {
         $this->addProduct();
-        /*--
+        //--
         require '../../onlineshopsolution/product/business.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
@@ -109,12 +109,12 @@ final class Product extends AbstractNormForm
     private function autofillPTypeArray()
     {
         // TODO Umschreiben, dass das Array aus der Datenbank befüllt wird
-        //##
+        /*##
         return array( 0 => array('product_category_name' => 'Please Choose One'),
                       1 => array('product_category_name' => 'Fill with entries from database!'),
                       2 => array('product_category_name' => 'Yes, you should!'));
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/product/autofillPTypeArray.inc.php';
         return $this->dbAccess->fetchResultset();
         //*/
@@ -128,10 +128,10 @@ final class Product extends AbstractNormForm
      */
     private function isValidPType()
     {
-        //##
+        /*##
         return true;
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/product/isValidPType.inc.php';
         if (count($rows) !== 0) {
             return true;
@@ -149,10 +149,10 @@ final class Product extends AbstractNormForm
      */
     private function isUniquePName()
     {
-        //##
+        /*##
         return true;
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/product/isUniquePName.inc.php';
         if (count($rows) !== 0) {
             return false;
@@ -169,7 +169,7 @@ final class Product extends AbstractNormForm
      */
     private function addProduct()
     {
-        /*--
+        //--
         require '../../onlineshopsolution/product/addProduct.inc.php';
         $this->dbAccess->executeStmt($params);
         //*/

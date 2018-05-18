@@ -15,7 +15,7 @@ use Utilities\Utilities;
  * User credentials are validated against the table onlineshop.user
  *
  * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
- * @package Onlineshop
+ * @package OnlineShop
  * @version 2.0.2
  */
 final class Login extends AbstractNormForm
@@ -48,7 +48,7 @@ final class Login extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
+        //--
         require '../../onlineshopsolution/login/construct.inc.php';
         //*/
     }
@@ -64,10 +64,10 @@ final class Login extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        /*--
+        //--
         require '../../onlineshopsolution/login/isValid.inc.php';
         //*/
-        //##
+        /*##
         $this->authenticateUser();
         //*/
         $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
@@ -99,7 +99,7 @@ final class Login extends AbstractNormForm
      */
     private function authenticateUser()
     {
-        //##
+        /*##
         $_SESSION['iduser']=1;
         $_SESSION[IS_LOGGED_IN] = Utilities::generateLoginHash();
         $_SESSION['first_name']='John';
@@ -119,10 +119,10 @@ final class Login extends AbstractNormForm
      */
     private function updateCart($old_session_id, $new_session_id)
     {
-        //##
+        /*##
         return true;
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/login/updateCart.inc.php';
         //*/
     }

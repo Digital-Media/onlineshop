@@ -9,28 +9,22 @@ use DBAccess\DBAccess;
 use Utilities\Utilities;
 
 /*
- * Das Warenkorbformular zeigt den Inhalte des Warenkorbs im OnlineShop an und läßt eine Änderung der Bestellmenge zu.
+ * The form to display the cart shows the added products and enables a user to alter the quantity for each product.
  *
- * Der Warenkorb setzt auf der ojectorientieren Klasse TNormform und den Smarty-Templatesauf.
- * Weiters benötigt es die Klasse DBAccess für Datenbankzugriffe, die die Klasse FileAccess ersetzt.
- * Durch die Verwendung von PDO Prepared Statements sind keine weiteren Maßnahmen gegen SQL-Injection notwendig
- * XSS wird von der Klasse View verhindert für mit POST abgeschickte Eingabefelder
- * In der Tabelle cart.onlineshop befinden sich Dummy-Einträge mit SessionID=1,
- * die für Testzwecke genutzt werden können, falls Ihre index.php nicht funktioniert.
+ * In case your index.php doesn't work,
+ * you can create dummy entries in onlineshop.cart with SessionID=1 for testing purpose.
+ * See /src/onlineshop.sql for a insert command to create some.
  *
- * Der Warenkorb wird durch index.php gefüllt.
- * In mycart.php kann die Bestellmenge pro Produkt nochmals verwändert werden und
- *  in der Tabelle onlineshop.cart gespeichert werden (Buttoen Update Cart).
+ * The cart is filled with the AddToCart button on the page index.php.
+ * With the button "Update Cart" on the page mycart.php a user can alter the quantity for each product and store it in
+ * the table onlineshop.cart.
  *
- * Nach Änderung der Bestellmenge, kann auch gleich auf die Seite checkout.php weitergeleitet
- * werden (Button Go To Checkout). Die Änderungen werden auch in diesem Fall
- * in der Tabelle onlineshop.cart gespeichert
- *
- * Die Klasse ist final, da es keinen Sinn macht, davon noch weitere Klassen abzuleiten.
+ * After changing the quantity you can directly finalize the order by clicking the "Go To Checkout" Button
+ * The changes are also saved in the table onlineshop.cart in this case.
  *
  * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
- * @package dab3
- * @version 2016
+ * @package OnlineShop
+ * @version 2.0.2
  */
 final class MyCart extends AbstractNormForm
 {
@@ -48,43 +42,54 @@ final class MyCart extends AbstractNormForm
     private $dbAccess;
 
     /**
+     * @var string $delete_array  array to store the pids to delete from onlineshop.cart to demonstrate
+     *                            reuse of prepared statements. prepare once execute many times in deleteFromCart()
+     */
+    //--
+    private $delete_array;
+    //*/
+    /**
+     * @var string $update_array  array to store the pids to update in onlineshop.cart to demonstrate
+     *                            reuse of prepared statements. prepare once execute many times in updateCart()
+     */
+    //--
+    private $update_array;
+    //*/
+
+    /**
      * MyCart constructor.
      *
      * Calls constructor of class AbstractNormForm.
      * Creates a database handler for the database connection.
-     * The assigned constants can be found in src/defines.inc.php
+     * Fills the pageArray and sends it to the template
+     * to list all orders in onlineshop.cart belonging to the current session
      *
      * @param View $defaultView Holds the initial @View object used for displaying the form.
      *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
+        //--
         require '../../onlineshopsolution/mycart/construct.inc.php';
         //*/
-        // Add the images to our view since we can't do this from outside the object
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
     }
 
     /**
      * Validates the user input
      *
-     * Das Array $_POST[self::QUANTITY] wird durchgegangen und jede pid mit Utilities::isInt() geprüft
-     * Fehlermeldungen werden im Array $errorMessages[] gesammelt.
-     * Für jede pid mit ungültiger quantity wird ein eigener Eintrag erstellt.
-     * Optional kann hier die callback-Funktion array_map()
-     * für die Prüfung des gesamten Arrays auf Utilites::isInt() verwendet werden.
-     *
-     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
+     * Steps through the array $_POST[self::QUANTITY] and checks each pid with Utilities::isInt()
+     * Optionally you can use the callback function array_map() to do this without a loop.
+     * Error messages are stored in the array $errorMessages[].
+     * Each pid with an invalid quantity gets its own entry.
      *
      * @return bool true, if $errorMessages is empty, else false
      */
     protected function isValid(): bool
     {
-        /*--
+        //--
         require '../../onlineshopsolution/mycart/isValid.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
@@ -94,17 +99,13 @@ final class MyCart extends AbstractNormForm
     /**
      * Process the user input, sent with a POST request
      *
-     * Schreibt über MyCart::changeCart() Änderungen der Quantity bei einem Produkt in die Tabelle onlineshop.cart.
-     * Falls der Button "Change Cart" <input name='update' ... > gedrückt wurde,
-     * wird im Erfolgsfall der Warenkorb nochmals angezeigt und in $statusMsg eine Nachricht geschrieben, dass die
-     * Änderung der von onlineshop.cart.quantity erfolgreich war.
-     * Wenn der Button "Go To Checkout" <inpurt name='checkout' ... > gedrückt wurde,
-     * wird im Erfolgsfall auf die Seite checkout.php weitergeleitet.
+     * Calls MyCart::changeCart() to store changes of a quantity to onlineshop.cart.
+     * If the button "Change Cart" <input name='update' ... > has been clicked,
+     * the orders are displayed again and an appropriate $statusMessage is sent.
+     * If the button "Go To Checkout" <inpurt name='checkout' ... > has been clicked,
+     * the user is redirected to checkout.php.
      *
-     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
-     *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     protected function business(): void
     {
@@ -119,25 +120,20 @@ final class MyCart extends AbstractNormForm
     }
 
     /**
-     * Gibt ein Array mit allen Produkten im Warenkorb Tabelle onlineshop.cart,
-     * die vom aktuell eingeloggten User bestellt wurden.
+     * Returns an array with the orders in onlineshop.cart, that have been ordered bei user currently logged in.
      *
-     * Identifiziert wird der User hier über die session_id. Ältere Bestellungen,
-     * die nicht abgeschickt wurden, werden in diesem Fall nicht berücksichtigt.
-     * Dazu müsste die Tabelle onlineshop.cart auch eine Spalte user_id beinhalten.
-     * Die Tabelle onlineshop.cart beinhaltet Dummyeinträge mit session_id=1.
-     * Diese können für Testzwecke benutzt werden, falls Ihre index.php und mycart.php
-     * nicht funktionieren.
+     * A user is identified with his current session_id. Orders of former sessions are not in the result set.
+     * With a field onlineshop.cart.user_iduser former orders could be considered, if the user logged in before
+     * leaving the site.
      *
-     * @return array|mixed $pageArray mit allen Einträgen der Tabelle onlineshop.cart für die aktuelle Session.
-     * Ein leeres Array, wenn keine Einträge vorhanden sind. false im Fehlerfall.
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @return array $pageArray, The result set, if valid entries exist in onlineshop.cart
+     *                           An empty array, if no entries are there.
+     * @throws DatabaseException
      */
     private function fillpageArray()
     {
-        // TODO Umschreiben, dass das Array ptypeArray aus der Datenbank befüllt wird
-        //##
+        // TODO Rewrite this code in way, that the array is filled with entries from the database
+        /*##
         return array( 0 => array('product_idproduct' => 1,
                                  'product_name' => 'Passivhaus',
                                  'price' => 300000,00, 'quantity' => 1),
@@ -149,7 +145,7 @@ final class MyCart extends AbstractNormForm
                                  'price' => 100000,00,
                                  'quantity' => 1));
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/mycart/fillpageArray.inc.php';
         $this->pageArray = $this->dbAccess->fetchResultset();
         return $this->pageArray;
@@ -157,52 +153,43 @@ final class MyCart extends AbstractNormForm
     }
 
     /**
-     * Schreibt Änderungen aus $_POST['quantity']['pid'] in die Tabelle onlineshop.cart
+     * Stores changes in $_POST['quantity']['pid'] to onlineshop.cart
      *
-     * Falls für eine pid die quantity auf 0 gesetzt wurde, wird der Eintrag in der Tablle onlineshop.cart gelöscht
-     * @see MyCart::deleteFromCart().
-     * Falls für eine pid die quantity auf einen Wert ungleich 0 geändert wurde wird der Eintrag
-     * der pid in der Tabelle onlineshop.cart geändert @see MyCart::updateCart().
-     * Alle pids mit quantity = 0 werden ins Array $delete_array['pid'] geschrieben.
-     * Alle anderen in das Array $update_array['pid'] und an MyCart::deleteFromCart() bzw.
-     * MyCart::updateCart() übergeben.
+     * If quantity has been set to 0 for a pid, the entry is deleted in onlineshop.cart
+     * You may use @see MyCart::deleteFromCart() for that.
+     * If quantity has been set to a value not equal to 0 for a pid, the entry is updated in onlineshop.cart
+     * You may use @see MyCart::updateCart() for that.
+     * But you can also do both steps in MyCart::changeCart().
      *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     private function changeCart()
     {
-        /*--
+        //--
         require '../../onlineshopsolution/mycart/changeCart.inc.php';
         //*/
     }
 
     /**
-     * Löst alle Einträge aus dem Array $delete_array aus der Tabelle onlineshop.cart für die aktuelle Session.
+     * Deletes entries from onlineshop.cart belonging to the current session.
      *
-     * @param array $delete_array  beinhaltet alle pids für Löschanforderungen für quantity=0.
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
-    private function deleteFromCart($delete_array)
+    private function deleteFromCart()
     {
-        /*--
+        //--
         require '../../onlineshopsolution/mycart/deleteFromCart.inc.php';
         //*/
     }
 
     /**
-     * Schreibt Änderungen für jede pid aus dem Array $update_array in die Spalte onlineshop.cart.quantity
-     * für die aktuelle Session.
-     * MyCart::updateCart() nutzt aus, dass prepared Statements pro prepare mehrfach ausgeführt werden können.
+     * Updates onlineshop.cart.quantity for given pids belonging to the current session
      *
-     * @param array $update_array beinhaltet alle pids für Änderungsanforderungen für quantity!=0.
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     private function updateCart($update_array)
     {
-        /*--
+        //--
         require '../../onlineshopsolution/mycart/updateCart.inc.php';
         //*/
     }
