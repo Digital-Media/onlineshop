@@ -19,7 +19,6 @@
                                 {% include "tablestyles.html.twig" %}
                                 <table>
                                     <tr>
-                                        <!-- statt Links wäre eine Pulldown Box im vierten <th> mit mehreren Auswahlmöglichkeien denkbar -->
                                         <th><a href="{{ _server.SCRIPT_NAME }}?sort=pid&amp;">PID</a></th>
                                         <th><a href="{{ _server.SCRIPT_NAME }}?sort=pname&amp;">Product_name</a></th>
                                         <th><a href="{{ _server.SCRIPT_NAME }}?sort=price&amp;">Price</a></th>
@@ -31,8 +30,6 @@
                                             <td>{{ pageArray[key]['idproduct'] }}</td>
                                             <td>{{ pageArray[key]['product_name'] }}</td>
                                             <td>{{ pageArray[key]['price'] }}</td>
-                                            <!-- Einige Shopsysteme lösen die Bestellung über einen GET-Aufruf. Wir wollen aber die TNormform verwenden, die auf POST aufbaut
-                                            <!-- {# <td><a href="index.php?pid={{ pageArray[key]['idproduct'] }}">Add to Cart</a></td> #} -->
                                             <td><button name="pid[{{ pageArray[key]['idproduct'] }}]" type="submit"><i class="fa fa-cart-plus" aria-hidden="true">&nbsp;Add To Cart</i></button></td>
                                         </tr>
                                         {% endfor %}
