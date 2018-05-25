@@ -101,10 +101,14 @@ CREATE TABLE IF NOT EXISTS `order_item` (
 DROP TABLE IF EXISTS `pentest`;
 CREATE TABLE IF NOT EXISTS `pentest` (
   `idpentest` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `pentest_varchar1` varchar(255) NULL,
-  `pentest_varchar2` varchar(255) NULL,
-  `pentest_int` int NULL,
-  `pentest_decimal` decimal(10,2) NULL,
+  `email` varchar(100) NOT NULL,
+  `password` char(128) NOT NULL,
+  `active` char(128) DEFAULT NULL,
+  `role` char(5) NOT NULL DEFAULT 'user',
+  `pt_varchar1` varchar(255) NULL,
+  `pt_varchar2` varchar(255) NULL,
+  `pt_int` int NULL,
+  `pt_decimal` decimal(10,2) NULL,
   PRIMARY KEY (`idpentest`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -208,9 +212,9 @@ ADD CONSTRAINT `product_fk` FOREIGN KEY (`product_idproduct`) REFERENCES `produc
 --
 
 -- Die Spalten pentest_varchar1 und pentest_varchart2 dienen als Spalten für email und password, um Angriffe auf Login zu testen
-INSERT INTO `pentest` (`idpentest`, `pentest_varchar1`, `pentest_varchar2`) VALUES
-(1, 'shopuser1@onlineshop.at', 'geheim'),
-(2, 'shopuser2@onlineshop.at', 'geheim');
+INSERT INTO `pentest` (`idpentest`, `email`, `password`, `active`, `role`) VALUES
+(1, 'shopuser1@onlineshop.at', 'geheim', null, 'admin'),
+(2, 'shopuser2@onlineshop.at', 'geheim', null, 'user');
 
 -- --------------------------------------------------------
 
