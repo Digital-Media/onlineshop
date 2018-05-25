@@ -61,7 +61,7 @@ final class OnlineShop extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*-- TODO Replace this line with your own code. Read Description above for more information
+        /*-- 
         require '../../onlineshopsolution/index/construct.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
@@ -298,6 +298,8 @@ final class OnlineShop extends AbstractNormForm
         // after selecting a result set from the database with a LIMIT clause.
         $page_count = 2;
         //*/
+        //TODO calculate $page_count. How many pages are needed to display result set
+        //TODO Only self::DISPLAY entries ard displayed on each page.
         /*--
         require '../../onlineshopsolution/index/setPaginationParameters.inc.php';
         //*/
