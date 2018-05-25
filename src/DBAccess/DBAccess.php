@@ -211,7 +211,7 @@ class DBAccess
     }
 
     /**
-     * Counts the rows in a result set
+     * Counts the rows in a result set for INSERT, UPDATE, DELETE
      *
      * In case of an error the SQL statement is dumped with debugDumpParams()
      *
