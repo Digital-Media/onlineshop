@@ -9,22 +9,16 @@ use DBAccess\DBAccess;
 use Utilities\Utilities;
 
 /**
- * Class Shop implementiert die Startseite (index.php) des OnlineShop
+ * Class Shop implements the landing page (index.php) of OnlineShop
  *
- * Die Seite index.php setzt auf der ojectorientieren Klasse TNormform und den Smarty-Templates von IMAR aus HM2 auf.
- * Weiters benötigt es die Klasse DBAccess für Datenbankzugriffe, die die Klasse FileAccess von IMAR ersetzt.
- * Durch die Verwendung von PDO Prepared Statements sind keine weiteren Maßnahmen gegen SQL-Injection notwendig.
- *
- * Diese Seite listet die Produkte des OnlineShops in einer Liste auf, die durchblättert werden kann.
- * Über die Konstante DISPLAY wird gesteuert, wieviele Produkte pro Seite angezeigt werden.
- * Über ein Suchfeld kann ein GET-Request abgesetzt werden, der die Anzahl der Treffer einschränkt.
- * Mit Shop::addToCart() können Produkte über einen POST-Request in den Warenkorb Tabelle onlineshop.cart gelegt werden.
- *
- * Die Klasse ist final, da es keinen Sinn macht, davon noch weitere Klassen abzuleiten.
+ * The class Shop returns all products of the table onlineshop.product to page through.
+ * How many entries are used per page is defined with the constant DISPLAY.
+ * The search field uses a GET request to limit the result set.
+ * The AddToCart button triggers the method Shop::addToCart() with a POST-Request to add a product to onlineshop.cart.
  *
  * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
- * @package onlineshop
- * @version 2016
+ * @package OnlineShop
+ * @version 2.0.2
  */
 final class OnlineShop extends AbstractNormForm
 {
@@ -35,12 +29,12 @@ final class OnlineShop extends AbstractNormForm
      * --> $_POST[self::PTYPE] and GET-Parameters, sent by links
      *
      *
-     * @var string START Key für $_GET- und $_SESSION-Eintrag den Starteintrag
-     *                   für den angezeigten Ausschnitt der Produktliste festlegt
+     * @var string START Key for $_GET and $_SESSION entry to define the starting entry of the displayed product list
      *                   @see src/basetemplates/pagination.html.twig
-     * @var string SORT Key für $_GET- und $_SESSION-Eintrag, der die Sortierreihenfolge bestimmt
-     * @var string SEARCH Key für $_POST-Eintrag für Suchfeld
-     * @var string PID Key für $_POST-Eintrag für den Bestellbutton
+     * @var string SORT Key for $_GET- and $_SESSION entry, that defines the sort order
+     * @var string SEARCH Key for $_POST entry for the search field
+     * @var string PID Key for $_POST entry of the AddToCart button
+     * @var string DISPLAY defines the number of entries displayed per page
      */
     const START = 'start';
     const SORT = 'sort';
@@ -49,42 +43,7 @@ final class OnlineShop extends AbstractNormForm
     const DISPLAY = 2;
 
     /**
-     * Hilfsvariablen, um Werte zwischen den Methoden auszutauschen
-     *
-     * @var string $start Startwert in der LIMIT-Klausel,
-     * @var string $sort gibt an nach welcher Spalte die ausgegebene Produktliste sortiert werden soll
-     * @var string $search gibt das Suchkriterium an, das die Produktliste einschränkt
-     * @var string $oldsearch Hilfsvariable, um den alten Wert von $search zwischenzuspeichern,
-     *                        um ihn später mit dem neuen vergleichen zu können.
-     * @var array $pid ProduktID, des Produkts, das mit AddToCart bestellt wurde.
-     * @var string $order_by beinhaltet die ORDER BY-Klausel für die sortierte Produktliste
-     * @var string $rowcount Anzahl der Produkte in der Tabelle onlineshop.produkt, die dem Suchkriterium entsprechen.
-     * @var string $pagecount Anzahl der Seiten, auf denen die Produktliste dargestellt werden kann,
-     *                        abhängig von der Konstante DISPLAY
-     * @var string $startprevious Startwert für die LIMIT-Klausel für das Select für den Previous-Link
-     * @var array $pagenumber Array mit den Startwerten aller Seiten,
-     *                        die über einen Link der mit der Seitennummer benannt ist,
-     *                        direkt angesprungen werden können
-     * @var string $current_page Hilfsvariable, die die Seitennummer der aktuell
-     *                           angezeigten Seite der Produktliste beinhaltet
-     * @var string $startnext Startwert für die LIMIT-Klausel für den Select für den Next-Link
-     *
-     */
-    private $start;
-    private $sort;
-    private $search;
-    private $oldsearch;
-    private $pid;
-    private $order_by;
-    private $rowcount;
-    private $pagecount;
-    private $startprevious;
-    private $pagenumber;
-    private $current_page;
-    private $startnext;
-
-    /**
-     * @var string $dbAccess  Database handler for access to database
+     * @var string $dbAccess Database handler for access to database
      */
     private $dbAccess;
 
@@ -93,37 +52,31 @@ final class OnlineShop extends AbstractNormForm
      *
      * Calls constructor of class AbstractNormForm.
      * Creates a database handler for the database connection.
-     * The assigned constants can be found in src/defines.inc.php
+     * Fills the pageArray and sends it to the template to list all products of onlineshop.product
      *
      * @param View $defaultView Holds the initial @View object used for displaying the form.
      *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
+        /*-- TODO Replace this line with your own code. Read Description above for more information
         require '../../onlineshopsolution/index/construct.inc.php';
         //*/
-        // Add the images to our view since we can't do this from outside the object
-        $this->currentView->setParameter(new GenericParameter("startKey", self::START));
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
     }
 
     /**
-     * Validates the user input after a order request with one of the "AddToCart" buttons.
+     * Validates the user input after a order request with one of the "AddToCart" buttons
+     * or a search value was sent. Be aware, that the $_POST array either contains the search field or a pid.
      *
-     * Auch wenn die pids im Template durch das PHP-Script index.php eingetragen werden,
-     * muss der Input als Benutzerinput gewertet werden,
-     * weil man nicht weiß, ob der Nutzer zum Senden der Bestellung den Request mit
-     * entsprechenden Tools noch manipuliert.
-     * Für jede pid ist ein eigener Button implementiert, daher wird jede pid im Array $_POST['pid']
-     * in einem eigenen Eintrag gespeichert.
-     * Mittels Shop::isValidPid() wird jede pid im Array $_POST['pid'] auf Gültigkeit geprüft.
-     * Fehlermeldungen werden im Array $errorMessages[] gesammelt.
-     *
-     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
+     * Even if the pids in the template are set by the PHP script index.php,
+     * they have to be considered as user input,
+     * because the data can be manipulated before they are sent to the server.
+     * For each pid there is a separate button, therefore each pid has its own entry in an array $_POST['pid']
+     * To validate each pid in the array $_POST['pid'] the method Shop::isValidPid() is called.
+     * Error messages are stored in the array $errorMessages[].
      *
      * @return bool true, if $errorMessages is empty, else false
      */
@@ -141,64 +94,104 @@ final class OnlineShop extends AbstractNormForm
     /**
      * Process the user input, sent with a POST request
      *
-     * Das Suchfeld wird mit GET übergeben und daher nicht hier behandelt.
-     * Die AddToCart - Buttons sind in ein POST-Formular verpackt nicht als Hyperlinks mit GET-Parametern.
-     * Das ist abhängig vom Shopsystem, wie das in der Praxis gehandhabt wird. Es gibt POST und GET-Implementierungen.
-     * Wir nehmen POST, weil wir die TNormformabläufe schon kennen, die auf POST ausgelegt sind.
+     * The search field is sent with a GET request and not considered here, because it only affects the list.
+     * The buttons "AddToCart" are enclosed by a for using the method POST instead of using hyperlinks with GET.
+     * In practice it depends on the chosen shop system, which implementation is used for the order buttons.
+     * We use POST, because AbstractNormForm is implemented for this case.
      *
-     * Über Shop::addToCart() wird das ausgewählte Produkt in den Warenkorb Tabelle onlineshop.cart gespeichert.
-     * Im Gutfall wird in $this->statusMsg eine Rückmeldung gegeben, welches Produkt in den Warenkorb gelegt wurde.
+     * Shop::addToCart() stores the chosen product in the table onlineshop.cart.
+     * On success an appropriate message is set in $this->statusMessage and sent to the template(setParameter).
      *
-     * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
-     *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @throws DatabaseException
      */
     protected function business(): void
     {
         if (isset($_POST[self::PID])) {
-            $this->addToCart();
-            $this->statusMessage = "Product $this->pid added";
+            $pid =$this->addToCart();
+            $this->statusMessage = "Product $pid added";
             $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
             $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
-            $this->currentView->setParameter(new PostParameter(OnlineShop::SEARCH, true));
         } else {
             $this->errorMessages ["addToCart"] = "Error adding Product to Cart. Please try again";
         }
     }
 
     /**
-     * Befüllt das Array um alle Produkte aufzulisten, die auf der aktuellen Seite angezeigt werden.
+     * Validates if the pid in $_POST['pid'] exists in onlineshop.product.
      *
-     * Es werden nur aktive Produkte berücksichtigt, bei denen die Spalte onlineshop.product.active='1' ist.
+     * Use Utilities::isInt to avoid requests to the database with values, that are not integer, which can't exist.
      *
-     * Es werden nur die Produkte gelesen, die dem Suchkriterium entsprechen.
-     * Das Suchkriterium aus dem Suchfeld (GET-Formular) kann leer sein.
-     * Dann gibt es keine Einschränkung.
-     * Suchfelder über die LIKE-Klausel sind die Spalten onlineshop.product_name, .short_description, long_description.
-     * Der Suchbegriff wird in @see Shop::setSearch() ermittelt.
+     * $_POST['pid'] is an array, but only a array with one entry is valid, because each button AddToCart can
+     * send only one pid. More entries in the array indicate, that someone manipulated the request.
      *
-     * Der Startwert der LIMIT-Klausel wird in @see Shop::setPaginationParameters() ermittelt.
+     * Each key in $_POST['pid'] is tested against onlineshop.product, if it exists, to avoid forced browsing.
      *
-     * Die Datensätze werden in der mittels $_GET[self::SORT] geschickten Sortierreihenfolge ausgegeben (ORDER BY).
-     * Die Sortierreihenfolge wird durch @see Shop::setOrderBy() ermittelt.
-     *
-     * Es werden so viele Sätze gelesen, wie in der Konstante DISPLAY festgelegt.
-     *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * @return bool false, if pid is not a positiv integer or 0, or doesn't exist in the database.
+     * @throws DatabaseException
      */
-    private function fillpageArray()
+    private function isValidPid()
     {
-        $this->setSearch();
-        $this->setPaginationParameters();
-        $this->setOrderBy();
-        $this->currentView->setParameter(new GenericParameter("pagecount", $this->pagecount));
-        $this->currentView->setParameter(new GenericParameter("pagenumber", $this->pagenumber));
-        $this->currentView->setParameter(new GenericParameter("current_page", $this->current_page));
-        $this->currentView->setParameter(new GenericParameter("startprevious", $this->startprevious));
-        $this->currentView->setParameter(new GenericParameter("startnext", $this->startnext));
-        // TODO Umschreiben, dass das Array pageArray aus der Datenbank befüllt wird
+        //##
+        return true;
+        //*/
+        /*--
+        require '../../onlineshopsolution/index/isValidPid.inc.php';
+        if ($count['count'] === "1") {
+            return true;
+        } else {
+            return false;
+        }
+        //*/
+    }
+
+    /**
+     * Stores the order in onlineshop.cart
+     *
+     * $_POST['pid'] is an array, but only a array with one entry is valid, because each button AddToCart can
+     * send only one pid. More entries in the array indicate, that someone manipulated the request.
+     *
+     * @return number $pid idproduct of the product added to onlineshop.cart
+     * @throws DatabaseException
+     */
+    private function addToCart()
+    {
+        //##
+        return 0;
+        //*/
+        /*--
+        require '../../onlineshopsolution/index/addToCart.inc.php';
+        return $pid;
+        //*/
+    }
+
+    /**
+     * Returns an array with all products displayed on the current page.
+     *
+     * The offset for the LIMIT clause is set in @see Shop::setPaginationParameters().
+     * The row count of the LIMIT clause is defined by the constant DISPLAY.
+     *
+     * The search value is set with @see Shop::setSearch().
+     * The search criteria is not required (two independent POST forms).
+     * The search fields for the LIKE clauses are onlineshop.product_name, -.short_description, -.long_description.
+     *
+     * The variable $order_by is set in @see Shop::setOrderBy().
+     * The entries are sorted according to the value in $_GET[self::SORT] (ORDER BY).
+     *
+     * The result set contains only products
+     *   with onlineshop.product.active='1'.
+     *   that match the search value of the search field
+     *
+     * @return array result set of database query
+     * @throws DatabaseException
+     */
+    private function fillpageArray(): array
+    {
+        $search = $this->setSearch();
+        $order_by = $this->setOrderBy();
+        $start = $this->setPaginationParameters($search);
+        $display = self::DISPLAY;
+
+        // TODO Rewrite this code in way, that the array is filled with entries from the database
         //##
         return $pageArray = array( 0 => array('idproduct' => 1,
                                               'product_name' => 'Passivhaus',
@@ -217,295 +210,146 @@ final class OnlineShop extends AbstractNormForm
     }
 
     /**
-     * Hilfsmethode für die Suche in der Tabelle onlineshop.product
      *
-     * Der Suchbegriff $this->search, der vom Benutzer im GET-Formular eingegeben wurde, für die LIKE-Klausel im Select
-     * @see Shop::setPageCount()
-     * wird ermittelt, validiert und im Session-Array zwischengespeichert,
-     * damit er beim Blättern über Seitenaufrufe hinweg erhalten bleibt.
+     * @return string  holds the current value of the search field, if any given.
+     * Detect if a new search value was sent and store it in $_SESSION for paging through the product list.
      *
-     * Der Wert der vorherigen Suche wird in $this->oldsearch zwischengespeichert.
-     * Der Startwert $this->start wird immer auf 0 gesetzt, wenn eine neue Suche gestartet wurde.
-     * Erkannt wird das daran, dass in $this->oldsearch ein anderer Wert gespeichert ist als in $_GET[self::SEARCH]
-     * @see Shop::setStart()
-     *
-     * Wurde der Suchbegriff mit $_GET mitgegeben wird er von dort übernommen und im Array $_SESSION hinterlegt.
-     * Kommt er aus $_GET, wird mit Utilies::isSearchString() sichergestellt,
-     * dass es sich um einen einzelnen Suchbegriff handelt.
-     * Das macht Sinn, weil wir hier mit LIKE arbeiten und nicht mit einer Volltextsuche.
-     * Ist er nicht in $_GET und bereits in $_SESSION wird er aus $_SESSION übernommen.
-     * In allen anderen Fälle wird er auf NULL gesetzt.
-     * Der reguläre Ausdruck in Utilities::isSingleWord() verhindert XSS.
      */
-    private function setSearch()
+    private function setSearch(): string
     {
-        if (isset($_SESSION[self::SEARCH])) {
-            $this->oldsearch = $_SESSION[self::SEARCH];
-        } else {
-            $this->oldsearch = "";
-        }
-        if (isset($_POST[self::SEARCH]) && !Utilities::isSingleWord($_POST[self::SEARCH])) {
-            $this->errorMessages[self::SEARCH] = "Please enter a single word. We use LIKE instead of FULLTEXT search";
-        } elseif (isset($_POST[self::SEARCH]) && Utilities::isSingleWord($_POST[self::SEARCH])) {
+        if (isset($_POST[self::SEARCH])) {
             $_SESSION[self::SEARCH]=$_POST[self::SEARCH];
-            $this->search=$_POST[self::SEARCH];
+            return $_POST[self::SEARCH];
         } elseif (!isset($_POST[self::SEARCH]) && isset($_SESSION[self::SEARCH])) {
-            $this->search=$_SESSION[self::SEARCH];
+            return $_SESSION[self::SEARCH];
         } else {
-            $this->search=null;
+            return "";
         }
     }
 
     /**
-     * Hilfsmethode für das Blättern in der Produktliste
+     * Defines how the result set should be sorted
      *
-     * Ermittelt über @see Shop::getPageCount(), die Anzahl der Seiten,
-     * die zur Darstellung aller Datensätze notwendig sind.
-     * Ermittelt den Startwert für alle Links der Blätterfunktion und
-     * die LIMIT-Klausel im Select auf die Tabelle onlineshop.product
-     * @see Shop::setStart(),
-     * Außerdem werden die Seitenzahlen für alle Seiten ermittelt,
-     * die durchblättert werden können und als Links mit dem Startwert im Template implementiert sind.
-     * $this->pagenumber enthält für jede Seite $i deren Startwert. Die Seitenzahl $i ist der Key im Array.
-     * Für die aktuelle Seite wird die Seitenzahl als Text in HTML ausgegeben
-     * und nicht mit einem mit der Seitenzahl benannten Link hinterlegt.
-     * @see templates/pagination.tpl
-     */
-    private function setPaginationParameters()
-    {
-        $this->setPageCount();
-        $this->setStart();
-        $this->current_page = ($this->start / self::DISPLAY) + 1;
-        $this->startprevious = $this->start - self::DISPLAY;
-        $this->startnext = $this->start + self::DISPLAY;
-        for ($i = 1; $i <= $this->pagecount; $i++) {
-            $this->pagenumber[$i] = (self::DISPLAY * ($i - 1));
-        }
-    }
-
-    /**
-     * Hilfsmethode für das Blättern in der Produktliste
+     * @var string $sort holds the current value for the ORDBY BY clause of the product list displayed.
+     * The GET array is filled with the sort value, when a user clicks a header field of the product list.
      *
-     * Ermittelt die Anzahl der Seiten $this->pagecount['count'], die notwendig ist um alle Produkte aufzulisten,
-     * wenn nur soviele Produkte pro Seite angezeigt werden,
-     * wie in der Konstante DISPLAY festgelegt ist. templates/pagination.html.twig
+     * The implementation avoids XSS and unwanted program states due to forced browsing.
      *
-     * Dazu muss im SELECT eine Gruppenfunktion zum Zählen genutzt werden und ein Alias, der count heißt (AS count).
-     * Dann wird dieser Alias count im associativen Rückgabe-Array zum Key.
-     * $this->rowcount['count'] wird in @see isValidStart() benötigt.
-     * Durch die Verwendung einer Objekt-Variable $this->... ist sie dort automatisch sichtbar.
-     *
-     * Es werden nur aktive Produkte berücksichtigt, bei denen die Spalte onlineshop.product.active='1' ist.
-     * Es werden nur Produkte gezählt, die dem Suchkriterium entsprechen.
-     * Das Suchkriterium aus dem Suchfeld (GET-Formular) kann leer sein.
-     * Dann gibt es keine Einschränkung.
-     * Suchfelder über die LIKE-Klausel sind die Spalten
-     * onlineshop.product.product_name, -.short_description, -.long_description.
-     * Der Suchbegriff wird in @see Shop::setSearch() ermittelt.
-     *
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
-     */
-    private function setPageCount()
-    {
-        //##
-        // Es sind 3 statische Datensätze
-        // Damit man das Blättern sieht auf 2 gesetzt.
-        // Auf beiden Seiten wird das gleiche angezeigt.
-        // Erst durch DB-Zugriff wird auf jeder Seite das richtige angezeigt.
-        $this->pagecount = 2;
-        //*/
-        /*--
-        require '../../onlineshopsolution/index/setPageCount.inc.php';
-        //*/
-    }
-
-    /**
-     * Hilfsmethode für das Blättern in der Produktliste
-     *
-     * Der Startwert $this->start für die LIMIT-Klausel im Select
-     * @see Shop::fillpageArray() für die aktuelle Seite wird ermittelt, validiert und im Session-Array gespeichert.
-     * Wurde $_GET[self::START] mitgegeben, wird der Wert von dort übernommen
-     * und es wird mit @see Utilies::isValidStart() sichergestellt,
-     * dass es sich um eine positive Integerzahl handelt
-     * und der Wert die Anzahl der Sätze in der Tabelle onlineshop.product nicht überschreitet.
-     * Ist $_GET[self::START] nicht befüllt, aber $_SESSION[self::START] beinhaltet einen Wert
-     * , wird er aus der Session übernommen.
-     * In allen anderen Fällen wird er auf 0 gesetzt.
-     *
-     * Wurde ein neuer Suchbegriff eingegeben, wird der Startwert auf 0 gesetzt,
-     * das heißt auf der ersten Seite der Produktliste gestartet.
-     *
-     * Tabelle onlinshop.product übersteigen, aber kein XSS. Die Startwerte werden in
-     * @see src/basetemplates/pagination.tpl ausgegeben.
-     */
-    private function setStart()
-    {
-        if (isset($_GET[self::START]) && $this->isValidStart()) {
-            $_SESSION[self::START]=$_GET[self::START];
-            $this->start=$_GET[self::START];
-        } elseif (!isset($_GET[self::START]) && isset($_SESSION[self::START])) {
-            $this->start=$_SESSION[self::START];
-        } else {
-            $this->start=0;
-        }
-        if (isset($_SESSION[self::SEARCH]) &&
-            isset($_POST[self::SEARCH]) &&
-            $this->oldsearch !== $_POST[self::SEARCH]) {
-            $_SESSION[self::START]=0;
-            $this->start=0;
-        }
-    }
-
-    /**
-     * Validiert, ob ein Startwert für das Blättern gültig ist
-     *
-     * Mit @see Utilities::isInt() wird geprüft ob $_GET[self::START] einen positiven Integerwert enthält oder 0.
-     * Dadurch wird XSS verhindert.
-     * Zusätzlich wird geprüft, ob der Startwert kleiner ist als die Gesamtzahl der Sätze $this->rowcount['count']
-     * in der Tabelle onlineshop.product, die in @see Shop::setPageCount() ermittelt wird.
-     * Das verhindert Forced Browsing mit sinnlosen Werten.
-     * Wäre der Startwert größer als die Anzahl der Sätze in onlineshop.product würde eine Leere Seite angezeigt.
-     *
-     */
-    private function isValidStart()
-    {
-        if (Utilities::isInt($_GET[self::START]) && ($_GET[self::START] < $this->rowcount['count'])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Hilfsmethode für die Sortierung der Produktliste befüllt die Variable $order_by mit der ORDER BY-Klausel
-     * für den Select in @see Shop::fillpageArray()
-     *
-     * Durch Shop:setSort() wird die Variable $this->sort befüllt.
-     * Durch deren Inhalt wird die Spalte bestimmt, nach der die Datensätze der Tabelle onlineshop.product in
-     * @see Shop::fillpageArray() sortiert werden.
-     * Es wird nur die Sortierreihenfolge ASC unterstützt.
-     * Durch die Implementierung einer PullDownBox mit mehreren Einträgen,
-     * könnte man beliebige Sortierungen unterstützen.
-     *
-     * Dadurch diese Implementierung wird sowohl Forced Browsing, als auch XSS verhindert.
+     * @return string sort order for order by clause
      */
     private function setOrderBy()
     {
-        $this->setSort();
-        switch ($this->sort) {
+        if (isset($_GET[self::SORT]) && in_array($_GET[self::SORT], array('pid','pname','price'))) {
+            $_SESSION[self::SORT]=$_GET[self::SORT];
+            $sort=$_GET[self::SORT];
+        } elseif (!isset($_GET[self::SORT]) && isset($_SESSION[self::SORT])) {
+            $sort=$_SESSION[self::SORT];
+        } else {
+            $sort='pid';
+        }
+        switch ($sort) {
             case 'pid':
-                $this->order_by = 'idproduct ASC';
-                break;
+                return 'idproduct ASC';
             case 'pname':
-                $this->order_by = 'product_name ASC';
+                return 'product_name ASC';
                 break;
             case 'price':
-                $this->order_by = 'price ASC';
+                return 'price ASC';
                 break;
             default:
-                $this->sort = 'pid';
-                $this->order_by = 'idproduct ASC';
-                break;
+               return 'idproduct ASC';
         }
     }
 
     /**
-     * Hilfsmethode für die Sortierung der Produktliste
+     * Set the parameters for paging through the product list
      *
-     * Die Spalte $this->sort für die Sortierung in der ORDBY BY-Klausel im Select
-     * @see Shop::fillpageArray() für die aktuelle Seite wird ermittelt, validiert und im Session-Array gespeichert.
-     * Wurde sie mit $_GET[self::SORT] mitgegeben wird sie von dort übernommen und im Array $_SESSION hinterlegt,
-     * um über Seitenaufrufe hinweg erhalten zu bleiben.
-     * Kommt sie aus $_GET, wird mit @see Shop::isValidSort() sichergestellt,
-     * dass es sich um eine gültige Sortierung handelt.
-     * Ist sie nicht in $_GET und bereits in $_SESSION wird er aus $_SESSION übernommen.
-     * In allen anderen Fälle wird sie auf 'pid' gesetzt.
+     * @var string $row_count Number of products in onlineshop.produkt, that match the WHERE clause.
      *
-     * Dadurch wird sowohl forced Browsing, als auch XSS verhindert.
+     * @var string $page_count Number of pages needed to display the product list, depending on the value of DISPLAY
+     *
+     * To Avoid XSS and Forced Browsing, SQL-Injection ... the input is validated with @see Utilies::isValidStart()
+     * and checked if it is less than $this->row_count['count'].
+     *
+     * @var string $start_previous Start value for the LIMIT clause in the select statement for the "previous" link
+     *
+     * @var string $current_page Variable, that stores the page number of the current page of the product list
+     *                           This value is not displayed as link, but as plain number in HTML
+     *
+     * @var string $start_next Start value of the LIMIT clause of the select statement for the "next" link
+     *
+     * @var array $page_number Array with the start values of all pages,
+     *                         for the links that have a page number $i assigned for direct access
+     *
+     * @see templates/pagination.tpl
+     *
+     * @return number $start offset for the LIMIT clause
+     *                    If a pagination link is clicked $start is set to $_GET[self::START]
+     *                    The row_count for the LIMIT clause is defined by self::DISPLAY
      */
-    private function setSort()
+    private function setPaginationParameters($search)
     {
-        if (isset($_GET[self::SORT]) && $this->isValidSort()) {
-            $_SESSION[self::SORT]=$_GET[self::SORT];
-            $this->sort=$_GET[self::SORT];
-        } elseif (!isset($_GET[self::SORT]) && isset($_SESSION[self::SORT])) {
-            $this->sort=$_SESSION[self::SORT];
-        } else {
-            $this->sort='pid';
-        }
-    }
-
-    /**
-     * Hilfsmethode für die Sortierung der Produktliste
-     *
-     * Diese Funktion filtert die übergebene Sortierung auf gültige Werte.
-     *
-     * Dadurch wird sowohl XSS verhindert, als auch ungewünschte Programmzustände durch Forced Browsing.
-     *
-     * @param mixed $sort Sortierwert, der aus $_GET kommt. Kann daher string oder number sein.
-     * @return bool true, wenn der $sort in der Liste vorkommt. Anderfalls false.
-     */
-    private function isValidSort()
-    {
-        return in_array($_GET[self::SORT], array('pid','pname','price'));
-    }
-
-    /**
-     * Prüft, ob eine pid im Array $_POST['pid'] in der Tabelle onlineshop.product vorkommt.
-     *
-     * Durch die Prüfung des Arrays mit der callback-Funktion array_map und Utilities::isInt wird verhindert,
-     * dass durch Manipulation des POST-Requests völlig sinnlose Werte für die Datenbankanfrage verwendet werden können,
-     * die ohnehin keinen Treffer ergeben könnten.
-     * Es wird nur der erste Treffer im Array $_POST['pid'] für das Schreiben in die Datenbank verwendet.
-     * An sich kann mit dem Drücken des Buttons nur ein Eintrag im Array $_POST['pid'] befüllt werden.
-     * Jedoch sollen auch an dieser Stelle Manipulationen des POST-Requests unterbunden werden.
-     * array_map() wird hier zu Demonstrationszwecken eingesetzt.
-     * Ein direkter Aufruf von Utilities::isInt() in der foreach-Schleife würde auch genügen.
-     * isValidPid() prüft mit Utilities::isInt() jeden KEY im Array $_POST['pid'][KEY]
-     * auf positives Integer oder 0 um XSS zu verhindern.
-     * Das ist nur einer (siehe vorher). Zusätzlich wird für diesen KEY geprüft,
-     * ob dieser in der Tabelle onlineshop.product vorkommt, um Forced Browsing mit sinnlosen pids zu verhindern.
-     *
-     * @return bool false, wenn eine pid kein positives Integer ist,
-     *                     oder nicht in der Datenbank vorkommt. Ansonsten true.
-     * @throws DatabaseException Diese wird von allen $this->dbAccess Methoden geworfen und hier nicht behandelt.
-     *         Die Exception wird daher nochmals weitergereicht (throw) und erst am Ende des Scripts behandelt.
-     */
-    private function isValidPid()
-    {
+        $page_number = [];
+        $row_count = $this->setRowCount($search);
         //##
-        return true;
+        // A static array with 3 entries is provided in fillPageArray()
+        // $page_count is set to 2, to show the pagination links.
+        // Both pages show the same 3 entries, because limiting the array to 2 entries works only
+        // after selecting a result set from the database with a LIMIT clause.
+        $page_count = 2;
         //*/
         /*--
-        require '../../onlineshopsolution/index/isValidPid.inc.php';
-        if ($count['count'] === "1") {
-            return true;
-        } else {
-            return false;
-        }
+        require '../../onlineshopsolution/index/setPaginationParameters.inc.php';
         //*/
+        $this->currentView->setParameter(new GenericParameter("page_count", $page_count));
+
+        if (isset($_GET[self::START]) && Utilities::isInt($_GET[self::START]) && ($_GET[self::START] < $row_count)) {
+            $start=$_GET[self::START];
+        }  else {
+            $start=0;
+        }
+        $start_previous = $start - self::DISPLAY;
+        $this->currentView->setParameter(new GenericParameter("start_previous", $start_previous));
+
+        $current_page = ($start / self::DISPLAY) + 1;
+        $this->currentView->setParameter(new GenericParameter("current_page", $current_page));
+
+        $start_next = $start + self::DISPLAY;
+        $this->currentView->setParameter(new GenericParameter("start_next", $start_next));
+
+        for ($i = 1; $i <= $page_count; $i++) {
+            $page_number[$i] = (self::DISPLAY * ($i - 1));
+        }
+        $this->currentView->setParameter(new GenericParameter("page_number", $page_number));
+
+        return $start;
+
     }
 
     /**
-     * Schreibt die Bestellung in den Warenkorb Tabelle onlineshop.cart
+     * Calculate the number of entries in onlineshop.product.
      *
-     * Nur der erste Eintrag im Array wird in den Warenkorb gelegt.
-     * Der Aufruf von break schadet nicht an dieser Stelle.
-     * An sich ist durch den Aufruf des submit-Buttons sicher gestellt, dass es nur einen Eintrag gibt.
-     * Allerdings werden dadurch Manipulationen des Requests mit mehreren Einträgen
-     * im Array $_POST[self::PID] verhindert.
+     * Consider using a group function in SQL to let the database count the rows.
+     * You have to use an alias for this group operation to make this work in MariaDB
      *
-     * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
-     *         The exception is treated in the try-catch block of the php script, that initializes this class.
+     * Only active products are considered. onlineshop.product.avtive='1'
+     * Only products, that match a given search string, are counted.
+     * The search value form $_POST, can be empty. In this case no LIKE clause is used.
+     * search fields for the LIKE clause are the columns
+     * onlineshop.product.product_name, -.short_description, -.long_description.
+     *
+     * @param $search holds the search value
+     * @return number number of entries in onlineshop.product, that are active.
+     * @throws DatabaseException
      */
-    private function addToCart()
+    private function setRowCount($search)
     {
         //##
-        return true;
+        return $row_count = 3;
         //*/
         /*--
-        require '../../onlineshopsolution/index/addToCart.inc.php';
+        require '../../onlineshopsolution/index/setRowCount.inc.php';
+        return $row_count['count'];
         //*/
     }
 }
