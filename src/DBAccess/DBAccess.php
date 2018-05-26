@@ -61,10 +61,11 @@ class DBAccess
         $options = array(
             // A warning is given for persistent connections in case of a interrupted database connection.
             // This warning is shown on the web page if error_reporting=E_ALL is set in php.ini
-            PDO::ATTR_PERSISTENT => true,
+            PDO::ATTR_PERSISTENT => TRUE,
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::MYSQL_ATTR_INIT_COMMAND => $charsetAttr,
+            PDO::MYSQL_ATTR_MULTI_STATEMENTS => TRUE
         );
         try {
             $this->dbh = new PDO($dsn, $mysqlUser, $mysqlPwd, $options);
