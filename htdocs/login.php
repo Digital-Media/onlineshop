@@ -3,7 +3,7 @@
 require "../vendor/autoload.php";
 
 /**
- * Einbinden der define-Angaben für den OnlineShop
+ * Include global constants
  */
 require_once '../src/defines.inc.php';
 
@@ -13,7 +13,11 @@ use Exercises\Login;
 use Fhooe\NormForm\Parameter\PostParameter;
 use Fhooe\NormForm\View\View;
 
-try {
+/* --- This is the main call of the norm form process
+ *
+ * Database exceptions are caught only here. A DEBUG page formatted in DBAccess::debugSQL() will be displayed
+ * PHP exception are redirected to a common error page
+ */try {
     // Defines a new view that specifies the template and the parameters that are passed to the template
     $view = new View(
         "loginMain.html.twig",
