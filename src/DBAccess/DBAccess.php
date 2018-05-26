@@ -45,7 +45,7 @@ class DBAccess
      * @param string $mysqlPwd Password for Database User
      * @param string $names Characterset for Database Connection, Default utf8
      * @param string $collate Collation for Characterset, Default utf8_general_ci
-     *
+     * @param string $multi Defines if MULTI_STATEMENTS can be used
      *
      * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
@@ -55,7 +55,8 @@ class DBAccess
         $mysqlUser = null,
         $mysqlPwd = null,
         $names = "utf8",
-        $collate = 'utf8_general_ci'
+        $collate = 'utf8_general_ci',
+        $multi = FALSE
     ) {
         $charsetAttr="SET NAMES $names COLLATE $collate";
         $options = array(
@@ -65,7 +66,7 @@ class DBAccess
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::MYSQL_ATTR_INIT_COMMAND => $charsetAttr,
-            PDO::MYSQL_ATTR_MULTI_STATEMENTS => TRUE
+            PDO::MYSQL_ATTR_MULTI_STATEMENTS => $multi
         );
         try {
             $this->dbh = new PDO($dsn, $mysqlUser, $mysqlPwd, $options);
