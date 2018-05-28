@@ -2,17 +2,17 @@
     <hr>
     {% if page_count > 1 %}
         {% if current_page != 1 %}
-            <a href="{{ server.SCRIPT_NAME }}?start={{ start_previous }}">Previous</a>
+            <a href="{{ server.SCRIPT_NAME }}?offset={{ offset_previous }}">Previous</a>
         {% endif %}
         {% for page_no,i in page_number %}{#foreach from=$page_number item=$i key=$pageno#}
             {% if page_no != current_page %}
-                <a href="{{ _server.SCRIPT_NAME }}?start={{ i }}">{{ page_no }}</a>
+                <a href="{{ _server.SCRIPT_NAME }}?offset={{ i }}">{{ page_no }}</a>
             {% else  %}
                 {{ page_no }}
             {% endif %}
         {% endfor %}
         {% if current_page != page_count  %}
-            <a href="{{ _server.SCRIPT_NAME }}?start={{ start_next }}">Next</a>
+            <a href="{{ _server.SCRIPT_NAME }}?offset={{ offset_next }}">Next</a>
         {% endif %}
     {% endif %}
 </div>
