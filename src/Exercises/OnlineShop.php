@@ -36,11 +36,11 @@ final class OnlineShop extends AbstractNormForm
      * @var string PID Key for $_POST entry of the AddToCart button
      * @var string DISPLAY defines the number of entries displayed per page
      */
-    const START = 'start';
+    const OFFSET = 'offset';
     const SORT = 'sort';
     const SEARCH = 'search';
     const PID = 'pid';
-    const DISPLAY = 2;
+    const ROW_COUNT = 2;
 
     /**
      * @var string $dbAccess Database handler for access to database
@@ -188,10 +188,12 @@ final class OnlineShop extends AbstractNormForm
     {
         $search = $this->setSearch();
         $order_by = $this->setOrderBy();
-        $start = $this->setPaginationParameters($search);
-        $display = self::DISPLAY;
+        $offset = $this->setPaginationParameters($search);
+        $display = self::ROW_COUNT;
 
         // TODO Rewrite this code in way, that the array is filled with entries from the database
+        // TODO For using LIMIT parameters you need to use DBAccess::bindValueByType()
+        // TODO This is necessary, because offset and row_count of the LIMIT clause have to be integers (Syntax!!)
         //##
         return $pageArray = array( 0 => array('idproduct' => 1,
                                               'product_name' => 'Passivhaus',
@@ -264,33 +266,33 @@ final class OnlineShop extends AbstractNormForm
     /**
      * Set the parameters for paging through the product list
      *
-     * @var string $row_count Number of products in onlineshop.produkt, that match the WHERE clause.
+     * @var string $product_count Number of products in onlineshop.produkt, that match the WHERE clause.
      *
      * @var string $page_count Number of pages needed to display the product list, depending on the value of DISPLAY
      *
      * To Avoid XSS and Forced Browsing, SQL-Injection ... the input is validated with @see Utilies::isValidStart()
      * and checked if it is less than $this->row_count['count'].
      *
-     * @var string $start_previous Start value for the LIMIT clause in the select statement for the "previous" link
+     * @var string $offset_previous Start value for the LIMIT clause in the select statement for the "previous" link
      *
      * @var string $current_page Variable, that stores the page number of the current page of the product list
      *                           This value is not displayed as link, but as plain number in HTML
      *
-     * @var string $start_next Start value of the LIMIT clause of the select statement for the "next" link
+     * @var string $offset_next Start value of the LIMIT clause of the select statement for the "next" link
      *
      * @var array $page_number Array with the start values of all pages,
      *                         for the links that have a page number $i assigned for direct access
      *
      * @see templates/pagination.tpl
      *
-     * @return number $start offset for the LIMIT clause
-     *                    If a pagination link is clicked $start is set to $_GET[self::START]
-     *                    The row_count for the LIMIT clause is defined by self::DISPLAY
+     * @return number $offset offset for the LIMIT clause
+     *                    If a pagination link is clicked $offset is set to $_GET[self::OFFSET]
+     *                    The row_count for the LIMIT clause is defined by self::ROW_COUNT
      */
-    private function setPaginationParameters($search)
+    private function setPaginationParameters($search): int
     {
         $page_number = [];
-        $row_count = $this->setRowCount($search);
+        $product_count = $this->setRowCount($search);
         //##
         // A static array with 3 entries is provided in fillPageArray()
         // $page_count is set to 2, to show the pagination links.
@@ -299,32 +301,32 @@ final class OnlineShop extends AbstractNormForm
         $page_count = 2;
         //*/
         //TODO calculate $page_count. How many pages are needed to display result set
-        //TODO Only self::DISPLAY entries ard displayed on each page.
+        //TODO Only self::ROW_COUNT entries ard displayed on each page.
         /*--
         require '../../onlineshopsolution/index/setPaginationParameters.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("page_count", $page_count));
 
-        if (isset($_GET[self::START]) && Utilities::isInt($_GET[self::START]) && ($_GET[self::START] < $row_count)) {
-            $start=$_GET[self::START];
+        if (isset($_GET[self::OFFSET]) && Utilities::isInt($_GET[self::OFFSET]) && ($_GET[self::OFFSET] < $product_count)) {
+            $offset= (int) $_GET[self::OFFSET];
         }  else {
-            $start=0;
+            $offset=0;
         }
-        $start_previous = $start - self::DISPLAY;
-        $this->currentView->setParameter(new GenericParameter("start_previous", $start_previous));
+        $offset_previous = $offset - self::ROW_COUNT;
+        $this->currentView->setParameter(new GenericParameter("offset_previous", $offset_previous));
 
-        $current_page = ($start / self::DISPLAY) + 1;
+        $current_page = ($offset / self::ROW_COUNT) + 1;
         $this->currentView->setParameter(new GenericParameter("current_page", $current_page));
 
-        $start_next = $start + self::DISPLAY;
-        $this->currentView->setParameter(new GenericParameter("start_next", $start_next));
+        $offset_next = $offset + self::ROW_COUNT;
+        $this->currentView->setParameter(new GenericParameter("offset_next", $offset_next));
 
         for ($i = 1; $i <= $page_count; $i++) {
-            $page_number[$i] = (self::DISPLAY * ($i - 1));
+            $page_number[$i] = (self::ROW_COUNT * ($i - 1));
         }
         $this->currentView->setParameter(new GenericParameter("page_number", $page_number));
 
-        return $start;
+        return $offset;
 
     }
 
@@ -347,11 +349,11 @@ final class OnlineShop extends AbstractNormForm
     private function setRowCount($search)
     {
         //##
-        return $row_count = 3;
+        return $product_count = 3;
         //*/
         /*--
         require '../../onlineshopsolution/index/setRowCount.inc.php';
-        return $row_count['count'];
+        return $product_count['count'];
         //*/
     }
 }
