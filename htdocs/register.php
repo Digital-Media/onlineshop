@@ -34,7 +34,7 @@ try {
         new PostParameter(Register::FAX),
         new PostParameter(Register::EMAIL),
         new PostParameter(Register::PASSWORD),
-        new PostParameter(Register::PASSWORDREPEAT)
+        new PostParameter(Register::PASSWORD_REPEAT)
     ]);
 
 // Creates a new IMAR object and triggers the NormForm process

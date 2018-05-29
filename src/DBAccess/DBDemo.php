@@ -55,7 +55,7 @@ final class DBDemo extends AbstractNormForm
     {
         parent::__construct($defaultView);
         $this->dbAccess = new DBAccess(DSN, DB_USER, DB_PWD, DB_NAMES, DB_COLLATION);
-        $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
+        $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArray()));
         // uncomment following lines to demonstrate error_handling
         // PHP Warning is visible in browser with display_errors=1
         //$x=1/0;
@@ -107,17 +107,18 @@ final class DBDemo extends AbstractNormForm
         $this->addPType();
         $this->statusMessage = "Product Category added";
         $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
-        $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
+        $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArray()));
         $this->currentView->setParameter(new PostParameter(DBDemo::PTYPE, true));
     }
 
     /**
      * Returns an array to display all entries of onlineshop.product_category on the current page.
      *
+     * @return array $result Result set of database query.
      * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
      *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
-    private function fillpageArray()
+    private function fillPageArray(): array
     {
         $query = <<<SQL
                  SELECT idproduct_category, product_category_name
@@ -136,7 +137,7 @@ SQL;
      * @throws DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
      *         The exception is treated in the try-catch block of the php script, that initializes this class.
      */
-    private function addPType()
+    private function addPType(): void
     {
         $query = <<<SQL
                  INSERT INTO product_category 
