@@ -45,14 +45,14 @@ final class MyCart extends AbstractNormForm
      * @var string $delete_array  array to store the pids to delete from onlineshop.cart to demonstrate
      *                            reuse of prepared statements. prepare once execute many times in deleteFromCart()
      */
-    /*--
+    //--
     private $delete_array;
     //*/
     /**
      * @var string $update_array  array to store the pids to update in onlineshop.cart to demonstrate
      *                            reuse of prepared statements. prepare once execute many times in updateCart()
      */
-    /*--
+    //--
     private $update_array;
     //*/
 
@@ -71,7 +71,7 @@ final class MyCart extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
+        //--
         require '../../onlineshopsolution/mycart/construct.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
@@ -89,7 +89,7 @@ final class MyCart extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        /*--
+        //--
         require '../../onlineshopsolution/mycart/isValid.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
@@ -130,10 +130,10 @@ final class MyCart extends AbstractNormForm
      *                           An empty array, if no entries are there.
      * @throws DatabaseException
      */
-    private function fillpageArray()
+    private function fillpageArray(): array
     {
         // TODO Rewrite this code in way, that the array is filled with entries from the database
-        //##
+        /*##
         return array( 0 => array('product_idproduct' => 1,
                                  'product_name' => 'Passivhaus',
                                  'price' => 300000,00, 'quantity' => 1),
@@ -145,7 +145,7 @@ final class MyCart extends AbstractNormForm
                                  'price' => 100000,00,
                                  'quantity' => 1));
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/mycart/fillpageArray.inc.php';
         $this->pageArray = $this->dbAccess->fetchResultset();
         return $this->pageArray;
@@ -163,9 +163,9 @@ final class MyCart extends AbstractNormForm
      *
      * @throws DatabaseException
      */
-    private function changeCart()
+    private function changeCart(): void
     {
-        /*--
+        //--
         require '../../onlineshopsolution/mycart/changeCart.inc.php';
         //*/
     }
@@ -175,9 +175,9 @@ final class MyCart extends AbstractNormForm
      *
      * @throws DatabaseException
      */
-    private function deleteFromCart()
+    private function deleteFromCart(): void
     {
-        /*--
+        //--
         require '../../onlineshopsolution/mycart/deleteFromCart.inc.php';
         //*/
     }
@@ -187,9 +187,9 @@ final class MyCart extends AbstractNormForm
      *
      * @throws DatabaseException
      */
-    private function updateCart($update_array)
+    private function updateCart($update_array): void
     {
-        /*--
+        //--
         require '../../onlineshopsolution/mycart/updateCart.inc.php';
         //*/
     }

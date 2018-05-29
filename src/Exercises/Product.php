@@ -46,10 +46,10 @@ final class Product extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
+        //--
         require '../../onlineshopsolution/product/construct.inc.php';
         //*/
-        $this->currentView->setParameter(new GenericParameter("ptypeArray", $this->autofillPTypeArray()));
+        $this->currentView->setParameter(new GenericParameter("ptypeArray", $this->fillPTypeArray()));
     }
 
     /**
@@ -67,7 +67,7 @@ final class Product extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        /*--
+        //--
         require '../../onlineshopsolution/product/isValid.inc.php';
         //*/
         $this->currentView->setParameter(
@@ -86,11 +86,11 @@ final class Product extends AbstractNormForm
     protected function business(): void
     {
         $this->addProduct();
-        /*--
+        //--
         require '../../onlineshopsolution/product/business.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
-        $this->currentView->setParameter(new GenericParameter("ptypeArray", $this->autofillPTypeArray()));
+        $this->currentView->setParameter(new GenericParameter("ptypeArray", $this->fillPTypeArray()));
         $this->currentView->setParameter(new GenericParameter("selected", null));
         $this->currentView->setParameter(new PostParameter(Product::PNAME, true));
         $this->currentView->setParameter(new PostParameter(Product::PRICE, true));
@@ -106,15 +106,15 @@ final class Product extends AbstractNormForm
      * @return mixed Array, das die Einträge der Tabelle onlineshop.product_category beinhaltet. false im Fehlerfall
      * @throws DatabaseException
      */
-    private function autofillPTypeArray()
+    private function fillPTypeArray(): array
     {
         // TODO Umschreiben, dass das Array aus der Datenbank befüllt wird
-        //##
+        /*##
         return array( 0 => array('product_category_name' => 'Please Choose One'),
                       1 => array('product_category_name' => 'Fill with entries from database!'),
                       2 => array('product_category_name' => 'Yes, you should!'));
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/product/autofillPTypeArray.inc.php';
         return $this->dbAccess->fetchResultset();
         //*/
@@ -126,12 +126,12 @@ final class Product extends AbstractNormForm
      * @return bool true, wenn der ptype-Eintrag vorhanden ist. false, wenn nicht vorhanden.
      * @throws DatabaseException
      */
-    private function isValidPType()
+    private function isValidPType(): bool
     {
-        //##
+        /*##
         return true;
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/product/isValidPType.inc.php';
         if (count($rows) !== 0) {
             return true;
@@ -147,12 +147,12 @@ final class Product extends AbstractNormForm
      * @return bool false, if pname in table onlineshop.product already exist, else true.
      * @throws DatabaseException
      */
-    private function isUniquePName()
+    private function isUniquePName(): bool
     {
-        //##
+        /*##
         return true;
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/product/isUniquePName.inc.php';
         if (count($rows) !== 0) {
             return false;
@@ -167,9 +167,9 @@ final class Product extends AbstractNormForm
      *
      * @throws DatabaseException
      */
-    private function addProduct()
+    private function addProduct(): void
     {
-        /*--
+        //--
         require '../../onlineshopsolution/product/addProduct.inc.php';
         $this->dbAccess->executeStmt($params);
         //*/

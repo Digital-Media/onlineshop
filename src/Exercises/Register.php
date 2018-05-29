@@ -31,7 +31,7 @@ final class Register extends AbstractNormForm
     const FAX = "fax";
     const EMAIL = "email";
     const PASSWORD = "password";
-    const PASSWORDREPEAT = "passwordrepeat";
+    const PASSWORD_REPEAT = "password_repeat";
 
     /**
      * @var string $dbAccess  Database handler for access to database
@@ -51,7 +51,7 @@ final class Register extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
+        //--
         require '../../onlineshopsolution/register/construct.inc.php';
         //*/
     }
@@ -73,7 +73,7 @@ final class Register extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        /*--
+        //--
         require '../../onlineshopsolution/register/isValid.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
@@ -102,9 +102,9 @@ final class Register extends AbstractNormForm
      *              false, if email exists.
      * @throws DatabaseException
      */
-    private function isUniqueEmail()
+    private function isUniqueEmail(): bool
     {
-        /*--
+        //--
         require '../../onlineshopsolution/register/isUniqueEmail.inc.php';
         if (count($rows) === 0) {
             return true;
@@ -112,7 +112,7 @@ final class Register extends AbstractNormForm
             return false;
         }
         //*/
-        //##
+        /*##
         return true;
         //*/
     }
@@ -129,13 +129,13 @@ final class Register extends AbstractNormForm
      * All other fields are directly stored to the table onlineshop.user.
      *
      * To test, if a login with login.php works with the current data,
-     * set active to null with PHPMyAdmin in onlineshop.user
+     * set onlineshop.user.active to null with PHPMyAdmin
      *
      * @throws DatabaseException
      */
-    private function addUser()
+    private function addUser(): void
     {
-        /*--
+        //--
         require '../../onlineshopsolution/register/addUser.inc.php';
         //*/
     }

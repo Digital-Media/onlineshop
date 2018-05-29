@@ -61,10 +61,10 @@ final class OnlineShop extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*-- 
+        //-- 
         require '../../onlineshopsolution/index/construct.inc.php';
         //*/
-        $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
+        $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArray()));
     }
 
     /**
@@ -82,7 +82,7 @@ final class OnlineShop extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        /*--
+        //--
         require '../../onlineshopsolution/index/isValid.inc.php';
         //*/
 
@@ -110,7 +110,7 @@ final class OnlineShop extends AbstractNormForm
             $pid =$this->addToCart();
             $this->statusMessage = "Product $pid added";
             $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
-            $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
+            $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArray()));
         } else {
             $this->errorMessages ["addToCart"] = "Error adding Product to Cart. Please try again";
         }
@@ -129,12 +129,12 @@ final class OnlineShop extends AbstractNormForm
      * @return bool false, if pid is not a positiv integer or 0, or doesn't exist in the database.
      * @throws DatabaseException
      */
-    private function isValidPid()
+    private function isValidPid(): bool
     {
-        //##
+        /*##
         return true;
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/index/isValidPid.inc.php';
         if ($count['count'] === "1") {
             return true;
@@ -150,15 +150,15 @@ final class OnlineShop extends AbstractNormForm
      * $_POST['pid'] is an array, but only a array with one entry is valid, because each button AddToCart can
      * send only one pid. More entries in the array indicate, that someone manipulated the request.
      *
-     * @return number $pid idproduct of the product added to onlineshop.cart
+     * @return integer $pid idproduct of the product added to onlineshop.cart
      * @throws DatabaseException
      */
-    private function addToCart()
+    private function addToCart(): int
     {
-        //##
+        /*##
         return 0;
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/index/addToCart.inc.php';
         return $pid;
         //*/
@@ -184,7 +184,7 @@ final class OnlineShop extends AbstractNormForm
      * @return array result set of database query
      * @throws DatabaseException
      */
-    private function fillpageArray(): array
+    private function fillPageArray(): array
     {
         $search = $this->setSearch();
         $order_by = $this->setOrderBy();
@@ -194,7 +194,7 @@ final class OnlineShop extends AbstractNormForm
         // TODO Rewrite this code in way, that the array is filled with entries from the database
         // TODO For using LIMIT parameters you need to use DBAccess::bindValueByType()
         // TODO This is necessary, because offset and row_count of the LIMIT clause have to be integers (Syntax!!)
-        //##
+        /*##
         return $pageArray = array( 0 => array('idproduct' => 1,
                                               'product_name' => 'Passivhaus',
                                               'price' => 300000,00),
@@ -205,7 +205,7 @@ final class OnlineShop extends AbstractNormForm
                                               'product_name' => 'Almgrundstück',
                                               'price' => 100000,00));
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/index/fillpageArray.inc.php';
         return $this->dbAccess->fetchResultset();
         //*/
@@ -232,14 +232,14 @@ final class OnlineShop extends AbstractNormForm
     /**
      * Defines how the result set should be sorted
      *
-     * @var string $sort holds the current value for the ORDBY BY clause of the product list displayed.
+     * @var string $sort holds the current value for the ORDER BY clause of the product list displayed.
      * The GET array is filled with the sort value, when a user clicks a header field of the product list.
      *
      * The implementation avoids XSS and unwanted program states due to forced browsing.
      *
      * @return string sort order for order by clause
      */
-    private function setOrderBy()
+    private function setOrderBy(): string
     {
         if (isset($_GET[self::SORT]) && in_array($_GET[self::SORT], array('pid','pname','price'))) {
             $_SESSION[self::SORT]=$_GET[self::SORT];
@@ -285,7 +285,7 @@ final class OnlineShop extends AbstractNormForm
      *
      * @see templates/pagination.tpl
      *
-     * @return number $offset offset for the LIMIT clause
+     * @return integer $offset offset for the LIMIT clause
      *                    If a pagination link is clicked $offset is set to $_GET[self::OFFSET]
      *                    The row_count for the LIMIT clause is defined by self::ROW_COUNT
      */
@@ -293,7 +293,7 @@ final class OnlineShop extends AbstractNormForm
     {
         $page_number = [];
         $product_count = $this->setRowCount($search);
-        //##
+        /*##
         // A static array with 3 entries is provided in fillPageArray()
         // $page_count is set to 2, to show the pagination links.
         // Both pages show the same 3 entries, because limiting the array to 2 entries works only
@@ -302,7 +302,7 @@ final class OnlineShop extends AbstractNormForm
         //*/
         //TODO calculate $page_count. How many pages are needed to display result set
         //TODO Only self::ROW_COUNT entries ard displayed on each page.
-        /*--
+        //--
         require '../../onlineshopsolution/index/setPaginationParameters.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("page_count", $page_count));
@@ -336,22 +336,22 @@ final class OnlineShop extends AbstractNormForm
      * Consider using a group function in SQL to let the database count the rows.
      * You have to use an alias for this group operation to make this work in MariaDB
      *
-     * Only active products are considered. onlineshop.product.avtive='1'
+     * Only active products are considered. onlineshop.product.active='1'
      * Only products, that match a given search string, are counted.
      * The search value form $_POST, can be empty. In this case no LIKE clause is used.
      * search fields for the LIKE clause are the columns
      * onlineshop.product.product_name, -.short_description, -.long_description.
      *
      * @param $search holds the search value
-     * @return number number of entries in onlineshop.product, that are active.
+     * @return integer number of entries in onlineshop.product, that are active.
      * @throws DatabaseException
      */
-    private function setRowCount($search)
+    private function setRowCount($search): int
     {
-        //##
+        /*##
         return $product_count = 3;
         //*/
-        /*--
+        //--
         require '../../onlineshopsolution/index/setRowCount.inc.php';
         return $product_count['count'];
         //*/
