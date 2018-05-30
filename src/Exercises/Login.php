@@ -48,7 +48,7 @@ final class Login extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        //--
+        /*--
         require '../../onlineshopsolution/login/construct.inc.php';
         //*/
     }
@@ -64,10 +64,10 @@ final class Login extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        //--
+        /*--
         require '../../onlineshopsolution/login/isValid.inc.php';
         //*/
-        /*##
+        //##
         $this->authenticateUser();
         //*/
         $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
@@ -99,7 +99,7 @@ final class Login extends AbstractNormForm
      */
     private function authenticateUser(): bool
     {
-        /*##
+        //##
         $_SESSION['iduser']=1;
         $_SESSION[IS_LOGGED_IN] = Utilities::generateLoginHash();
         $_SESSION['first_name']='John';
@@ -109,29 +109,6 @@ final class Login extends AbstractNormForm
         // copy solution from onlineshopsolution/login/authenticateUser.inc.php here to make solution work.
         // require doesn't work in this case
         //
-        $query = <<<SQL
-                 SELECT iduser, first_name, last_name, password 
-                 FROM user 
-                 WHERE email=:email 
-                 AND active IS NULL
-SQL;
-        $this->dbAccess->prepareQuery($query);
-        $this->dbAccess->executeStmt(array(':email' => $_POST[self::EMAIL]));
-        $rows = $this->dbAccess->fetchResultset();
-        if (count($rows) === 1 && password_verify($_POST[self::PASSWORD], $rows[0]['password'])) {
-            // TODO Optional, Warenkorb über session_regenerate_id() hinweg erhalten
-            $old_session_id = session_id();
-            session_regenerate_id();
-            $this->updateCart($old_session_id, session_id());
-            // End optional
-            $_SESSION['iduser']=$rows[0]['iduser'];
-            $_SESSION[IS_LOGGED_IN] = Utilities::generateLoginHash();
-            $_SESSION['first_name']=$rows[0]['first_name'];
-            $_SESSION['last_name']=$rows[0]['last_name'];
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**
@@ -142,10 +119,10 @@ SQL;
      */
     private function updateCart($old_session_id, $new_session_id)
     {
-        /*##
+        //##
         return true;
         //*/
-        //--
+        /*--
         require '../../onlineshopsolution/login/updateCart.inc.php';
         //*/
     }
