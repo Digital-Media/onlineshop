@@ -4,9 +4,8 @@
     <section class="Section">
         <div class="Container">
             <h2 class="Section-heading">My Cart</h2>
-            {% include "errorMessages.html.twig" %}
-            {% include "statusMessage.html.twig" %}
-            <form action="{{ _server.SCRIPT_NAME }}" method="post" enctype="multipart/form-data">
+            <div id="messages"></div>
+            <form method="post">
                 <div class="InputCombo Grid-full">
                     {% include "tablestyles.html.twig" %}
                     <table>
@@ -22,7 +21,7 @@
                                 <td>{{ pageArray[key]['product_idproduct'] }}</td>
                                 <td>{{ pageArray[key]['product_namey'] }}</td>
                                 <td>{{ pageArray[key]['price'] }}</td>
-                                <td><input type="text" name="quantity[{{ pageArray[key]['product_idproduct'] }}]" size="10" maxlength="10" value="{{ pageArray[key]['quantity'] }}"/></td>
+                                <td><input type="number" min="0" max="999" id="{{ pageArray[key]['product_idproduct'] }}" name="quantity" value="{{ pageArray[key]['quantity'] }}" class="input_qty" /></td>
                             </tr>
                         {% else %}
                             <tr>
@@ -36,9 +35,8 @@
                     </table>
                 </div>
                 {% if not(pageArray is empty) %}
-                    <div class="Grid-full">
-                        <input type="submit" class="Button" name="update" value="Update Cart" />
-                        <input type="submit" class="Button" name="checkout" value="Go To Checkout" />
+                    <div id="checkout" class="Grid-full">
+                        <a href="checkout.php"  class="Button u-spaceLM">Go to Checkout</a>
                     </div>
                 {% endif %}
             </form>
