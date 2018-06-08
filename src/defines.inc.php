@@ -5,7 +5,7 @@
 /**
  * Activate Debugging-Messages here for easier testing
  */
-define('DEBUG', true);
+define('DEBUG', false);
 if (DEBUG) {
     echo "<br>WARNING: Debugging is enabled. Set DEBUG to false for production use in " . __FILE__;
     echo "<br>Connect via SSH and send tail -f /var/log/apache2/error.log";

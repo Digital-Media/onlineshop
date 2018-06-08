@@ -35,6 +35,7 @@ final class MyCart extends AbstractNormForm
      * --> $_POST[self::PTYPE]
      */
     const QUANTITY = 'quantity';
+    const PID = 'pid';
 
     /**
      * @var string $dbAccess  Database handler for access to database
@@ -74,48 +75,50 @@ final class MyCart extends AbstractNormForm
         /*--
         require '../../onlineshopsolution/mycart/construct.inc.php';
         //*/
+        $this->dbAccess = new DBAccess(DSN, DB_USER, DB_PWD, DB_NAMES, DB_COLLATION);
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
     }
 
     /**
-     * Validates the user input
+     * Validates the user input sent via AJAX
      *
-     * Steps through the array $_POST[self::QUANTITY] and checks each pid with Utilities::isInt()
-     * Optionally you can use the callback function array_map() to do this without a loop.
      * Error messages are stored in the array $errorMessages[].
-     * Each pid with an invalid quantity gets its own entry.
      *
      * @return bool true, if $errorMessages is empty, else false
      */
     protected function isValid(): bool
     {
+        $this->currentView=null;
+        $error="";
         /*--
         require '../../onlineshopsolution/mycart/isValid.inc.php';
         //*/
-        $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
+        if (!(Utilities::isInt($_POST[self::QUANTITY])) || !(Utilities::isInt($_POST[self::PID]))) {
+            $this->errorMessages[] = [self::QUANTITY => "Please enter a valid quantity for PID " . Utilities::sanitizeFilter($_POST[self::PID])];
+        }
+        if ((count($this->errorMessages) !== 0)) {
+            $json = json_encode($this->errorMessages, JSON_UNESCAPED_SLASHES);
+            echo '{"errorMessages": ' . $json . '}';
+        }
+
         return (count($this->errorMessages) === 0);
     }
 
     /**
-     * Process the user input, sent with a POST request
+     * Process the user input, sent with a POST AJAX request
      *
      * Calls MyCart::changeCart() to store changes of a quantity to onlineshop.cart.
-     * If the button "Change Cart" <input name='update' ... > has been clicked,
-     * the orders are displayed again and an appropriate $statusMessage is sent.
-     * If the button "Go To Checkout" <inpurt name='checkout' ... > has been clicked,
-     * the user is redirected to checkout.php.
      *
      * @throws DatabaseException
      */
     protected function business(): void
     {
-        $this->changeCart();
-        if (isset($_POST['update'])) {
-            $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
-            $this->statusMessage = "Quantity changed";
-            $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
-        } elseif (isset($_POST['checkout'])) {
-            View::redirectTo('checkout.php');
+        if ((int) $_POST[self::QUANTITY] === 0) {
+            $this->deleteFromCart();
+            echo  '{"deleteMessage" : "Product with PID ' . Utilities::sanitizeFilter($_POST[self::PID]) . ' deleted from cart"}';
+        } else {
+            $this->updateCart();
+            echo  '{"statusMessage" : "Quantity changed for PID ' . Utilities::sanitizeFilter($_POST[self::PID]) . '"}';
         }
     }
 
@@ -132,8 +135,8 @@ final class MyCart extends AbstractNormForm
      */
     private function fillpageArray(): array
     {
-        // TODO Rewrite this code in way, that the array is filled with entries from the database
-        //##
+        // TODO Rewrite this code in a way, that the array is filled with entries from the database
+        /*##
         return array( 0 => array('product_idproduct' => 1,
                                  'product_name' => 'Passivhaus',
                                  'price' => 300000,00, 'quantity' => 1),
@@ -150,6 +153,16 @@ final class MyCart extends AbstractNormForm
         $this->pageArray = $this->dbAccess->fetchResultset();
         return $this->pageArray;
         //*/
+        $query = <<<SQL
+                 SELECT product_idproduct, product_name, price, quantity
+                 FROM cart
+                 WHERE session_id = :session_id
+SQL;
+        $this->dbAccess->prepareQuery($query);
+        //(session_id() != "") ? $sessionid = session_id() : $sessionid = 1;
+        $this->dbAccess->executeStmt(array(':session_id' => 1));
+        $this->pageArray = $this->dbAccess->fetchResultset();
+        return $this->pageArray;
     }
 
     /**
@@ -180,6 +193,16 @@ final class MyCart extends AbstractNormForm
         /*--
         require '../../onlineshopsolution/mycart/deleteFromCart.inc.php';
         //*/
+        $query = <<<SQL
+                 DELETE FROM  cart 
+                 WHERE product_idproduct = :idproduct
+                 AND session_id = :session_id
+SQL;
+        $this->dbAccess->prepareQuery($query);
+        $pid = $_POST[self::PID];
+        //(session_id() != "") ? $sessionid = session_id() : $sessionid = 1;
+        $params = array(':idproduct' => $pid, ':session_id' => 1);
+        $this->dbAccess->executeStmt($params);
     }
 
     /**
@@ -187,10 +210,22 @@ final class MyCart extends AbstractNormForm
      *
      * @throws DatabaseException
      */
-    private function updateCart($update_array): void
+    private function updateCart(): void
     {
         /*--
         require '../../onlineshopsolution/mycart/updateCart.inc.php';
         //*/
+        $query = <<<SQL
+                 UPDATE  cart 
+                 SET quantity = :quantity
+                 WHERE product_idproduct = :idproduct
+                 AND session_id = :session_id
+SQL;
+        $this->dbAccess->prepareQuery($query);
+        $pid = $_POST[self::PID];
+        $quantity = $_POST[self::QUANTITY];
+        //(session_id() != "") ? $sessionid = session_id() : $sessionid = 1;
+        $params = array(':idproduct' => $pid, ':session_id' => 1, ':quantity' => $quantity);
+        $this->dbAccess->executeStmt($params);
     }
 }
