@@ -75,7 +75,6 @@ final class MyCart extends AbstractNormForm
         /*--
         require '../../onlineshopsolution/mycart/construct.inc.php';
         //*/
-        $this->dbAccess = new DBAccess(DSN, DB_USER, DB_PWD, DB_NAMES, DB_COLLATION);
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
     }
 
