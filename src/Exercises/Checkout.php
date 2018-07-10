@@ -66,7 +66,8 @@ final class Checkout extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
+        // Invalidate View for AJAX
+        // $this->currentView=null;
         return (count($this->errorMessages) === 0);
     }
 
@@ -76,7 +77,7 @@ final class Checkout extends AbstractNormForm
      * Because the order is split up into two tables, the inserts have to be enclose by "begin transaction" and "commit".
      * If both inserts succeed, the order is deleted from onlineshop.cart.
      * The delete also has to be within "begin transaction" and "commit".
-     * After the commit $this->statusMessage is set to appropriate value stating that the order was successful.
+     * After the commit a statusMessage is set to an appropriate value, stating that the order was successful.
      *
      * During the transaction there are no validation, that can cause an explicit rollback.
      * In case of an exception the database automatically rolls back.
@@ -90,7 +91,6 @@ final class Checkout extends AbstractNormForm
         /*--
         require '../../onlineshopsolution/checkout/business.inc.php';
         //*/
-        $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
     }
 
     /**

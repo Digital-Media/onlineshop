@@ -24,7 +24,7 @@ use Utilities\Utilities;
  * @package onlineshop
  * @version 2018
  */
-final class DBDemo extends AbstractNormForm
+final class DBAjaxDemo extends AbstractNormForm
 {
     // make trait Utilities accessible via $this->
     use Utilities;
@@ -80,13 +80,21 @@ final class DBDemo extends AbstractNormForm
      */
     protected function isValid(): bool
     {
+        // Invalidate View for AJAX
+        $this->currentView=null;
         if ($this->isEmptyPostField(self::PTYPE)) {
             $this->errorMessages[self::PTYPE] = "Please enter a Product Category.";
         }
+        /*
         if (isset($_POST[self::PTYPE]) && !$this::isSingleWord($_POST[self::PTYPE])) {
             $this->errorMessages[self::PTYPE] = "Please enter a Product Category as a Single Word.";
         }
-        $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
+        */
+        if ((count($this->errorMessages) !== 0)) {
+            $this->errorMessages['errorMessages'] = count($this->errorMessages);
+            $json = json_encode($this->errorMessages, JSON_UNESCAPED_SLASHES);
+            echo $json;
+        }
         return (count($this->errorMessages) === 0);
     }
 
@@ -105,10 +113,7 @@ final class DBDemo extends AbstractNormForm
     protected function business(): void
     {
         $this->addPType();
-        $this->statusMessage = "Product Category added";
-        $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
-        $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArray()));
-        $this->currentView->setParameter(new PostParameter(DBDemo::PTYPE, true));
+        echo  '{"statusMessage" : "Product Category added", "aid" : ' . $this->dbAccess->lastInsertId() . ' }';
     }
 
     /**
@@ -146,7 +151,8 @@ SQL;
         $this->dbAccess->prepareQuery($query, DEBUG);
         // The next two lines do the same due to "use Utilities" at the begin of the class declaration
         // $params = array(':ptype' => Utilities::sanitizeFilter($_POST[self::PTYPE]));
-        $params = array(':ptype' => $this->sanitizeFilter($_POST[self::PTYPE]));
+        //$params = array(':ptype' => $this->sanitizeFilter($_POST[self::PTYPE]));
+        $params = array(':ptype' => $_POST[self::PTYPE]);
         $this->dbAccess->executeStmt($params);
     }
 }

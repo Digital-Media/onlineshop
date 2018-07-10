@@ -4,9 +4,11 @@
     <section class="Section">
         <div class="Container">
             <h2 class="Section-heading">Checkout</h2>
-            {% include "errorMessages.html.twig" %}
-            {% include "statusMessage.html.twig" %}
-            <form action="{{  _server.SCRIPT_NAME }}" method="post" enctype="multipart/form-data">
+            <div id="messages">
+                {% include "errorMessages.html.twig" %}
+                {% include "statusMessage.html.twig" %}
+            </div>
+            <form action="{{  _server.SCRIPT_NAME }}" method="post" enctype="multipart/form-data" id="checkoutform">
                 <div class="InputCombo Grid-full">
                     {% include "tablestyles.html.twig" %}
                     <table>
@@ -44,4 +46,6 @@
         </div>
     </section>
 </main>
+<!-- uncomment for using AJAX. A submit event is registered in this case -->
+<!--<script src="../src/Exercises/js/checkout.js"></script>-->
 {% include "footer.html.twig" %}

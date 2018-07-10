@@ -4,9 +4,11 @@
     <section class="Section">
         <div class="Container">
             <h2 class="Section-heading">Add Product</h2>
-            {% include "errorMessages.html.twig" %}
-            {% include "statusMessage.html.twig" %}
-            <form action="{{ _server.SCRIPT_NAME }}" method="post" enctype="multipart/form-data">
+            <div id="messages">
+                {% include "errorMessages.html.twig" %}
+                {% include "statusMessage.html.twig" %}
+            </div>
+            <form action="{{ _server.SCRIPT_NAME }}" method="post" enctype="multipart/form-data" id="productform">
                 <div class="InputCombo Grid-full">
                     <label for="{{ pname.getName() }}" class="InputCombo-label">Product Name*:</label>
                     <input type="text" id="{{ pname.getName() }}" name="{{ pname.getName() }}" value="{{ pname.getValue() }}" placeholder="Choose a unique Product Name" class="InputCombo-field">
@@ -46,4 +48,5 @@
         </div>
     </section>
 </main>
+<!--<script src="../src/Exercises/js/product.js"></script>-->
 {% include "footer.html.twig" %}

@@ -4,8 +4,11 @@
     <section class="Section">
         <div class="Container">
             <h2 class="Section-heading">My Cart</h2>
-            <div id="messages"></div>
-            <form method="post">
+            <div id="messages">
+                {% include "errorMessages.html.twig" %}
+                {% include "statusMessage.html.twig" %}
+            </div>
+            <form action="#" method="post" id="mycartform">
                 <div class="InputCombo Grid-full">
                     {% include "tablestyles.html.twig" %}
                     <table>
@@ -16,31 +19,38 @@
                             <th>Quantity</th>
                         </tr>
                         {% if pageArray is defined %}
-                        {% for key, value in pageArray %}
-                            <tr>
-                                <td>{{ pageArray[key]['product_idproduct'] }}</td>
-                                <td>{{ pageArray[key]['product_namey'] }}</td>
-                                <td>{{ pageArray[key]['price'] }}</td>
-                                <td><input type="number" min="0" max="999" id="{{ pageArray[key]['product_idproduct'] }}" name="quantity" value="{{ pageArray[key]['quantity'] }}" class="input_qty" /></td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td> No Products in Cart </td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                            </tr>
-                        {% endfor %}
+                            {% for key, value in pageArray %}
+                                <tr>
+                                    <td>{{ pageArray[key]['product_idproduct'] }}</td>
+                                    <td>{{ pageArray[key]['product_namey'] }}</td>
+                                    <td>{{ pageArray[key]['price'] }}</td>
+                                    <td>
+                                        <input id="{{ pageArray[key]['product_idproduct'] }}" type="number" name="quantity[{{ pageArray[key]['product_idproduct'] }}]" min="0" max="10" value="{{ pageArray[key]['quantity'] }}" class="input_qty"/>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td> No Products in Cart </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            {% endfor %}
                         {% endif %}
                     </table>
                 </div>
                 {% if not(pageArray is empty) %}
-                    <div id="checkout" class="Grid-full">
-                        <a href="checkout.php"  class="Button u-spaceLM">Go to Checkout</a>
+                    <div id="submitbuttons" class="Grid-full">
+                        <!-- If form is sent directly by Browser -->
+                        <input id="update" type="submit" class="Button" name="update" value="Update Cart" />
+                        <input id="checkout" type="submit" class="Button" name="checkout" value="Go To Checkout" />
+                        <!-- For use with mycart.js and AJAX -->
+                        <!--<a href="checkout.php" class="Button">Go To Checkout</a>-->
                     </div>
                 {% endif %}
             </form>
         </div>
     </section>
 </main>
+<!--<script src="../src/Exercises/js/mycartmixed.js"></script>-->
 {% include "footer.html.twig" %}

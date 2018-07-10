@@ -46,7 +46,7 @@ final class Product extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
+        //--
         require '../../onlineshopsolution/product/construct.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("ptypeArray", $this->fillPTypeArray()));
@@ -70,10 +70,6 @@ final class Product extends AbstractNormForm
         /*--
         require '../../onlineshopsolution/product/isValid.inc.php';
         //*/
-        $this->currentView->setParameter(
-            new GenericParameter("selected", Utilities::sanitizeFilter($_POST[self::PTYPE]))
-        );
-        $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
         return (count($this->errorMessages) === 0);
     }
 
@@ -89,15 +85,6 @@ final class Product extends AbstractNormForm
         /*--
         require '../../onlineshopsolution/product/business.inc.php';
         //*/
-        $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
-        $this->currentView->setParameter(new GenericParameter("ptypeArray", $this->fillPTypeArray()));
-        $this->currentView->setParameter(new GenericParameter("selected", null));
-        $this->currentView->setParameter(new PostParameter(Product::PNAME, true));
-        $this->currentView->setParameter(new PostParameter(Product::PRICE, true));
-        $this->currentView->setParameter(new PostParameter(Product::PTYPE, true));
-        $this->currentView->setParameter(new PostParameter(Product::ACTIVE, true));
-        $this->currentView->setParameter(new PostParameter(Product::SHORTDESC, true));
-        $this->currentView->setParameter(new PostParameter(Product::LONGDESC, true));
     }
 
     /**
@@ -171,7 +158,6 @@ final class Product extends AbstractNormForm
     {
         /*--
         require '../../onlineshopsolution/product/addProduct.inc.php';
-        $this->dbAccess->executeStmt($params);
         //*/
     }
 }

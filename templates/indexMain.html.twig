@@ -3,49 +3,52 @@
 <main class="Site-content">
     <section class="Section">
         <div class="Container">
-            {% include "errorMessages.html.twig" %}
-            {% include "statusMessage.html.twig" %}
-            <form action="{{ _server.SCRIPT_NAME }}" method="post">
-                                <div class="InputCombo Grid-full">
-                                    <label for="{{ search.getName() }}" class="InputCombo-label">Search:</label>
-                                    <input type="search" id="{{ search.getName() }}" name="{{ search.getName() }}" value="{{ search.getValue() }}" class="InputCombo-field">
-                                    <button type="submit" class="Button"><i class="fa fa-search" aria-hidden="true"></i></button>
-                                </div>
-                            </form>
-                        <br>
-                        <h2 class="Section-heading">List of Products</h2>
-                        <div class="InputCombo Grid-full">
-                            <form action="{{ _server.SCRIPT_NAME }}" method="post"  enctype="multipart/form-data">
-                                {% include "tablestyles.html.twig" %}
-                                <table>
-                                    <tr>
-                                        <th><a href="{{ _server.SCRIPT_NAME }}?sort=pid&amp;">PID</a></th>
-                                        <th><a href="{{ _server.SCRIPT_NAME }}?sort=pname&amp;">Product_name</a></th>
-                                        <th><a href="{{ _server.SCRIPT_NAME }}?sort=price&amp;">Price</a></th>
-                                        <th>&nbsp;</th>
-                                    </tr>
-                                    {% if pageArray is defined %}
-                                        {% for key, value in pageArray %}
-                                        <tr>
-                                            <td>{{ pageArray[key]['idproduct'] }}</td>
-                                            <td>{{ pageArray[key]['product_name'] }}</td>
-                                            <td>{{ pageArray[key]['price'] }}</td>
-                                            <td><button name="pid[{{ pageArray[key]['idproduct'] }}]" type="submit"><i class="fa fa-cart-plus" aria-hidden="true">&nbsp;Add To Cart</i></button></td>
-                                        </tr>
-                                        {% endfor %}
-                                    {% else %}
-                                        <tr>
-                                            <td> No products found in search </td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                        </tr>
-                                    {% endif %}
-                                </table>
+            <div id="messages">
+                {% include "errorMessages.html.twig" %}
+                {% include "statusMessage.html.twig" %}
+            </div>
+            <form action="{{ _server.SCRIPT_NAME }}" method="post" enctype="multipart/form-data">
+                <div class="InputCombo Grid-full">
+                    <label for="{{ search.getName() }}" class="InputCombo-label">Search:</label>
+                    <input type="search" id="{{ search.getName() }}" name="{{ search.getName() }}" value="{{ search.getValue() }}" class="InputCombo-field">
+                    <button type="submit" class="Button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </div>
+            </form>
+            <br>
+            <h2 class="Section-heading">List of Products</h2>
+            <div class="InputCombo Grid-full">
+                <form action="{{ _server.SCRIPT_NAME }}" method="post"  enctype="multipart/form-data" id="indexform">
+                    {% include "tablestyles.html.twig" %}
+                    <table>
+                        <tr>
+                            <th><a href="{{ _server.SCRIPT_NAME }}?sort=pid&amp;">PID</a></th>
+                            <th><a href="{{ _server.SCRIPT_NAME }}?sort=pname&amp;">Product_name</a></th>
+                            <th><a href="{{ _server.SCRIPT_NAME }}?sort=price&amp;">Price</a></th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        {% if pageArray is defined %}
+                            {% for key, value in pageArray %}
+                                <tr>
+                                    <td>{{ pageArray[key]['idproduct'] }}</td>
+                                    <td>{{ pageArray[key]['product_name'] }}</td>
+                                    <td>{{ pageArray[key]['price'] }}</td>
+                                    <td><button id="{{ pageArray[key]['idproduct'] }}" name="pid[{{ pageArray[key]['idproduct'] }}]" type="submit" class="addtocart"><i class="fa fa-cart-plus" aria-hidden="true">&nbsp;Add To Cart</i></button></td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td> No products found in search </td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        {% endif %}
+                    </table>
                     {% include "pagination.html.twig" %}
                 </form>
              </div>
         </div>
     </section>
 </main>
+<!--script src="../src/Exercises/js/index.js"></script>-->
 {%  include "footer.html.twig"  %}
