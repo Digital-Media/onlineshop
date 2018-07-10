@@ -46,7 +46,7 @@ final class Product extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        //--
+        /*--
         require '../../onlineshopsolution/product/construct.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("ptypeArray", $this->fillPTypeArray()));
