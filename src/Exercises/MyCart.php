@@ -98,6 +98,7 @@ final class MyCart extends AbstractNormForm
      * Process the user input, sent with a POST request
      *
      * Calls MyCart::deleteFromCart() and MyCart::updateCart() to store changes of a quantity to onlineshop.cart.
+     * If the button "Go To Checkout" is clicked, the user is redirected to checkout.php (@see View::redirectTo())
      *
      * @throws DatabaseException
      */
