@@ -4,9 +4,11 @@
     <section class="Section">
         <div class="Container">
             <h2 class="Section-heading">Register for an OnlineShop account</h2>
-            {% include "errorMessages.html.twig" %}
-            {% include "statusMessage.html.twig" %}
-            <form action="{{ _server.SCRIPT_NAME }}" method="post" enctype="multipart/form-data">
+            <div id="messages">
+                {% include "errorMessages.html.twig" %}
+                {% include "statusMessage.html.twig" %}
+            </div>
+            <form action="{{ _server.SCRIPT_NAME }}" method="post" enctype="multipart/form-data" id="registerform">
                 <div class="InputCombo Grid-full">
                     <label for="{{ firstname.getName() }}" class="InputCombo-label">Firstname:</label>
                     <input type="text" id="{{ firstname.getName() }}" name="{{ firstname.getName() }}" value="{{ firstname.getValue() }}" class="InputCombo-field">
@@ -58,4 +60,5 @@
         </div>
     </section>
 </main>
+<!--<script src="../src/Exercises/js/register.js"></script>-->
 {% include "footer.html.twig" %}

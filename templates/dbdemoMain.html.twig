@@ -3,12 +3,16 @@
 <main class="Site-content">
     <section class="Section">
         <div class="Container">
-            {% include "errorMessages.html.twig" %}
-            {% include "statusMessage.html.twig" %}
-                <form action="{{ _server.SCRIPT_NAME }}" method="post">
+            <div id="messages">
+                <div id="messages">
+                    {% include "errorMessages.html.twig" %}
+                    {% include "statusMessage.html.twig" %}
+                </div>
+            </div>
+                <form action="{{ _server.SCRIPT_NAME }}" method="post" enctype="multipart/form-data" id="dbdemoform">
                     <div class="InputCombo Grid-full">
                         <label for="{{ ptype.getName() }}" class="InputCombo-label">Product Category:</label>
-                        <input type="search" id="{{ ptype.getName() }}" name="{{ ptype.getName() }}" value="{{ ptype.getValue() }}" class="InputCombo-field">
+                        <input type="text" id="{{ ptype.getName() }}" name="{{ ptype.getName() }}" value="{{ ptype.getValue() }}" class="InputCombo-field">
                     </div>
                     <div class="Grid-full">
                         <button type="submit" class="Button">Add Product Category</button>
@@ -41,4 +45,7 @@
         </div>
     </section>
 </main>
+<!-- uncomment one of both for using AJAX. A submit event is registered in this case -->
+<!--<script src="../src/DBAccess/js/dbajaxdemo.js"></script>-->
+<!--<script src="../src/DBAccess/js/dbajaxdemojquery.js"></script>-->
 {% include "footer.html.twig" %}

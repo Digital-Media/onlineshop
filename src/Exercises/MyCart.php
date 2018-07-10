@@ -88,38 +88,24 @@ final class MyCart extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        $this->currentView=null;
-        $error="";
         /*--
         require '../../onlineshopsolution/mycart/isValid.inc.php';
         //*/
-        if (!(Utilities::isInt($_POST[self::QUANTITY])) || !(Utilities::isInt($_POST[self::PID]))) {
-            $this->errorMessages[] = [self::QUANTITY => "Please enter a valid quantity for PID " . Utilities::sanitizeFilter($_POST[self::PID])];
-        }
-        if ((count($this->errorMessages) !== 0)) {
-            $json = json_encode($this->errorMessages, JSON_UNESCAPED_SLASHES);
-            echo '{"errorMessages": ' . $json . '}';
-        }
-
         return (count($this->errorMessages) === 0);
     }
 
     /**
-     * Process the user input, sent with a POST AJAX request
+     * Process the user input, sent with a POST request
      *
-     * Calls MyCart::changeCart() to store changes of a quantity to onlineshop.cart.
+     * Calls MyCart::deleteFromCart() and MyCart::updateCart() to store changes of a quantity to onlineshop.cart.
      *
      * @throws DatabaseException
      */
     protected function business(): void
     {
-        if ((int) $_POST[self::QUANTITY] === 0) {
-            $this->deleteFromCart();
-            echo  '{"deleteMessage" : "Product with PID ' . Utilities::sanitizeFilter($_POST[self::PID]) . ' deleted from cart"}';
-        } else {
-            $this->updateCart();
-            echo  '{"statusMessage" : "Quantity changed for PID ' . Utilities::sanitizeFilter($_POST[self::PID]) . '"}';
-        }
+       /*--
+       require '../../onlineshopsolution/mycart/business.inc.php';
+       //*/
     }
 
     /**
@@ -136,7 +122,7 @@ final class MyCart extends AbstractNormForm
     private function fillpageArray(): array
     {
         // TODO Rewrite this code in a way, that the array is filled with entries from the database
-        /*##
+        //##
         return array( 0 => array('product_idproduct' => 1,
                                  'product_name' => 'Passivhaus',
                                  'price' => 300000,00, 'quantity' => 1),
@@ -153,79 +139,66 @@ final class MyCart extends AbstractNormForm
         $this->pageArray = $this->dbAccess->fetchResultset();
         return $this->pageArray;
         //*/
-        $query = <<<SQL
-                 SELECT product_idproduct, product_name, price, quantity
-                 FROM cart
-                 WHERE session_id = :session_id
-SQL;
-        $this->dbAccess->prepareQuery($query);
-        //(session_id() != "") ? $sessionid = session_id() : $sessionid = 1;
-        $this->dbAccess->executeStmt(array(':session_id' => 1));
-        $this->pageArray = $this->dbAccess->fetchResultset();
-        return $this->pageArray;
     }
 
     /**
-     * Stores changes in $_POST['quantity']['pid'] to onlineshop.cart
+     * Validates if the pid in $_POST['pid'] exists in onlineshop.product.
      *
-     * If quantity has been set to 0 for a pid, the entry is deleted in onlineshop.cart
-     * You may use @see MyCart::deleteFromCart() for that.
-     * If quantity has been set to a value not equal to 0 for a pid, the entry is updated in onlineshop.cart
-     * You may use @see MyCart::updateCart() for that.
-     * But you can also do both steps in MyCart::changeCart().
+     * Use Utilities::isInt to avoid requests to the database with values, that are not integer, which can't exist.
      *
+     * $_POST['pid'] is an array, but only a array with one entry is valid, because each button AddToCart can
+     * send only one pid. More entries in the array indicate, that someone manipulated the request.
+     *
+     * Each key in $_POST['pid'] is tested against onlineshop.product, if it exists, to avoid forced browsing.
+     *
+     * @param string $pid onlineshop.product.idproduct, that has to exist
+     *
+     * @return bool false, if pid is not a positiv integer or 0, or doesn't exist in the database.
      * @throws DatabaseException
      */
-    private function changeCart(): void
+    private function isValidPid($pid): bool
     {
+        //##
+        return true;
+        //*/
         /*--
-        require '../../onlineshopsolution/mycart/changeCart.inc.php';
+        require '../../onlineshopsolution/mycart/isValidPid.inc.php';
+        if ($count['count'] === "1") {
+            return true;
+        } else {
+            return false;
+        }
         //*/
     }
 
     /**
      * Deletes entries from onlineshop.cart belonging to the current session.
      *
+     * @param string $pid pid of rows to be deleted from onlineshop.cart
+     * @param string $sessionid current sessionid of rows to be deleted from onlineshop.cart
+     *
      * @throws DatabaseException
      */
-    private function deleteFromCart(): void
+    private function deleteFromCart($pid, $sessionid): void
     {
         /*--
         require '../../onlineshopsolution/mycart/deleteFromCart.inc.php';
         //*/
-        $query = <<<SQL
-                 DELETE FROM  cart 
-                 WHERE product_idproduct = :idproduct
-                 AND session_id = :session_id
-SQL;
-        $this->dbAccess->prepareQuery($query);
-        $pid = $_POST[self::PID];
-        //(session_id() != "") ? $sessionid = session_id() : $sessionid = 1;
-        $params = array(':idproduct' => $pid, ':session_id' => 1);
-        $this->dbAccess->executeStmt($params);
     }
 
     /**
      * Updates onlineshop.cart.quantity for given pids belonging to the current session
      *
+     * @param string $pid pid of rows to be updated in onlineshop.cart
+     * @param string $quantity new quantity to be set in onlineshop.cart for given pid and sessionid
+     * @param string $sessionid current sessionid of rows to be updated in onlineshop.cart
+     *
      * @throws DatabaseException
      */
-    private function updateCart(): void
+    private function updateCart($pid, $quantity, $sessionid): void
     {
         /*--
         require '../../onlineshopsolution/mycart/updateCart.inc.php';
         //*/
-        $query = <<<SQL
-                 UPDATE  cart 
-                 SET quantity = :quantity
-                 WHERE product_idproduct = :idproduct
-                 AND session_id = :session_id
-SQL;
-        $this->dbAccess->prepareQuery($query);
-        $pid = $_POST[self::PID];
-        $quantity = $_POST[self::QUANTITY];
-        //(session_id() != "") ? $sessionid = session_id() : $sessionid = 1;
-        $params = array(':idproduct' => $pid, ':session_id' => 1, ':quantity' => $quantity);
-        $this->dbAccess->executeStmt($params);
     }
 }

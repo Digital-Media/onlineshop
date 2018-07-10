@@ -9,6 +9,13 @@ database access with PHP Libraries.
 
 Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/media-technology-and-design/
 
+# Basic usage
+
+* ``cd <code>`` which should be accessible for your web server.
+* ``sudo git clone https://github.com/Digital-Media/onlineshop.git onlineshop``
+* ``cd onlineshop``
+* ``composer install``
+
 # Used technologies and requirements
 
 The exercises have been developed with [Vagrant](https://www.vagrantup.com/) and [Virtualbox](https://www.virtualbox.org/). 
@@ -23,14 +30,13 @@ PHP 7.1 is required to run the examples.
 * [PHP 7.1](http://php.net/manual/en/migration71.new-features.php)
 * [MariaDB](https://mariadb.org/)
 * [PDO-Datenbankschnittstelle](http://php.net/manual/en/book.pdo.php)
-* [TNormform](https://github.com/Digital-Media/normform)
+* [Normform](https://github.com/Digital-Media/normform)
 * [TWIG Templates](https://twig.symfony.com/)
 * [CSS3 Flexbox](https://www.w3.org/TR/css-flexbox-1/)
 * [PHP-FIG PSR: PHP Standards Recommendations](https://www.php-fig.org/psr/)
 
 
 The files, that have to be completed for the exercises, are stored in the subdirectory ``src/exercises``.
-Each lesson has its own subdirectory. For one exercise only files in this subdirectory have to be completed.
 All other files are for reference.
 
 Sample solutions are included with ``require`` from a solution folder. The git repostitory, that holds the solution is private.

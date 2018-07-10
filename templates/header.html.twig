@@ -9,7 +9,6 @@
           integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="../src/js/mycart.js"></script>
 </head>
 <body class="Site">
 <header class="Site-header">
@@ -22,7 +21,7 @@
         <div class="Header-logout">
             You are logged in as  {{  _session.first_name }} {{  _session.last_name }}. <a href="logout.php" class="Button u-spaceLM">Logout</a>
         </div>
-        {%  elseif _session is empty  %}
+        {%  else  %}
         <div class="Header-logout">
             <a href="login.php"  class="Button u-spaceLM">Login</a>
         </div>

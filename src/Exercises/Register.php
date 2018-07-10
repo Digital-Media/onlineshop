@@ -76,7 +76,6 @@ final class Register extends AbstractNormForm
         /*--
         require '../../onlineshopsolution/register/isValid.inc.php';
         //*/
-        $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
         return (count($this->errorMessages) === 0);
     }
 
@@ -91,7 +90,9 @@ final class Register extends AbstractNormForm
     protected function business(): void
     {
         $this->addUser();
-        View::redirectTo('index.php');
+        /*--
+        require '../../onlineshopsolution/register/business.inc.php';
+        //*/
     }
 
 

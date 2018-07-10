@@ -61,7 +61,7 @@ final class OnlineShop extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*-- 
+        /*--
         require '../../onlineshopsolution/index/construct.inc.php';
         //*/
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArray()));
@@ -85,9 +85,6 @@ final class OnlineShop extends AbstractNormForm
         /*--
         require '../../onlineshopsolution/index/isValid.inc.php';
         //*/
-
-        $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
-
         return (count($this->errorMessages) === 0);
     }
 
@@ -106,14 +103,9 @@ final class OnlineShop extends AbstractNormForm
      */
     protected function business(): void
     {
-        if (isset($_POST[self::PID])) {
-            $pid =$this->addToCart();
-            $this->statusMessage = "Product $pid added";
-            $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
-            $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArray()));
-        } else {
-            $this->errorMessages ["addToCart"] = "Error adding Product to Cart. Please try again";
-        }
+        /*--
+        require '../../onlineshopsolution/index/business.inc.php';
+        //*/
     }
 
     /**

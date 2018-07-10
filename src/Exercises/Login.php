@@ -70,7 +70,6 @@ final class Login extends AbstractNormForm
         //##
         $this->authenticateUser();
         //*/
-        $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
         return (count($this->errorMessages) === 0);
     }
 
@@ -80,6 +79,7 @@ final class Login extends AbstractNormForm
      * If a user called a page, that is protected by login, he will be redirected back to the page he requested.
      * If he directly requested the login page he is redirected to index.php
      * A page protected by login has to store its name in $_SESSION['redirect'] to make this redirect possible.
+     * @see View::redirect() for this.
      */
     protected function business(): void
     {
@@ -92,7 +92,7 @@ final class Login extends AbstractNormForm
      *
      * After a successful login the session_id is regenerated to make session hijacking more difficult.
      * session_regenerate_id() is used for that.
-     * After that the session_ids in onlineshop.cart have to be replaced with the new one.
+     * After that the corresponding session_ids in onlineshop.cart have to be replaced with the new one.
      *
      * @return bool true, if email+password match a row in onlineshop.user, else false.
      * @throws DatabaseException
