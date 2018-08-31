@@ -225,9 +225,9 @@ INSERT INTO `pentest` (`idpentest`, `email`, `password`, `active`, `role`) VALUE
 INSERT INTO `product` (`idproduct`, `product_name`, `price`, `short_description`, `long_description`, `active`, `date_added`) VALUES
 (1, 'Passivhaus', '300000.00', 'Haus mit U-Wert<10kWh/am2', 'Haus mit U-Wert<10kWh/am2\r\n20m2 Solaranlage\r\n40m2 Photovoltaik\r\n7500l Regenwassertank, ideal an kalten Wintertagen', 1, '2009-12-28 15:45:03'),
 (2, 'Niedrigenergiehaus', '250000.00', 'Haus mit U-Wert<45kWh/am2', 'Haus mit U-Wert<45kWh/am2\r\n20 m2 Solaranlage, ideal an kalten Wintertagen', 0, '2009-12-28 15:45:44'),
-(3, 'Seegrundstück', '200000.00', 'Seegrundstück am Attersee', 'Seegrundstueck am Attersee mit Seeblick und Bergblick, ideal fuer heisse Sommertage', 1,'2009-12-29 16:15:42'),
-(4, 'Almgrundstück', '300000.00', 'Almgrundstück an einem Bergsee', 'Almgrundstück an einem Bergsee mit Zufahrtsstrasse, geschottert und Winterräumung, ideal fuer heiße Sommertage', 1,'2009-12-29 16:15:42'),
-(5, 'Talgrundstück', '10000.00', 'Grundstück am Talende', 'Talgrundstück am Ende des Steyerlingtales, wenig Sonne, dafuer viel kaltes Bachwasser direkt neben dem Grundstück, ideal für heiße Sommertage', 1,'2009-12-29 16:15:42');
+(3, 'Seegrundstück', '200000.00', 'Seegrundstück am Attersee', 'Seegrundstück am Attersee mit Seeblick und Bergblick, ideal für heiße Sommertage', 1,'2009-12-29 16:15:42'),
+(4, 'Almgrundstück', '300000.00', 'Almgrundstück an einem Bergsee', 'Almgrundstück an einem Bergsee mit Zufahrtsstraße, geschottert und Winterräumung, ideal für heiße Sommertage', 1,'2009-12-29 16:15:42'),
+(5, 'Talgrundstück', '10000.00', 'Grundstück am Talende', 'Talgrundstück am Ende des Steyerlingtales, wenig Sonne, dafür viel kaltes Bachwasser direkt neben dem Grundstück, ideal für heiße Sommertage', 1,'2009-12-29 16:15:42');
 
 --
 -- Adding FULLTEXT Index for `product`
