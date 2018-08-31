@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `pentest` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products`
+-- Table structure for table `product`
 --
 
 DROP TABLE IF EXISTS `product`;
@@ -219,7 +219,7 @@ INSERT INTO `pentest` (`idpentest`, `email`, `password`, `active`, `role`) VALUE
 -- --------------------------------------------------------
 
 --
--- Dumping data for table `products`
+-- Dumping data for table `product`
 --
 
 INSERT INTO `product` (`idproduct`, `product_name`, `price`, `short_description`, `long_description`, `active`, `date_added`) VALUES
@@ -228,6 +228,13 @@ INSERT INTO `product` (`idproduct`, `product_name`, `price`, `short_description`
 (3, 'Seegrundstück', '200000.00', 'Seegrundstück am Attersee', 'Seegrundstueck am Attersee mit Seeblick und Bergblick, ideal fuer heisse Sommertage', 1,'2009-12-29 16:15:42'),
 (4, 'Almgrundstück', '300000.00', 'Almgrundstück an einem Bergsee', 'Almgrundstück an einem Bergsee mit Zufahrtsstrasse, geschottert und Winterräumung, ideal fuer heiße Sommertage', 1,'2009-12-29 16:15:42'),
 (5, 'Talgrundstück', '10000.00', 'Grundstück am Talende', 'Talgrundstück am Ende des Steyerlingtales, wenig Sonne, dafuer viel kaltes Bachwasser direkt neben dem Grundstück, ideal für heiße Sommertage', 1,'2009-12-29 16:15:42');
+
+--
+-- Adding FULLTEXT Index for `product`
+--
+
+ALTER TABLE product ADD FULLTEXT product_fulltext (product_name, short_description, long_description);
+ALTER TABLE product ADD FULLTEXT product_name_fulltext (product_name);
 
 -- --------------------------------------------------------
 

@@ -9,7 +9,7 @@ require_once '../src/defines.inc.php';
 
 session_start();
 
-use Exercises\Login;
+use DBAccess\ESearchDemo;
 use Fhooe\NormForm\Parameter\PostParameter;
 use Fhooe\NormForm\View\View;
 
@@ -17,22 +17,27 @@ use Fhooe\NormForm\View\View;
  *
  * Database exceptions are caught only here. A DEBUG page formatted in DBAccess::debugSQL() will be displayed
  * PHP exception are redirected to a common error page
- */try {
+ */
+try {
     // Defines a new view that specifies the template and the parameters that are passed to the template
     $view = new View(
-        "loginMain.html.twig",
+        "esearchdemoMain.html.twig",
         "../templates",
         "../templates_c",
         [
-        new PostParameter(Login::EMAIL),
-        new PostParameter(Login::PASSWORD)
+            new PostParameter(ESearchDemo::COPY_TO),
+            new PostParameter(ESearchDemo::LIKE),
+            new PostParameter(ESearchDemo::MATCH),
+            new PostParameter(ESearchDemo::NO_CURSOR),
+            new PostParameter(ESearchDemo::PAGING)
         ]
-    );    // Creates a new Login object and triggers the NormForm process
-    $login = new Login($view);
-    $login->normForm();
+    );
+    // Creates a new Product object and triggers the NormForm process
+    $dbdemo = new ESearchDemo($view);
+    $dbdemo->normForm();
 } catch (Exception $e) {
     if (DEBUG) {
-        echo "An error occured in file " . $e->getFile() . " on line " . $e->getLine() . ":" . $e->getMessage();
+        echo "An error occured in file " . $e->getFile() ." on line " . $e->getLine() .":" . $e->getMessage();
     } else {
         echo "<h2>Something went wrong</h2>";
     }
