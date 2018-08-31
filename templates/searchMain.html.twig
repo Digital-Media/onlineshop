@@ -1,0 +1,54 @@
+{% include "header.html.twig" %}
+{% include "navigation.html.twig" %}
+<main class="Site-content">
+    <section class="Section">
+        <div class="Container">
+            <div id="messages">
+                {% include "errorMessages.html.twig" %}
+                {% include "statusMessage.html.twig" %}
+            </div>
+            <form action="{{ _server.SCRIPT_NAME }}" method="post" enctype="multipart/form-data">
+                <div class="InputCombo Grid-full">
+                    <label for="{{ search.getName() }}" class="InputCombo-label">Search:</label>
+                    <input type="search" id="{{ search.getName() }}" name="{{ search.getName() }}" value="{{ search.getValue() }}" class="InputCombo-field">
+                    <button type="submit" class="Button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </div>
+            </form>
+            <br>
+            <h2 class="Section-heading">List of Products</h2>
+            <div class="InputCombo Grid-full">
+               <form action="{{ _server.SCRIPT_NAME }}" method="post"  enctype="multipart/form-data" id="indexform">
+                    {% include "tablestyles.html.twig" %}
+                    <table>
+                        <tr>
+                            <th>PID</th>
+                            <th>Product_name</th>
+                            <th>Price</th>
+                        </tr>
+                        {% if pageArray is defined %}
+                            {% for key, value in pageArray %}
+                                <tr>
+                                    <td>{{ pageArray[key]['idproduct'] }}</td>
+                                    <td>{{ pageArray[key]['product_name'] }}</td>
+                                    <td>{{ pageArray[key]['price'] }}</td>
+                                </tr>
+                            {% endfor %}
+                            <input type="hidden" name="start" value="{{ startValue }}" class="InputCombo-field">
+                        {% if startValue  != 0 %}<button type="submit" class="Button" name="previous" value="{{ storeSearch }}"><i class="fas fa-backward"></i></button>{% endif %}
+                        {% if (startValue + 2  < totalValue )  %}    <button type="submit" class="Button" name="next" value="{{ storeSearch }}"><i class="fas fa-forward"></i></button>{% endif %}
+                        {% else %}
+                            <tr>
+                                <td> No products found in search </td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </form>
+             </div>
+        </div>
+    </section>
+</main>
+<!--script src="../src/Exercises/js/search.js"></script>-->
+{%  include "footer.html.twig"  %}
