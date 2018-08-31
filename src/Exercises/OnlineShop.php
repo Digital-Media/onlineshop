@@ -56,7 +56,7 @@ final class OnlineShop extends AbstractNormForm
      *
      * @param View $defaultView Holds the initial @View object used for displaying the form.
      *
-     * @throws DatabaseException
+     * @throws \DBAccess\DatabaseException
      */
     public function __construct(View $defaultView)
     {
@@ -99,7 +99,7 @@ final class OnlineShop extends AbstractNormForm
      * Shop::addToCart() stores the chosen product in the table onlineshop.cart.
      * On success an appropriate message is set in $this->statusMessage and sent to the template(setParameter).
      *
-     * @throws DatabaseException
+     * @throws \DBAccess\DatabaseException
      */
     protected function business(): void
     {
