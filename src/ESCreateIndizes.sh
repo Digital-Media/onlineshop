@@ -234,6 +234,6 @@ curl -X PUT "localhost:9200/product_hyphen_decompounder/_doc/5" -H 'Content-Type
 {
     "product_name" : "Talgrundstück",
     "short_description" : "Grundstück am Talende",
-    "long_description" : "Talgrundstück am Ende des Steyerlingtales, wenig Sonne, dafuer viel kaltes Bachwasser direkt neben dem Grundstück, ideal für heiße Sommertage"
+    "long_description" : "Talgrundstück am Ende des Steyerlingtales, wenig Sonne, dafür viel kaltes Bachwasser direkt neben dem Grundstück, ideal für heiße Sommertage"
 }
 '
