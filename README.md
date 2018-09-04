@@ -19,7 +19,9 @@ Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/med
 # Used technologies and requirements
 
 The exercises have been developed with [Vagrant](https://www.vagrantup.com/) and [Virtualbox](https://www.virtualbox.org/). 
-A [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev-base) with the installation of the web environment is hosted on GitHub.
+A [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev) with the installation of the web environment is hosted on GitHub.
+A [second Vagrantfile](https://github.com/Digital-Media/hgb-dbdev) with the installation of the web environment and the 
+search engine ElasticSearch is hosted on GitHub as an alternative environment.
 But *OnlineShop* can be installed in a different environment as well.
 
 PHP 7.1 is required to run the examples.
@@ -34,6 +36,8 @@ PHP 7.1 is required to run the examples.
 * [TWIG Templates](https://twig.symfony.com/)
 * [CSS3 Flexbox](https://www.w3.org/TR/css-flexbox-1/)
 * [PHP-FIG PSR: PHP Standards Recommendations](https://www.php-fig.org/psr/)
+* [ElasticSearch PHP Client 6.0](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/index.html) works
+only with second Vagrantfile.
 
 
 The files, that have to be completed for the exercises, are stored in the subdirectory ``src/exercises``.
