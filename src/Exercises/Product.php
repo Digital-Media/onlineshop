@@ -102,7 +102,7 @@ final class Product extends AbstractNormForm
                       2 => array('product_category_name' => 'Yes, you should!'));
         //*/
         /*--
-        require '../../onlineshopsolution/product/autofillPTypeArray.inc.php';
+        require '../../onlineshopsolution/product/fillPTypeArray.inc.php';
         return $this->dbAccess->fetchResultset();
         //*/
     }
