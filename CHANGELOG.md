@@ -5,7 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Unit tests with [PHPUnit](https://phpunit.de/).
+- Support for Redis
+- Support for Neo4J
+
+## [3.0.0] - 2018-07-16
+### Added
+- ElasticSearch-PHP 6.0
 
 ## [2.1.0] - 2018-07-16
 ### Added
