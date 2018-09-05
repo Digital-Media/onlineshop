@@ -22,7 +22,8 @@ The exercises have been developed with [Vagrant](https://www.vagrantup.com/) and
 A [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev) with the installation of the web environment is hosted on GitHub.
 A [second Vagrantfile](https://github.com/Digital-Media/hgb-dbdev) with the installation of the web environment and the 
 search engine ElasticSearch is hosted on GitHub as an alternative environment.
-But *OnlineShop* can be installed in a different environment as well.
+But *OnlineShop* can be installed in a different environment as well. 
+[XAMPP](https://www.apachefriends.org/de/download.html) or [MAMP](https://www.mamp.info/de/)
 
 PHP 7.1 is required to run the examples.
 
