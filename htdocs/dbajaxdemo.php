@@ -22,7 +22,7 @@ use Fhooe\NormForm\View\View;
 try {
     // Defines a new view that specifies the template and the parameters that are passed to the template
     $view = new View(
-        "dbdemoMain.html.twig",
+        "dbajaxdemoMain.html.twig",
         "../templates",
         "../templates_c",
         [
