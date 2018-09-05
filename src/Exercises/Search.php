@@ -67,6 +67,9 @@ final class Search extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
+        /*--
+        require '../../onlineshopsolution/search/construct.inc.php';
+        //*/
     }
 
     /**
