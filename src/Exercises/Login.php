@@ -84,6 +84,7 @@ final class Login extends AbstractNormForm
     protected function business(): void
     {
         isset($_SESSION[REDIRECT]) ? $redirect= $_SESSION['redirect'] : $redirect='index.php';
+        // replace the following line with a solution for AJAX, when using AJAX
         View::redirectTo($redirect);
     }
 
