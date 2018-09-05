@@ -7,7 +7,7 @@
  */
 define('DEBUG', true);
 if (DEBUG) {
-    echo "<br>WARNING: Debugging is enabled. Set DEBUG to false for production use in " . __FILE__;
+    echo "<br><span style='color:red'>WARNING: Debugging is enabled. Set DEBUG to false for production use or for using AJAX in " . __FILE__ . "</span>";
     echo "<br>Connect via SSH and send tail -f /var/log/apache2/error.log";
     echo " to see errors not displayed in Browser<br><br>";
     error_reporting(E_ALL);
