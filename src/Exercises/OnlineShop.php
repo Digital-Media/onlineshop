@@ -16,7 +16,7 @@ use Utilities\Utilities;
  * The search field uses a GET request to limit the result set.
  * The AddToCart button triggers the method Shop::addToCart() with a POST-Request to add a product to onlineshop.cart.
  *
- * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
+ * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package OnlineShop
  * @version 2.0.2
  */
@@ -27,7 +27,6 @@ final class OnlineShop extends AbstractNormForm
     /**
      * Constants for a HTML attribute in <input name='ptype' id='ptype' ... >, <label for='ptype' ... >
      * --> $_POST[self::PTYPE] and GET-Parameters, sent by links
-     *
      *
      * @var string START Key for $_GET and $_SESSION entry to define the starting entry of the displayed product list
      *                   @see src/basetemplates/pagination.html.twig
@@ -207,7 +206,6 @@ final class OnlineShop extends AbstractNormForm
      *
      * @return string  holds the current value of the search field, if any given.
      * Detect if a new search value was sent and store it in $_SESSION for paging through the product list.
-     *
      */
     private function setSearch(): string
     {
@@ -251,7 +249,7 @@ final class OnlineShop extends AbstractNormForm
                 return 'price ASC';
                 break;
             default:
-               return 'idproduct ASC';
+                return 'idproduct ASC';
         }
     }
 
@@ -301,7 +299,7 @@ final class OnlineShop extends AbstractNormForm
 
         if (isset($_GET[self::OFFSET]) && Utilities::isInt($_GET[self::OFFSET]) && ($_GET[self::OFFSET] < $product_count)) {
             $offset= (int) $_GET[self::OFFSET];
-        }  else {
+        } else {
             $offset=0;
         }
         $offset_previous = $offset - self::ROW_COUNT;
@@ -319,7 +317,6 @@ final class OnlineShop extends AbstractNormForm
         $this->currentView->setParameter(new GenericParameter("page_number", $page_number));
 
         return $offset;
-
     }
 
     /**
@@ -334,7 +331,7 @@ final class OnlineShop extends AbstractNormForm
      * search fields for the LIKE clause are the columns
      * onlineshop.product.product_name, -.short_description, -.long_description.
      *
-     * @param $search holds the search value
+     * @param  $search holds the search value
      * @return integer number of entries in onlineshop.product, that are active.
      * @throws DatabaseException
      */

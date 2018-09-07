@@ -79,6 +79,7 @@ final class Login extends AbstractNormForm
      * If a user called a page, that is protected by login, he will be redirected back to the page he requested.
      * If he directly requested the login page he is redirected to index.php
      * A page protected by login has to store its name in $_SESSION['redirect'] to make this redirect possible.
+     *
      * @see View::redirect() for this.
      */
     protected function business(): void

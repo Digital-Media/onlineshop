@@ -11,13 +11,15 @@ $iterator = Finder::create()
     ->exclude("tests")
     ->in("src");
 
-$sami = new Sami($iterator, [
+$sami = new Sami(
+    $iterator, [
     "title" => "NormForm-Skeleton API",
     "build_dir" => __DIR__ . "/docs/",
     "cache_dir" => __DIR__ . "/cache/",
     "remote_repository" => new GitHubRemoteRepository("Digital-Media/normform-skeleton", __DIR__),
     "default_opened_level" => 2
-]);
+    ]
+);
 
 // Also include private properties and methods
 $sami["filter"] = function () {

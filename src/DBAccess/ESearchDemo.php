@@ -24,7 +24,7 @@ use PDO;
  *
  * Class ESearchDemo is final, because it makes no sense to derive a class from it.
  *
- * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
+ * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package onlineshop
  * @version 2018
  */
@@ -173,7 +173,7 @@ final class ESearchDemo extends AbstractNormForm
         if (isset($_POST[self::PAGING])) {
             $search = $_POST[self::PAGING];
             $result = $this->doElasticSearchPaging($search);
-            if (count($result['hits']['hits']) !== 0 ) {
+            if (count($result['hits']['hits']) !== 0) {
                 $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArrayPaging($result)));
                 var_dump($result['hits']['hits']);
             }
@@ -204,7 +204,7 @@ final class ESearchDemo extends AbstractNormForm
     /**
      * Returns an array to display all entries of onlineshop.product on the current page.
      *
-     * @param array $result Result of search in ElasticSearch
+     * @param  array $result Result of search in ElasticSearch
      * @return array $result Result set of database query.
      *
      * @throws \DBAccess\DatabaseException
@@ -249,7 +249,7 @@ SQL;
     /**
      * Returns an array to display all entries of onlineshop.product on the current page.
      *
-     * @param string $search Search term sent by user
+     * @param  string $search Search term sent by user
      * @return array $result Result set of database query using LIKE for matching.
      *
      * @throws \DBAccess\DatabaseException
@@ -302,7 +302,7 @@ SQL;
      * This query uses FULLTEXT index on product_name only.
      * FULLTEXT Indizes in MariaDB don't use a word decompounder.
      *
-     * @param string $search Search term sent by user
+     * @param  string $search Search term sent by user
      * @return array $result Result set of database query using MATCH AGAINST for the product_name column only.
      *
      * @throws \DBAccess\DatabaseException
@@ -324,7 +324,7 @@ SQL;
      * copy_to provides a field, where all search terms of all fields are gathered.
      * Additionally a word decompounder is used in the ES index product_hyphen_deompounder.
      *
-     * @param string $search Search term sent by user
+     * @param  string $search Search term sent by user
      * @return array $result Result set of ES search against all fields via copy_to field search.
      */
     private function doElasticSearchCopyTo(string $search): array
@@ -351,7 +351,7 @@ SQL;
      * columns product_name, short_description and long_description. This is provided by an additional FULLTEXT index
      * on onlineshop.product.
      *
-     * @param array $result Result of search in ElasticSearch
+     * @param  array $result Result of search in ElasticSearch
      * @return array $result Result set of database query.
      *
      * @throws \DBAccess\DatabaseException
@@ -374,8 +374,7 @@ SQL;
      * UNION. If want to refer to the IDs sent by ES, you have to loop over all ES results an build the queries
      * dynamically.
      *
-     *
-     * @param array $result Result of search in ElasticSearch
+     * @param  array $result Result of search in ElasticSearch
      * @return array $result Result set of database query.
      *
      * @throws \DBAccess\DatabaseException
@@ -413,7 +412,7 @@ SQL;
                 SELECT idproduct, product_name, price
                 FROM product
                 WHERE idproduct = :id5;
-SQL;
+        SQL;
         //*/
         $this->dbAccess->prepareQuery($query, DEBUG);
         $this->dbAccess->bindValueByType(':id1', $id[1], PDO::PARAM_INT);
@@ -429,7 +428,7 @@ SQL;
      * Returning the results of an ES search using from and size for paging. Only the first page is queried in this case.
      * For real paging you have to calculate and remember the from value for each page.
      *
-     * @param string $search Search term sent by user
+     * @param  string $search Search term sent by user
      * @return array $result Result set of ES search against all fields via copy_to field search.
      */
     private function doElasticSearchPaging(string $search): array
@@ -458,7 +457,7 @@ SQL;
     /**
      * Uses only an ID count of size delivered by ES search for the IN clause. @see doElasticSearchPaging()
      *
-     * @param array $result Result of search in ElasticSearch
+     * @param  array $result Result of search in ElasticSearch
      * @return array $result Result set of database query with IN clause.
      *
      * @throws \DBAccess\DatabaseException
@@ -466,8 +465,8 @@ SQL;
     private function fillPageArrayPaging(array $result): array
     {
 
-        $id[1]= intval ($result['hits']['hits'][0]['_id']);
-        $id[2]= isset($result['hits']['hits'][1]['_id']) ? intval ($result['hits']['hits'][1]['_id']) : 0;
+        $id[1]= intval($result['hits']['hits'][0]['_id']);
+        $id[2]= isset($result['hits']['hits'][1]['_id']) ? intval($result['hits']['hits'][1]['_id']) : 0;
         $query = <<<SQL
                 SELECT idproduct, product_name, price
                 FROM product

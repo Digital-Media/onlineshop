@@ -20,7 +20,7 @@ use Utilities\Utilities;
  *
  * Class DBAccess is final, because it makes no sense to derive a class from it.
  *
- * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
+ * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package onlineshop
  * @version 2018
  */

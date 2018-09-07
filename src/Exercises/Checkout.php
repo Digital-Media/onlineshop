@@ -21,7 +21,7 @@ use Utilities\Utilities;
  * One order in onlineshop.cart is connected via equal entries in the field onlineshop.cart.session_id.
  * On success a status message is set and all entries in onlineshop.cart are deleted.
  *
- * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
+ * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package OnlineShop
  * @version 2.0.2
  */
@@ -127,7 +127,6 @@ final class Checkout extends AbstractNormForm
         require '../../onlineshopsolution/checkout/fillpageArray.inc.php';
         return $pageArray;
         //*/
-
     }
 
     /**

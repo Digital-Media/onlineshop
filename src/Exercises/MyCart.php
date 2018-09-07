@@ -103,9 +103,9 @@ final class MyCart extends AbstractNormForm
      */
     protected function business(): void
     {
-       /*--
-       require '../../onlineshopsolution/mycart/business.inc.php';
-       //*/
+        /*--
+        require '../../onlineshopsolution/mycart/business.inc.php';
+        //*/
     }
 
     /**
@@ -174,7 +174,7 @@ final class MyCart extends AbstractNormForm
     /**
      * Deletes entries from onlineshop.cart belonging to the current session.
      *
-     * @param string $pid pid of rows to be deleted from onlineshop.cart
+     * @param string $pid       pid of rows to be deleted from onlineshop.cart
      * @param string $sessionid current sessionid of rows to be deleted from onlineshop.cart
      *
      * @throws DatabaseException
@@ -189,8 +189,8 @@ final class MyCart extends AbstractNormForm
     /**
      * Updates onlineshop.cart.quantity for given pids belonging to the current session
      *
-     * @param string $pid pid of rows to be updated in onlineshop.cart
-     * @param string $quantity new quantity to be set in onlineshop.cart for given pid and sessionid
+     * @param string $pid       pid of rows to be updated in onlineshop.cart
+     * @param string $quantity  new quantity to be set in onlineshop.cart for given pid and sessionid
      * @param string $sessionid current sessionid of rows to be updated in onlineshop.cart
      *
      * @throws DatabaseException

@@ -72,9 +72,9 @@ class NormFormTest extends \PHPUnit\Framework\TestCase
             } else {
                 if ($param->getName() === "errorMessages") {
                     // There are two required fields, that need a errorMessage associated
-                    self::assertCount(2,$param->getValue());
-                    self::assertArrayHasKey('firstname',$param->getValue());
-                    self::assertArrayHasKey('lastname',$param->getValue());
+                    self::assertCount(2, $param->getValue());
+                    self::assertArrayHasKey('firstname', $param->getValue());
+                    self::assertArrayHasKey('lastname', $param->getValue());
                 }
             }
         }
@@ -98,8 +98,8 @@ class NormFormTest extends \PHPUnit\Framework\TestCase
                 }
             } else {
                 if ($param instanceof GenericParameter) {
-                    self::assertCount(1,$param->getValue());
-                    self::assertArrayHasKey('firstname',$param->getValue());
+                    self::assertCount(1, $param->getValue());
+                    self::assertArrayHasKey('firstname', $param->getValue());
                 }
             }
         }
@@ -123,8 +123,8 @@ class NormFormTest extends \PHPUnit\Framework\TestCase
                 }
             } else {
                 if ($param instanceof GenericParameter) {
-                    self::assertCount(1,$param->getValue());
-                    self::assertArrayHasKey('lastname',$param->getValue());
+                    self::assertCount(1, $param->getValue());
+                    self::assertArrayHasKey('lastname', $param->getValue());
                 }
             }
         }
