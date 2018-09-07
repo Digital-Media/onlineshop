@@ -4,7 +4,8 @@ let xhr = new XMLHttpRequest();
 let form;
 let formData;
 
-function sendAJAXRequest(event) {
+function sendAJAXRequest(event)
+{
     formData = new FormData(form);
 
     xhr.open("POST", "dbajaxdemo.php", true);
@@ -15,7 +16,8 @@ function sendAJAXRequest(event) {
     event.preventDefault();
 }
 
-function handleResponse() {
+function handleResponse()
+{
     if (xhr.status === 200) {
         let messages;
         messages = document.getElementById("messages");
@@ -24,8 +26,7 @@ function handleResponse() {
         // If parsing as JSON worked, we can use the response directly
         if (xhr.responseType === "json") {
             myObj = xhr.response;
-        }
-        // otherwise we have to parse it ourselves
+        } // otherwise we have to parse it ourselves
         else {
             myObj = JSON.parse(xhr.responseText);
         }
@@ -66,7 +67,7 @@ function handleResponse() {
             // get the AutoIncrement value from the returned json.
             let newtxt = document.createTextNode(myObj.aid);
             let newtxt2;
-            for(let pair of formData.entries()) {
+            for (let pair of formData.entries()) {
                 newtxt2 = document.createTextNode(pair[1]);
             }
             tbody[1].append(newtr);
@@ -81,7 +82,11 @@ function handleResponse() {
 
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    form = document.getElementById("dbajaxdemoform");
-    form.addEventListener("submit", sendAJAXRequest);
-});
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+        form = document.getElementById("dbajaxdemoform");
+        form.addEventListener("submit", sendAJAXRequest);
+    }
+);
+

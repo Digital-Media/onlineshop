@@ -24,7 +24,7 @@ use PDO;
  *
  * Class DBAccess is final, because it makes no sense to derive a class from it.
  *
- * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
+ * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package onlineshop
  * @version 2018
  */
@@ -58,6 +58,7 @@ final class Search extends AbstractNormForm
      *
      * Calls constructor of class AbstractNormForm.
      * Creates a database handler for the database connection.
+     * Creates the Handler for ElasticSearch access
      * The assigned constants can be found in src/defines.inc.php
      *
      * @param View $defaultView Holds the initial @View object used for displaying the form.
@@ -100,10 +101,8 @@ final class Search extends AbstractNormForm
     /**
      * Process the user input, sent with a POST request
      *
-     * Shop::addPType() stores a new category in onlineshop.product_category.
-     * If this works $this->statusMsg is set and displayed in the template.
-     * All categories are read from onlineshop.product_category and displayed in the template.
-     *
+     * Stores the search term in hidden input field
+     * Sets the start parameter for pagination
      * Abstract methods of the class AbstractNormform have to be implemented in the derived class.
      *
      * @throws \DBAccess\DatabaseException is thrown by all methods of $this->dbAccess and not treated here.
@@ -123,27 +122,30 @@ final class Search extends AbstractNormForm
         if (isset($_POST['next'])) {
             $search = $_POST['next'];
             $this->currentView->setParameter(new GenericParameter("storeSearch", $_POST['next']));
-            $this->start = intval ($_POST['start']) + 2;
+            $this->start = intval($_POST['start']) + 2;
             $this->currentView->setParameter(new GenericParameter("startValue", $this->start));
         }
         if (isset($_POST['previous'])) {
             $search = $_POST['previous'];
             $this->currentView->setParameter(new GenericParameter("storeSearch", $_POST['previous']));
-            $this->start = intval ($_POST['start']) - 2;
+            $this->start = intval($_POST['start']) - 2;
             $this->currentView->setParameter(new GenericParameter("startValue", $this->start));
         }
 
         $result = $this->doElasticSearch($search);
-        if (isset ($result['hits'])) {
+        if (isset($result['hits'])) {
             $this->currentView->setParameter(new GenericParameter("totalValue", $result['hits']['total']));
-            if (count($result['hits']['hits']) !== 0 ) {
+            if (count($result['hits']['hits']) !== 0) {
                 $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArray($result)));
             }
         }
     }
 
     /**
+     * Searches for entries in Elasticsearch, that match the given serach terms
      *
+     * @param  string $search search terms given in search field
+     * @return array $result Result of the ElasticSearch request
      */
     private function doElasticSearch(string $search): array
     {
@@ -157,9 +159,9 @@ final class Search extends AbstractNormForm
     }
 
     /**
-     * Returns an array to display all entries of onlineshop.product_category on the current page.
+     * Returns an array to display all entries found by ElasticSearch of onlineshop.product on the current page.
      *
-     * @param array $result Result of search in ElasticSearch
+     * @param  array $result Result of search in ElasticSearch
      * @return array $result Result set of database query.
      *
      * @throws \DBAccess\DatabaseException

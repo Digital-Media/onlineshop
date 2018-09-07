@@ -1,7 +1,7 @@
 
 window.projectVersion = 'master';
 
-(function(root) {
+(function (root) {
 
     var bhIndex = null;
     var rootPath = '';
@@ -29,8 +29,12 @@ window.projectVersion = 'master';
         {}
     ];
 
-    /** Tokenizes strings by namespaces and functions */
-    function tokenizer(term) {
+    /**
+     * 
+     * Tokenizes strings by namespaces and functions 
+     */
+    function tokenizer(term) 
+    {
         if (!term) {
             return [];
         }
@@ -62,7 +66,7 @@ window.projectVersion = 'master';
          * Cleans the provided term. If no term is provided, then one is
          * grabbed from the query string "search" parameter.
          */
-        cleanSearchTerm: function(term) {
+        cleanSearchTerm: function (term) {
             // Grab from the query string
             if (typeof term === 'undefined') {
                 var name = 'search';
@@ -77,76 +81,98 @@ window.projectVersion = 'master';
             return term.replace(/<(?:.|\n)*?>/gm, '');
         },
 
-        /** Searches through the index for a given term */
-        search: function(term) {
+        /**
+         * 
+         * Searches through the index for a given term 
+         */
+        search: function (term) {
             // Create a new search index if needed
             if (!bhIndex) {
-                bhIndex = new Bloodhound({
-                    limit: 500,
-                    local: searchIndex,
-                    datumTokenizer: function (d) {
-                        return tokenizer(d.name);
-                    },
-                    queryTokenizer: Bloodhound.tokenizers.whitespace
-                });
+                bhIndex = new Bloodhound(
+                    {
+                        limit: 500,
+                        local: searchIndex,
+                        datumTokenizer: function (d) {
+                            return tokenizer(d.name);
+                        },
+                        queryTokenizer: Bloodhound.tokenizers.whitespace
+                    }
+                );
                 bhIndex.initialize();
             }
 
             results = [];
-            bhIndex.get(term, function(matches) {
-                results = matches;
-            });
+            bhIndex.get(
+                term, function (matches) {
+                    results = matches;
+                }
+            );
 
             if (!rootPath) {
                 return results;
             }
 
             // Fix the element links based on the current page depth.
-            return $.map(results, function(ele) {
-                if (ele.link.indexOf('..') > -1) {
+            return $.map(
+                results, function (ele) {
+                    if (ele.link.indexOf('..') > -1) {
+                        return ele;
+                    }
+                    ele.link = rootPath + ele.link;
+                    if (ele.fromLink) {
+                        ele.fromLink = rootPath + ele.fromLink;
+                    }
                     return ele;
                 }
-                ele.link = rootPath + ele.link;
-                if (ele.fromLink) {
-                    ele.fromLink = rootPath + ele.fromLink;
-                }
-                return ele;
-            });
+            );
         },
 
-        /** Get a search class for a specific type */
-        getSearchClass: function(type) {
+        /**
+         * 
+         * Get a search class for a specific type 
+         */
+        getSearchClass: function (type) {
             return searchTypeClasses[type] || searchTypeClasses['_'];
         },
 
-        /** Add the left-nav tree to the site */
-        injectApiTree: function(ele) {
+        /**
+         * 
+         * Add the left-nav tree to the site 
+         */
+        injectApiTree: function (ele) {
             ele.html(treeHtml);
         }
     };
 
-    $(function() {
-        // Modify the HTML to work correctly based on the current depth
-        rootPath = $('body').attr('data-root-path');
-        treeHtml = treeHtml.replace(/href="/g, 'href="' + rootPath);
-        Sami.injectApiTree($('#api-tree'));
-    });
+    $(
+        function () {
+            // Modify the HTML to work correctly based on the current depth
+            rootPath = $('body').attr('data-root-path');
+            treeHtml = treeHtml.replace(/href="/g, 'href="' + rootPath);
+            Sami.injectApiTree($('#api-tree'));
+        }
+    );
 
     return root.Sami;
 })(window);
 
-$(function() {
+$(
+    function () {
 
-    // Enable the version switcher
-    $('#version-switcher').change(function() {
-        window.location = $(this).val()
-    });
+        // Enable the version switcher
+        $('#version-switcher').change(
+            function () {
+                window.location = $(this).val()
+            }
+        );
 
     
         // Toggle left-nav divs on click
-        $('#api-tree .hd span').click(function() {
-            $(this).parent().parent().toggleClass('opened');
-        });
+        $('#api-tree .hd span').click(
+            function () {
+                $(this).parent().parent().toggleClass('opened');
+            }
+        );
 
         // Expand the parent namespaces of the current page.
         var expected = $('body').attr('data-name');
@@ -169,32 +195,40 @@ $(function() {
     
     
         var form = $('#search-form .typeahead');
-        form.typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 1
-        }, {
-            name: 'search',
-            displayKey: 'name',
-            source: function (q, cb) {
-                cb(Sami.search(q));
+        form.typeahead(
+            {
+                hint: true,
+                highlight: true,
+                minLength: 1
+            }, {
+                name: 'search',
+                displayKey: 'name',
+                source: function (q, cb) {
+                    cb(Sami.search(q));
+                }
             }
-        });
+        );
 
         // The selection is direct-linked when the user selects a suggestion.
-        form.on('typeahead:selected', function(e, suggestion) {
-            window.location = suggestion.link;
-        });
+        form.on(
+            'typeahead:selected', function (e, suggestion) {
+                window.location = suggestion.link;
+            }
+        );
 
         // The form is submitted when the user hits enter.
-        form.keypress(function (e) {
-            if (e.which == 13) {
-                $('#search-form').submit();
-                return true;
+        form.keypress(
+            function (e) {
+                if (e.which == 13) {
+                    $('#search-form').submit();
+                    return true;
+                }
             }
-        });
+        );
 
     
-});
+    }
+);
+
 
 

@@ -57,6 +57,7 @@ final class Product extends AbstractNormForm
      *
      * All fields are required.
      * pname is checked for uniqueness against onlineshop.product.product_name.
+     *
      * @see Product::isUniquePName().
      * Price can be validated with Utilities::isPrice().
      * ptype is checked against onlineshop.prdoduct_category, if it exists.

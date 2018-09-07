@@ -13,7 +13,6 @@ use Exercises\Register;
 use Fhooe\NormForm\Parameter\PostParameter;
 use Fhooe\NormForm\View\View;
 
-
 /* --- This is the main call of the norm form process
  *
  * Database exceptions are caught only here. A DEBUG page formatted in DBAccess::debugSQL() will be displayed
@@ -35,9 +34,10 @@ try {
         new PostParameter(Register::EMAIL),
         new PostParameter(Register::PASSWORD),
         new PostParameter(Register::PASSWORD_REPEAT)
-    ]);
+        ]
+    );
 
-// Creates a new IMAR object and triggers the NormForm process
+    // Creates a new IMAR object and triggers the NormForm process
     $register = new Register($view);
     $register->normForm();
 } catch (Exception $e) {

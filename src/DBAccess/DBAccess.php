@@ -4,11 +4,6 @@ namespace DBAccess;
 use \PDOException;
 use \PDO;
 
-/*
- * Including class for Database Exceptions
- */
-require_once 'DatabaseException.php';
-
 /**
  * The class DBAccess uses object orientated PHP, PDO for access to MariaDB and implements prepared statements.
  *
@@ -17,7 +12,7 @@ require_once 'DatabaseException.php';
  * All api functions for CRUD operations are implemented using prepared statements.
  * All PDOExceptions are enclosed by a Database Exception for easier debugging with a comprehensive error page.
  *
- * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
+ * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package onlineshop
  * @version 2018
  */
@@ -40,12 +35,12 @@ class DBAccess
      * The connection to the database is persistent.
      * PDO is configured for using the ErrorMode Exceptions instead of Errors.
      *
-     * @param string $dsn Data Source Name including Database Type, Host, Port, Database Name
+     * @param string $dsn       Data Source Name including Database Type, Host, Port, Database Name
      * @param string $mysqlUser Database User to connect with
-     * @param string $mysqlPwd Password for Database User
-     * @param string $names Characterset for Database Connection, Default utf8
-     * @param string $collate Collation for Characterset, Default utf8_general_ci
-     * @param string $multi Defines if MULTI_STATEMENTS can be used
+     * @param string $mysqlPwd  Password for Database User
+     * @param string $names     Characterset for Database Connection, Default utf8
+     * @param string $collate   Collation for Characterset, Default utf8_general_ci
+     * @param string $multi     Defines if MULTI_STATEMENTS can be used
      *
      * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
@@ -56,13 +51,13 @@ class DBAccess
         $mysqlPwd = null,
         $names = "utf8",
         $collate = 'utf8_general_ci',
-        $multi = FALSE
+        $multi = false
     ) {
         $charsetAttr="SET NAMES $names COLLATE $collate";
         $options = array(
             // A warning is given for persistent connections in case of a interrupted database connection.
             // This warning is shown on the web page if error_reporting=E_ALL is set in php.ini
-            PDO::ATTR_PERSISTENT => TRUE,
+            PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::MYSQL_ATTR_INIT_COMMAND => $charsetAttr,
@@ -86,7 +81,7 @@ class DBAccess
      * creating and optimizing the execution plan (using indexes, ...)
      *
      * @param string $query Contains the SQL statement, that is prepared by the database.
-     * @param bool $debug If true the SQL statement is returned to the browser
+     * @param bool   $debug If true the SQL statement is returned to the browser
      *
      * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
@@ -116,7 +111,7 @@ class DBAccess
      *
      * @param string $param Name of the SQL named parameter
      * @param string $value Value of the SQL named parameter, that is assigned
-     * @param null $type type of the parameter: PDO::PARAM_STR, PDO::PARAM_INT, PDO::PARAM_BOOL, PDO::PARAM_NULL
+     * @param null   $type  type of the parameter: PDO::PARAM_STR, PDO::PARAM_INT, PDO::PARAM_BOOL, PDO::PARAM_NULL
      */
     public function bindValueByType($param, $value, $type = null):void
     {
@@ -148,7 +143,8 @@ class DBAccess
      * Two versions are implemented.
      *      1. Parameters are given in an assigned array, while calling execute()
      *      2. No array is handed during execute() call, which requires the call of
-     *         @method bindValueByType() before calling execute()
+     *
+     * @method bindValueByType() before calling execute()
      * In case of an Error the SQL statement is dumped with debugDumpParams()
      *
      * @param array $params Array with the named parameters of the SQL statement

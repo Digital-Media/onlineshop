@@ -123,6 +123,7 @@ final class Register extends AbstractNormForm
      *
      * The field active stores a MD5-Hash to determine, that a two-phase authentication has not been finished yet.
      * If active is set to NULL, when clicking a link with this hash sent via email, the user can log in.
+     *
      * @see login.php
      * role has a default value (user) and can be left empty, if you allow only normal users to register via this form.
      * date_registered can be omitted or filled with NOW(), to store the current timestamp.
