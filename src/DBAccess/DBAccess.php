@@ -346,6 +346,6 @@ class DBAccess
         // Pass error description to catch block.
         // This error message is returned by the Database Exception thrown in the catch block of the method called,
         // and can be used to send it to the browser with echo in the catch block of a project using DBAccess
-        return $sqlerrormessage;
-    }
+        $message = $sqlerrormessage ? $sqlerrormessage : $PDOError;
+        return $message;    }
 }
