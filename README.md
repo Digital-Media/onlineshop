@@ -95,8 +95,10 @@ Folder | Description
 ``htdocs/css`` | A set of predefined styles to be used with *NormForm*. Include ``main.css`` to use it.
 ``templates`` | HTML templates for the TWIG template engine used in ``/src/*.php``.
 ``templates_c`` | Output folder for compiled TWIG templates.
-``src`` | Classes implemented for *OnlineShop*, including the class DBDemo, that shows how to use [NormForm](https://github.com/Digital-Media/normform), DBAccess and LogWriter. The Trait Utilities provides static helper methods, that can be used in any context. The class LogWriter initializes monolog logging and provides methods to write personalized log files to ``onlineshop/src/onlinehsop.log`` according to PSR3
+``src`` | ``define.inc.php`` holds the constants to access the database. Scripts to load Data to MariaDB and ElasticSearch. A class diagramm for onlineshop.
+``src/DBAccess`` | Classes implemented for *OnlineShop*, including the class DBDemo, that shows how to use [NormForm](https://github.com/Digital-Media/normform), DBAccess and LogWriter. DBAjaxDemo demonstrates the usage of usage of AJAX with Normform. ESearchDemo demonstrates the usage of ElasticSearch.
 ``src/exercises`` | Classes to be implemented for *OnlineShop* exercises.
+``src/Utilities`` | The Trait Utilities provides static helper methods, that can be used in any context. The class LogWriter initializes monolog logging and provides methods to write personalized log files to ``onlineshop/src/Utilities/onlineshop.log`` according to PSR3.
 ``vendor`` | Third party libraries installed with composer: [NormForm](https://github.com/Digital-Media/normform), [TWIG Templates](https://twig.symfony.com/), Javascript Libraries ...
 
 A basic class diagramm for OnlineShop (built with http://www.umlet.com/umletino/
