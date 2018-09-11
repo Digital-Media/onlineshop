@@ -10,7 +10,8 @@
     "require": {
         "php": "^7.1",
         "fhooe/normform": "^1.0",
-        "elasticsearch/elasticsearch": "~6.0"
+        "elasticsearch/elasticsearch": "~6.0",
+        "monolog/monolog": "^1.23"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.0"
