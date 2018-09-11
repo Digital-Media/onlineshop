@@ -3,6 +3,7 @@ namespace DBAccess;
 
 use \PDOException;
 use \PDO;
+use Utilities\LogWriter;
 
 /**
  * The class DBAccess uses object orientated PHP, PDO for access to MariaDB and implements prepared statements.
@@ -29,6 +30,11 @@ class DBAccess
     private $stmt;
 
     /**
+     * @var string $logWriter  Instance of monolog to write logs to onlineshop.log
+     */
+    private $logWriter;
+
+    /**
      * Constructor for DBAccess.
      *
      * The database connection $dbh is set up using the given credentials
@@ -53,6 +59,7 @@ class DBAccess
         $collate = 'utf8_general_ci',
         $multi = false
     ) {
+        $this->logWriter = LogWriter::getInstance();
         $charsetAttr="SET NAMES $names COLLATE $collate";
         $options = array(
             // A warning is given for persistent connections in case of a interrupted database connection.
@@ -91,12 +98,11 @@ class DBAccess
             if ($this->dbh) {
                 $this->stmt = $this->dbh->prepare($query);
                 if ($debug) {
-                    echo $query . "<br><br>";
+                    $this->logWriter->logDebug("DBAccess: " . $query);
                 }
             }
         } catch (PDOException $e) {
-            $formatedError = $this->debugSQL();
-            throw new DatabaseException($formatedError);
+            throw new DatabaseException($this->debugSQL());
         }
     }
 
@@ -167,8 +173,7 @@ class DBAccess
                 return $this->stmt->execute();
             }
         } catch (PDOException $e) {
-            $formatedError = $this->debugSQL();
-            throw new DatabaseException($formatedError);
+            throw new DatabaseException($this->debugSQL());
         }
     }
 
@@ -185,8 +190,7 @@ class DBAccess
         try {
             return $this->stmt->fetchAll();
         } catch (PDOException $e) {
-            $formatedError = $this->debugSQL();
-            throw new DatabaseException($formatedError);
+            throw new DatabaseException($this->debugSQL());
         }
     }
 
@@ -203,8 +207,7 @@ class DBAccess
         try {
             return $this->stmt->fetch();
         } catch (PDOException $e) {
-            $formatedError = $this->debugSQL();
-            throw new DatabaseException($formatedError);
+            throw new DatabaseException($this->debugSQL());
         }
     }
 
@@ -221,8 +224,7 @@ class DBAccess
         try {
             return $this->stmt->rowCount();
         } catch (PDOException $e) {
-            $formatedError = $this->debugSQL();
-            throw new DatabaseException($formatedError);
+            throw new DatabaseException($this->debugSQL());
         }
     }
 
@@ -239,8 +241,7 @@ class DBAccess
         try {
             return $this->dbh->lastInsertId();
         } catch (PDOException $e) {
-            $formatedError = $this->debugSQL();
-            throw new DatabaseException($formatedError);
+            throw new DatabaseException($this->debugSQL());
         }
     }
 
@@ -257,8 +258,7 @@ class DBAccess
         try {
             return $this->dbh->beginTransaction();
         } catch (PDOException $e) {
-            $formatedError = $this->debugSQL();
-            throw new DatabaseException($formatedError);
+            throw new DatabaseException($this->debugSQL());
         }
     }
 
@@ -275,8 +275,7 @@ class DBAccess
         try {
             return $this->dbh->commit();
         } catch (PDOException $e) {
-            $formatedError = $this->debugSQL();
-            throw new DatabaseException($formatedError);
+            throw new DatabaseException($this->debugSQL());
         }
     }
 
@@ -294,8 +293,7 @@ class DBAccess
         try {
             return $this->dbh->rollBack();
         } catch (PDOException $e) {
-            $formatedError = $this->debugSQL();
-            throw new DatabaseException($formatedError);
+            throw new DatabaseException($this->debugSQL());
         }
     }
 
@@ -312,19 +310,15 @@ class DBAccess
             // Split the PDO SQL Error Array to multiple variables.
             // This makes formatting them in HTML easier.
             $err_info   = $this->stmt->errorInfo();
-            $sqlerror =  $err_info[2];
-            $sqlerrormessage = $err_info[1];
             $ansisqlstate = $err_info[0];
+            $sqlerror =  $err_info[1];
+            $sqlerrormessage = $err_info[2];
             // Write the PDO SQL Statement from the output buffer to a PHP variable and empty it afterwards.
             // No direct output to the browser occurs in this case.
             ob_start();
             $this->stmt->debugDumpParams();
-            $out1 = ob_get_contents();
+            $debugdumpparams = ob_get_contents();
             ob_clean();
-            // Do some formatting for easier reading
-            $out1 = str_replace(']', ']<br><br>', $out1);
-            $out1 = str_replace(PHP_EOL, '<br>', $out1);
-            $debugdumpparams = str_replace('Params', '<br><br><b>SQL Prepared Statement Parameters</b><br><br>', $out1);
         } else {
             // initialize variables, that are not set, if the error occurs in the constructor
             $sqlerror = null;
@@ -336,43 +330,22 @@ class DBAccess
         // No direct output to the browser occurs in this case.
         ob_start();
         debug_print_backtrace();
-        $out2 = ob_get_contents();
-        // Do some formatting for easier reading
-        $phpcallstack = str_replace('#', '<br>#', $out2);
+        $phpcallstack = ob_get_contents();
         ob_clean();
-        // Create a static DEBUG Error Page, that is displayed in the browser instead of the HTML template
-        $formatedError = <<<ERRORPAGE
-                <!DOCTYPE html>
-                    <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <title>DEBUG Error Page</title>
-                        </head>
-                        <body>
-                            <div>
-                                <h2> DEBUG Error Page for $_SERVER[SCRIPT_NAME] </h2>
-                                    <p><b> To hide error messages and redirect to an error page set DEBUG = FALSE </b></p>
-                                    <b style='color: #FF0000;'> Please correct the following Database Error </b><br>
-                                    <p style='color: #FF0000;'>$sqlerror$PDOError</p>
-                                    <b>MariaDB ErrorCode: </b> $sqlerrormessage
-                                    <b>ANSI SQLSTATE: </b> $ansisqlstate
-                                    <br><b>For more Information see:</b>
-                                    <a href='https://mariadb.com/kb/en/mariadb/mariadb-error-codes/' target='_blank'>MariaDB Error Codes</a> <b> or </b>
-                                    <a href='http://dev.mysql.com/doc/refman/5.7/en/error-messages-client.html' target='_blank'>MySQL Client Error Codes</a>
-                                    <p><b> SQL Statement </b><p>
-                                    $debugdumpparams
-                                    <br><br><b>PHP Call Stack:</b><br>
-                                    $phpcallstack
-                            </div>
-                        </body>
-                    </html>
-ERRORPAGE;
-
-        // Write to error_log, to document errors even if DEBUG = FALSE
-        error_log($formatedError, 0);
+        // Write to application log, to document errors
+        //*
+        $this->logWriter->logError(' #### Start Errormessages from DBAccess ####');
+        $this->logWriter->logError(' ANSI STATE: ' . $ansisqlstate);
+        $this->logWriter->logError(' SQL ERROR: ' . $sqlerror);
+        $this->logWriter->logError(' SQL ERROR MESSAGE: ' . $sqlerrormessage);
+        $this->logWriter->logError(' DEBUG PARAMS: ' . $debugdumpparams);
+        $this->logWriter->logError(' PHP CALL STACK: ' . $phpcallstack);
+        $this->logWriter->logError(' PDO ERROR: ' . $PDOError);
+        $this->logWriter->logError(' #### End Errormessages from DBAccess ####');
+        //*/
         // Pass error description to catch block.
         // This error message is returned by the Database Exception thrown in the catch block of the method called,
         // and can be used to send it to the browser with echo in the catch block of a project using DBAccess
-        return $formatedError;
+        return $sqlerrormessage;
     }
 }

@@ -6,6 +6,7 @@ use Fhooe\NormForm\Parameter\GenericParameter;
 use Fhooe\NormForm\Parameter\PostParameter;
 use Fhooe\NormForm\View\View;
 use Utilities\Utilities;
+use Utilities\LogWriter;
 
 /**
  * Class DBDEmo implements a demo page for the class AbstractNormForm combined with the class DBAccess of OnlineShop
@@ -35,6 +36,11 @@ final class DBDemo extends AbstractNormForm
     const PTYPE = 'ptype';
 
     /**
+     * @var string $logWriter  Instance of monolog to write logs to onlineshop.log
+     */
+    private $logWriter;
+
+    /**
      * @var string $dbAccess  Database handler for access to database
      */
     private $dbAccess;
@@ -43,6 +49,7 @@ final class DBDemo extends AbstractNormForm
      * DBDemo Constructor.
      *
      * Calls constructor of class AbstractNormForm.
+     * Creates a logWriter instance
      * Creates a database handler for the database connection.
      * The assigned constants can be found in src/defines.inc.php
      *
@@ -54,6 +61,7 @@ final class DBDemo extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
+        $this->logWriter = LogWriter::getInstance();
         $this->dbAccess = new DBAccess(DSN, DB_USER, DB_PWD, DB_NAMES, DB_COLLATION);
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArray()));
         // uncomment following lines to demonstrate error_handling
@@ -87,6 +95,9 @@ final class DBDemo extends AbstractNormForm
             $this->errorMessages[self::PTYPE] = "Please enter a Product Category as a Single Word.";
         }
         $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
+        // Debugging without echo, print_r, var_dump
+        $this->logWriter->logInfo("Sent POST Array");
+        $this->logWriter->logDebug($_POST);
         return (count($this->errorMessages) === 0);
     }
 
@@ -124,7 +135,7 @@ final class DBDemo extends AbstractNormForm
                  SELECT idproduct_category, product_category_name
                  FROM product_category
 SQL;
-        $this->dbAccess->prepareQuery($query, DEBUG);
+        $this->dbAccess->prepareQuery($query, true);
         $this->dbAccess->executeStmt();
         $result = $this->dbAccess->fetchResultset();
         return $result;
@@ -143,7 +154,7 @@ SQL;
                  INSERT INTO product_category 
                  SET product_category_name = :ptype
 SQL;
-        $this->dbAccess->prepareQuery($query, DEBUG);
+        $this->dbAccess->prepareQuery($query, true);
         // The next two lines do the same due to "use Utilities" at the begin of the class declaration
         // $params = array(':ptype' => Utilities::sanitizeFilter($_POST[self::PTYPE]));
         $params = array(':ptype' => $this->sanitizeFilter($_POST[self::PTYPE]));

@@ -44,9 +44,13 @@ only with second Vagrantfile.
 The files, that have to be completed for the exercises, are stored in the subdirectory ``src/exercises``.
 All other files are for reference.
 
+Errors are logged in
+* ``onlineshop/src/onlineshop.log``
+* the Apache error log ``tail -f /var/log/apache2/error.log`` or wherever it resides in your installation.
+
 Sample solutions are included with ``require`` from a solution folder. The git repostitory, that holds the solution is private.
 These parts can be ignored for your own solution or deleted completely.
-Do not include these files, but work directly in the files in ``src/exercises`` to complete your solution. ``TODO``s will guide you, what has to be done for completing the solution. For a better understanding read the PHPDoc comments, that describe the classes, methods, properties and constants and have a look at the provided example src/DBAccess/DBDemo.php.
+Do not include these files, but work directly in the files in ``src/exercises`` to complete your solution. ``TODO``s will guide you, what has to be done for completing the solution. For a better understanding read the PHPDoc comments, that describe the classes, methods, properties and constants and have a look at the provided example src/DBAccess/DBDemo.php. You can use ``onlineshop/src/onlinshop.sql`` to restore the MariaDB database provided for the excercises.
 
 For example:  
     
@@ -91,7 +95,7 @@ Folder | Description
 ``htdocs/css`` | A set of predefined styles to be used with *NormForm*. Include ``main.css`` to use it.
 ``templates`` | HTML templates for the TWIG template engine used in ``/src/*.php``.
 ``templates_c`` | Output folder for compiled TWIG templates.
-``src`` | Classes implemented for *OnlineShop*, including a DBDemo for [NormForm](https://github.com/Digital-Media/normform) and DBAccess.  The Trait Utilities provides static helper methods, that can be used in any context.
+``src`` | Classes implemented for *OnlineShop*, including the class DBDemo, that shows how to use [NormForm](https://github.com/Digital-Media/normform), DBAccess and LogWriter. The Trait Utilities provides static helper methods, that can be used in any context. The class LogWriter initializes monolog logging and provides methods to write personalized log files to ``onlineshop/src/onlinehsop.log`` according to PSR3
 ``src/exercises`` | Classes to be implemented for *OnlineShop* exercises.
 ``vendor`` | Third party libraries installed with composer: [NormForm](https://github.com/Digital-Media/normform), [TWIG Templates](https://twig.symfony.com/), Javascript Libraries ...
 

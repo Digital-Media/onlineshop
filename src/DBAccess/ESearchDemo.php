@@ -7,6 +7,7 @@ use Fhooe\NormForm\Parameter\GenericParameter;
 use Fhooe\NormForm\Parameter\PostParameter;
 use Fhooe\NormForm\View\View;
 use Utilities\Utilities;
+use Utilities\LogWriter;
 use PDO;
 
 /**
@@ -82,6 +83,7 @@ final class ESearchDemo extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
+        $this->logWriter = LogWriter::getInstance();
         $this->dbAccess = new DBAccess(DSN, DB_USER, DB_PWD, DB_NAMES, DB_COLLATION);
         $this->esClient = ClientBuilder::create()
             ->setSerializer('\Elasticsearch\Serializers\SmartSerializer')
@@ -175,7 +177,9 @@ final class ESearchDemo extends AbstractNormForm
             $result = $this->doElasticSearchPaging($search);
             if (count($result['hits']['hits']) !== 0) {
                 $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArrayPaging($result)));
-                var_dump($result['hits']['hits']);
+                //var_dump($result['hits']['hits']);
+                // Debugging without echo, print_r, var_dump
+                $this->logWriter->logDebug($result['hits']['hits']);
             }
         }
     }
@@ -216,7 +220,7 @@ final class ESearchDemo extends AbstractNormForm
                  FROM product
 SQL;
 
-        $this->dbAccess->prepareQuery($query, DEBUG);
+        $this->dbAccess->prepareQuery($query, true);
         $this->dbAccess->executeStmt();
         return $this->dbAccess->fetchResultset();
     }
@@ -264,7 +268,7 @@ SQL;
                  OR  long_description LIKE :search
 SQL;
 
-        $this->dbAccess->prepareQuery($query, DEBUG);
+        $this->dbAccess->prepareQuery($query, true);
         $this->dbAccess->bindValueByType(':search', "%$search%", PDO::PARAM_STR);
         $this->dbAccess->executeStmt();
         return $this->dbAccess->fetchResultset();
@@ -314,7 +318,7 @@ SQL;
                  FROM product
                  WHERE match (product_name) against ('$search');
 SQL;
-        $this->dbAccess->prepareQuery($query, DEBUG);
+        $this->dbAccess->prepareQuery($query, true);
         $this->dbAccess->bindValueByType(':id1', $search, PDO::PARAM_STR);
         $this->dbAccess->executeStmt();
         return $this->dbAccess->fetchResultset();
@@ -363,7 +367,7 @@ SQL;
                          FROM product
                          WHERE match (product_name, short_description, long_description) against ('$search');
 SQL;
-        $this->dbAccess->prepareQuery($query, DEBUG);
+        $this->dbAccess->prepareQuery($query, true);
         $this->dbAccess->bindValueByType(':search', $search, PDO::PARAM_STR);
         $this->dbAccess->executeStmt();
         return $this->dbAccess->fetchResultset();
@@ -414,7 +418,7 @@ SQL;
                 WHERE idproduct = :id5;
         SQL;
         //*/
-        $this->dbAccess->prepareQuery($query, DEBUG);
+        $this->dbAccess->prepareQuery($query, true);
         $this->dbAccess->bindValueByType(':id1', $id[1], PDO::PARAM_INT);
         $this->dbAccess->bindValueByType(':id2', $id[2], PDO::PARAM_INT);
         $this->dbAccess->bindValueByType(':id3', $id[3], PDO::PARAM_INT);
@@ -449,7 +453,9 @@ SQL;
             "size" => 2,
             "body" => $json
         ];
-        var_dump($params['body']);
+        //var_dump($params['body']);
+        // Debugging without echo, print_r, var_dump
+        $this->logWriter->logInfo($params['body']);
         $result = $this->esClient->search($params);
         return $result;
     }
@@ -473,7 +479,7 @@ SQL;
                 WHERE idproduct in (:id1, :id2)
 SQL;
 
-        $this->dbAccess->prepareQuery($query, DEBUG);
+        $this->dbAccess->prepareQuery($query, true);
         $this->dbAccess->bindValueByType(':id1', $id[1], PDO::PARAM_INT);
         $this->dbAccess->bindValueByType(':id2', $id[2], PDO::PARAM_INT);
         $this->dbAccess->executeStmt();

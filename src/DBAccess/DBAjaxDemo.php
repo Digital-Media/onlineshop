@@ -129,7 +129,7 @@ final class DBAjaxDemo extends AbstractNormForm
                  SELECT idproduct_category, product_category_name
                  FROM product_category
 SQL;
-        $this->dbAccess->prepareQuery($query, DEBUG);
+        $this->dbAccess->prepareQuery($query, true);
         $this->dbAccess->executeStmt();
         $result = $this->dbAccess->fetchResultset();
         return $result;
@@ -148,7 +148,7 @@ SQL;
                  INSERT INTO product_category 
                  SET product_category_name = :ptype
 SQL;
-        $this->dbAccess->prepareQuery($query, DEBUG);
+        $this->dbAccess->prepareQuery($query, true);
         // The next two lines do the same due to "use Utilities" at the begin of the class declaration
         // $params = array(':ptype' => Utilities::sanitizeFilter($_POST[self::PTYPE]));
         //$params = array(':ptype' => $this->sanitizeFilter($_POST[self::PTYPE]));

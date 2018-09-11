@@ -8,7 +8,6 @@ require "../vendor/autoload.php";
 require_once '../src/defines.inc.php';
 
 session_start();
-
 use DBAccess\DBDemo;
 use Fhooe\NormForm\Parameter\PostParameter;
 use Fhooe\NormForm\View\View;
@@ -32,9 +31,5 @@ try {
     $dbdemo = new DBDemo($view);
     $dbdemo->normForm();
 } catch (Exception $e) {
-    if (DEBUG) {
-        echo "An error occured in file " . $e->getFile() ." on line " . $e->getLine() .":" . $e->getMessage();
-    } else {
-        echo "<h2>Something went wrong</h2>";
-    }
+    echo "Something went wrong.";
 }
