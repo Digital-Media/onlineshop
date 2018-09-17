@@ -49,9 +49,7 @@ final class Checkout extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
-        require '../../onlineshopsolution/checkout/construct.inc.php';
-        //*/
+        //%%checkout/construct
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
     }
 
@@ -88,9 +86,7 @@ final class Checkout extends AbstractNormForm
      */
     protected function business(): void
     {
-        /*--
-        require '../../onlineshopsolution/checkout/business.inc.php';
-        //*/
+        //%%checkout/business
     }
 
     /**
@@ -110,7 +106,7 @@ final class Checkout extends AbstractNormForm
     protected function fillpageArray(): array
     {
         // TODO rewrite this code in a way, that the entries are filled from the database.
-        //##
+        //##%%
         return $pageArray = array(
                                 0 => array('product_idproduct' => 1,
                                            'product_name' => 'Passivhaus',
@@ -122,11 +118,8 @@ final class Checkout extends AbstractNormForm
                                            'product_name' => 'Almgrundstück',
                                            'price' => 100000,00, 'quantity' => 1)
                             );
-        //*/
-        /*--
-        require '../../onlineshopsolution/checkout/fillpageArray.inc.php';
-        return $pageArray;
-        //*/
+        //#%#%*/
+        //%%checkout/fillpageArray
     }
 
     /**
@@ -137,10 +130,7 @@ final class Checkout extends AbstractNormForm
      */
     private function totalSum(): string
     {
-        /*--
-        require '../../onlineshopsolution/checkout/totalsum.inc.php';
-        return $result['totalsum'];
-        //*/
+        //%%checkout/totalsum
     }
 
     /**
@@ -155,9 +145,7 @@ final class Checkout extends AbstractNormForm
 
     private function addOrder(): void
     {
-        /*--
-        require '../../onlineshopsolution/checkout/addOrder.inc.php';
-        //*/
+        //%%checkout/addOrder
     }
 
     /**
@@ -174,9 +162,7 @@ final class Checkout extends AbstractNormForm
      */
     private function addItems(): void
     {
-        /*--
-        require '../../onlineshopsolution/checkout/addItems.inc.php';
-        //*/
+        //%%checkout/addItems
     }
 
     /**
@@ -186,8 +172,6 @@ final class Checkout extends AbstractNormForm
      */
     private function deleteWholeCart(): void
     {
-        /*--
-        require_once '../../onlineshopsolution/checkout/deleteWholeCart.inc.php';
-        //*/
+        //%%checkout/deleteWholeCart
     }
 }

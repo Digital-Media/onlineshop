@@ -7,6 +7,7 @@ use Fhooe\NormForm\Parameter\PostParameter;
 use Fhooe\NormForm\View\View;
 use DBAccess\DBAccess;
 use Utilities\Utilities;
+use PDO;
 
 /*
  * The class Register implements a registration of a user at onlineshop.
@@ -51,9 +52,7 @@ final class Register extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
-        require '../../onlineshopsolution/register/construct.inc.php';
-        //*/
+        //%%register/construct
     }
 
     /**
@@ -73,9 +72,7 @@ final class Register extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        /*--
-        require '../../onlineshopsolution/register/isValid.inc.php';
-        //*/
+        //%%register/isValid
         return (count($this->errorMessages) === 0);
     }
 
@@ -90,9 +87,7 @@ final class Register extends AbstractNormForm
     protected function business(): void
     {
         $this->addUser();
-        /*--
-        require '../../onlineshopsolution/register/business.inc.php';
-        //*/
+        //%%register/business
     }
 
 
@@ -105,17 +100,10 @@ final class Register extends AbstractNormForm
      */
     private function isUniqueEmail(): bool
     {
-        /*--
-        require '../../onlineshopsolution/register/isUniqueEmail.inc.php';
-        if (count($rows) === 0) {
-            return true;
-        } else {
-            return false;
-        }
-        //*/
-        //##
+        //%%register/isUniqueEmail
+        //##%%
         return true;
-        //*/
+        //#%#%*/
     }
 
     /**
@@ -137,8 +125,6 @@ final class Register extends AbstractNormForm
      */
     private function addUser(): void
     {
-        /*--
-        require '../../onlineshopsolution/register/addUser.inc.php';
-        //*/
+        //%%register/addUser
     }
 }

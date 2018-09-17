@@ -7,6 +7,7 @@ use Fhooe\NormForm\Parameter\PostParameter;
 use Fhooe\NormForm\View\View;
 use DBAccess\DBAccess;
 use Utilities\Utilities;
+use PDO;
 
 /**
  * Class Shop implements the landing page (index.php) of OnlineShop
@@ -60,9 +61,7 @@ final class OnlineShop extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
-        require '../../onlineshopsolution/index/construct.inc.php';
-        //*/
+        //%%index/construct
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArray()));
     }
 
@@ -81,9 +80,7 @@ final class OnlineShop extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        /*--
-        require '../../onlineshopsolution/index/isValid.inc.php';
-        //*/
+        //%%index/isValid
         return (count($this->errorMessages) === 0);
     }
 
@@ -102,9 +99,7 @@ final class OnlineShop extends AbstractNormForm
      */
     protected function business(): void
     {
-        /*--
-        require '../../onlineshopsolution/index/business.inc.php';
-        //*/
+        //%%index/business
     }
 
     /**
@@ -122,17 +117,10 @@ final class OnlineShop extends AbstractNormForm
      */
     private function isValidPid(): bool
     {
-        //##
+        //##%%
         return true;
-        //*/
-        /*--
-        require '../../onlineshopsolution/index/isValidPid.inc.php';
-        if ($count['count'] === "1") {
-            return true;
-        } else {
-            return false;
-        }
-        //*/
+        //#%#%*/
+        //%%index/isValidPid
     }
 
     /**
@@ -146,13 +134,10 @@ final class OnlineShop extends AbstractNormForm
      */
     private function addToCart(): int
     {
-        //##
+        //##%%
         return 0;
-        //*/
-        /*--
-        require '../../onlineshopsolution/index/addToCart.inc.php';
-        return $pid;
-        //*/
+        //#%#%*/
+        //%%index/addToCart
     }
 
     /**
@@ -185,7 +170,7 @@ final class OnlineShop extends AbstractNormForm
         // TODO Rewrite this code in way, that the array is filled with entries from the database
         // TODO For using LIMIT parameters you need to use DBAccess::bindValueByType()
         // TODO This is necessary, because offset and row_count of the LIMIT clause have to be integers (Syntax!!)
-        //##
+        //##%%
         return $pageArray = array( 0 => array('idproduct' => 1,
                                               'product_name' => 'Passivhaus',
                                               'price' => 300000,00),
@@ -195,11 +180,8 @@ final class OnlineShop extends AbstractNormForm
                                    2 => array('idproduct' => 3,
                                               'product_name' => 'Almgrundstück',
                                               'price' => 100000,00));
-        //*/
-        /*--
-        require '../../onlineshopsolution/index/fillpageArray.inc.php';
-        return $this->dbAccess->fetchResultset();
-        //*/
+        //#%#%*/
+        //%%index/fillpageArray
     }
 
     /**
@@ -283,18 +265,16 @@ final class OnlineShop extends AbstractNormForm
     {
         $page_number = [];
         $product_count = $this->setRowCount($search);
-        //##
+        //##%%
         // A static array with 3 entries is provided in fillPageArray()
         // $page_count is set to 2, to show the pagination links.
         // Both pages show the same 3 entries, because limiting the array to 2 entries works only
         // after selecting a result set from the database with a LIMIT clause.
         $page_count = 2;
-        //*/
+        //#%#%*/
         //TODO calculate $page_count. How many pages are needed to display result set
         //TODO Only self::ROW_COUNT entries ard displayed on each page.
-        /*--
-        require '../../onlineshopsolution/index/setPaginationParameters.inc.php';
-        //*/
+        //%%index/setPaginationParameters
         $this->currentView->setParameter(new GenericParameter("page_count", $page_count));
 
         if (isset($_GET[self::OFFSET]) && Utilities::isInt($_GET[self::OFFSET]) && ($_GET[self::OFFSET] < $product_count)) {
@@ -337,12 +317,9 @@ final class OnlineShop extends AbstractNormForm
      */
     private function setRowCount($search): int
     {
-        //##
+        //##%%
         return $product_count = 3;
-        //*/
-        /*--
-        require '../../onlineshopsolution/index/setRowCount.inc.php';
-        return $product_count['count'];
-        //*/
+        //#%#%*/
+        //%%index/setRowCount
     }
 }
