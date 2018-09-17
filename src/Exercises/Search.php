@@ -68,9 +68,7 @@ final class Search extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
-        require '../../onlineshopsolution/search/construct.inc.php';
-        //*/
+        //%%search/construct
     }
 
     /**
@@ -149,13 +147,10 @@ final class Search extends AbstractNormForm
      */
     private function doElasticSearch(string $search): array
     {
-        //##
+        //##%%
         return [];
-        //*/
-        /*--
-        require '../../onlineshopsolution/search/doElasticSearch.inc.php';
-        return $result;
-        //*/
+        //#%#%*/
+        //%%search/doElasticSearch
     }
 
     /**
@@ -168,12 +163,9 @@ final class Search extends AbstractNormForm
      */
     private function fillPageArray(array $result): array
     {
-        //##
+        //##%%
         return [];
-        //*/
-        /*--
-        require '../../onlineshopsolution/search/fillPageArray.inc.php';
-        return $result;
-        //*/
+        //#%#%*/
+        //%%search/fillPageArray
     }
 }

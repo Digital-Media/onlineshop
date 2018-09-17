@@ -4,8 +4,9 @@
             <a href="mailto:martin.harrer@fh-hagenberg.at">Martin Harrer</a> and
             <a href="mailto:wolfgang.hochleitner@fh-hagenberg.at">Wolfgang Hochleitner</a>.
         </p>
+        {%  if not(_server.SCRIPT_NAME is same as ('/code/onlineshop/htdocs/solution.php')) %} <a href="solution.php"  class="Button u-spaceLM">Create Solution</a> {% endif %}
         <p class="Footer-version"><i class="fa fa-shopping-bag" aria-hidden="true"></i>
-            <a href="https://github.com/Digital-Media/phpue">OnlineShop Version 2017</a>
+            <a href="https://github.com/Digital-Media/onlineshop" target="_blank">OnlineShop Version 2017</a>
         </p>
     </div>
 </footer>

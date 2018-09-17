@@ -72,9 +72,7 @@ final class MyCart extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
-        require '../../onlineshopsolution/mycart/construct.inc.php';
-        //*/
+        //%%mycart/construct
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillpageArray()));
     }
 
@@ -87,9 +85,7 @@ final class MyCart extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        /*--
-        require '../../onlineshopsolution/mycart/isValid.inc.php';
-        //*/
+        //%%mycart/isValid
         return (count($this->errorMessages) === 0);
     }
 
@@ -103,9 +99,7 @@ final class MyCart extends AbstractNormForm
      */
     protected function business(): void
     {
-        /*--
-        require '../../onlineshopsolution/mycart/business.inc.php';
-        //*/
+        //%%mycart/business
     }
 
     /**
@@ -122,7 +116,7 @@ final class MyCart extends AbstractNormForm
     private function fillpageArray(): array
     {
         // TODO Rewrite this code in a way, that the array is filled with entries from the database
-        //##
+        //##%%
         return array( 0 => array('product_idproduct' => 1,
                                  'product_name' => 'Passivhaus',
                                  'price' => 300000,00, 'quantity' => 1),
@@ -133,12 +127,8 @@ final class MyCart extends AbstractNormForm
                                  'product_name' => 'Almgrundstück',
                                  'price' => 100000,00,
                                  'quantity' => 1));
-        //*/
-        /*--
-        require '../../onlineshopsolution/mycart/fillpageArray.inc.php';
-        $this->pageArray = $this->dbAccess->fetchResultset();
-        return $this->pageArray;
-        //*/
+        //#%#%*/
+        //%%mycart/fillpageArray
     }
 
     /**
@@ -158,17 +148,10 @@ final class MyCart extends AbstractNormForm
      */
     private function isValidPid($pid): bool
     {
-        //##
+        //##%%
         return true;
-        //*/
-        /*--
-        require '../../onlineshopsolution/mycart/isValidPid.inc.php';
-        if ($count['count'] === "1") {
-            return true;
-        } else {
-            return false;
-        }
-        //*/
+        //#%#%*/
+        //%%mycart/isValidPid
     }
 
     /**
@@ -181,9 +164,7 @@ final class MyCart extends AbstractNormForm
      */
     private function deleteFromCart($pid, $sessionid): void
     {
-        /*--
-        require '../../onlineshopsolution/mycart/deleteFromCart.inc.php';
-        //*/
+        //%%mycart/deleteFromCart
     }
 
     /**
@@ -197,8 +178,6 @@ final class MyCart extends AbstractNormForm
      */
     private function updateCart($pid, $quantity, $sessionid): void
     {
-        /*--
-        require '../../onlineshopsolution/mycart/updateCart.inc.php';
-        //*/
+        //%%mycart/updateCart
     }
 }

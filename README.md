@@ -37,6 +37,7 @@ PHP 7.1 is required to run the examples.
 * [TWIG Templates](https://twig.symfony.com/)
 * [CSS3 Flexbox](https://www.w3.org/TR/css-flexbox-1/)
 * [PHP-FIG PSR: PHP Standards Recommendations](https://www.php-fig.org/psr/)
+* [Monlog PSR3](https://github.com/Seldaek/monolog)
 * [ElasticSearch PHP Client 6.0](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/index.html) works
 only with second Vagrantfile.
 

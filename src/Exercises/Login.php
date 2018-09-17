@@ -48,9 +48,7 @@ final class Login extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        /*--
-        require '../../onlineshopsolution/login/construct.inc.php';
-        //*/
+        //%%login/construct
     }
 
     /**
@@ -64,12 +62,10 @@ final class Login extends AbstractNormForm
      */
     protected function isValid(): bool
     {
-        /*--
-        require '../../onlineshopsolution/login/isValid.inc.php';
-        //*/
-        //##
+        //%%login/isValid
+        //##%%
         $this->authenticateUser();
-        //*/
+        //#%#%*/
         return (count($this->errorMessages) === 0);
     }
 
@@ -101,16 +97,14 @@ final class Login extends AbstractNormForm
      */
     private function authenticateUser(): bool
     {
-        //##
+        //##%%
         $_SESSION['iduser']=1;
         $_SESSION[IS_LOGGED_IN] = Utilities::generateLoginHash();
         $_SESSION['first_name']='John';
         $_SESSION['last_name']='Doe';
         return true;
-        //*/
-        // copy solution from onlineshopsolution/login/authenticateUser.inc.php here to make solution work.
-        // require doesn't work in this case
-        //
+        //#%#%*/
+        //%%login/authenticateUser
     }
 
     /**
@@ -121,11 +115,9 @@ final class Login extends AbstractNormForm
      */
     private function updateCart($old_session_id, $new_session_id)
     {
-        //##
+        //##%%
         return true;
-        //*/
-        /*--
-        require '../../onlineshopsolution/login/updateCart.inc.php';
-        //*/
+        //#%#%*/
+        //%%login/updateCart
     }
 }

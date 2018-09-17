@@ -11,7 +11,7 @@ use Utilities\LogWriter;
  * The PDO driver for MySQL and MariaDB are identically at the moment.
  * You can use either MariaDB or MySQL for projects using this class.
  * All api functions for CRUD operations are implemented using prepared statements.
- * All PDOExceptions are enclosed by a Database Exception for easier debugging with a comprehensive error page.
+ * All PDOExceptions are enclosed by a Database Exception for easier debugging with monolog.
  *
  * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package onlineshop
@@ -298,11 +298,9 @@ class DBAccess
     }
 
     /**
-     * Building a formatted DEBUG Error Page using HTML
+     * Writing a full error message to a application log file using Utilities/LogWriter based on monolog
      *
-     * @return string $formatedError Returns a formatted error page if DEBUG = TRUE
-     *                               including the faulty SQL statement, the SQL error message,
-     *                               the PHP Call Stack and some additional information useful for debugging.
+     * @return string $formatedError Returns the SQL or PDO error, depending on which one is set
      */
     public function debugSQL($PDOError = null):string
     {
@@ -347,5 +345,6 @@ class DBAccess
         // This error message is returned by the Database Exception thrown in the catch block of the method called,
         // and can be used to send it to the browser with echo in the catch block of a project using DBAccess
         $message = $sqlerrormessage ? $sqlerrormessage : $PDOError;
-        return $message;    }
+        return $message;
+    }
 }

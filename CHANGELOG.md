@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Support for Redis
 - Support for Neo4J
 
-## [3.1.1] - 2018-07-16
+## [3.2.0] - 2018-09-19
+### Added
+- automated creating of solution and restoring of the templates
+
+## [3.1.1] - 2018-09-11
 ### Added
 - monolog
 ### Fixed
