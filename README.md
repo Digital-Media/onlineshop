@@ -45,47 +45,27 @@ only with second Vagrantfile.
 The files, that have to be completed for the exercises, are stored in the subdirectory ``src/exercises``.
 All other files are for reference.
 
-Errors are logged in
+PHP Errors are logged in
 * ``onlineshop/src/onlineshop.log``
 * the Apache error log ``tail -f /var/log/apache2/error.log`` or wherever it resides in your installation.
 
-Sample solutions are included with ``require`` from a solution folder. The git repostitory, that holds the solution is private.
-These parts can be ignored for your own solution or deleted completely.
-Do not include these files, but work directly in the files in ``src/exercises`` to complete your solution. ``TODO``s will guide you, what has to be done for completing the solution. For a better understanding read the PHPDoc comments, that describe the classes, methods, properties and constants and have a look at the provided example src/DBAccess/DBDemo.php. You can use ``onlineshop/src/onlinshop.sql`` to restore the MariaDB database provided for the excercises.
+Sample solutions from a solution folder can be copied into the exercise templates with the class src/Solution/Solution.php.
+The git repostitory, that holds the solution is private. If necessary ``TODO``s will guide you, what has to be done for completing the exercises. 
+For a better understanding read the PHPDoc comments, that describe the classes, methods, properties and constants and have a look at the provided example src/DBAccess/DBDemo.php. You can use ``onlineshop/src/onlinshop.sql`` to restore the MariaDB database provided for the excercises.
 
-For example:  
+For example the following line is replaced with the content of <solutionfolder>/index/construct.inc.php:  
     
-    /*--
-    require '<path-to-solution>/index/construct.inc.php';
-    //*/
+    //%%<path-to-solution>/index/construct
 
-Given parts of the solution are marked as seen below. These parts ensure, that the code works without PHP runtime errors, even before the solution is completed.
+Given parts of the solution are marked as seen below. These parts ensure, that the code works without PHP runtime errors, even before the exercise is completed.
      
-     //##
+     //##%%
      return true;
-     //*/
+     //#%#%
      
 For example a fake login is implemented in a way, that you can login without given user credentials. 
-To complete the solution you have to implement the database access to validate the given user credentials.
-Keep these parts of the code, they can be part of your final solution, if you put them on the right place in your own code.
-
-To demonstrate, how the skeleton works, the comments are set, as seen in the examples above.
-
-If you have access to the solution repository you can demonstrate, how the pattern solution works.
-In this case the comments are switched to
-
-    //--
-    require '<path-to-solution>/index/construct.inc.php';
-    //*/
-
-and
-
-     /*##
-     return true;
-     //*/
-
-Shell scripts are used to toggle comments. They are stored in a private git repository, that holds the solution. 
-They use GNU ``sed`` to toggle the commenting of both blocks from ``/*`` to ``//`` and the other way round.
+To complete the exercise you have to implement the database access to validate the given user credentials.
+Keep these parts of the code, they may be part of your final solution, if you put them on the right place in your own code.
 
 
 ## Structure of this Repository
@@ -99,6 +79,7 @@ Folder | Description
 ``src`` | ``define.inc.php`` holds the constants to access the database. Scripts to load Data to MariaDB and ElasticSearch. A class diagramm for onlineshop.
 ``src/DBAccess`` | Classes implemented for *OnlineShop*, including the class DBDemo, that shows how to use [NormForm](https://github.com/Digital-Media/normform), DBAccess and LogWriter. DBAjaxDemo demonstrates the usage of usage of AJAX with Normform. ESearchDemo demonstrates the usage of ElasticSearch.
 ``src/exercises`` | Classes to be implemented for *OnlineShop* exercises.
+``src/Solution`` | The class Solution.php copies sample solutions to the marked lines in the exercises. CreateSolution.php and RestoreBackup.php do this in a scripted version, to demonstrate differences of OO PHP and scripted PHP.
 ``src/Utilities`` | The Trait Utilities provides static helper methods, that can be used in any context. The class LogWriter initializes monolog logging and provides methods to write personalized log files to ``onlineshop/src/Utilities/onlineshop.log`` according to PSR3.
 ``vendor`` | Third party libraries installed with composer: [NormForm](https://github.com/Digital-Media/normform), [TWIG Templates](https://twig.symfony.com/), Javascript Libraries ...
 
