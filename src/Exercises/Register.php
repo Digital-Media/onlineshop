@@ -103,7 +103,7 @@ final class Register extends AbstractNormForm
         //%%register/isUniqueEmail
         //##%%
         return true;
-        //#%#%*/
+        //#%#%
     }
 
     /**

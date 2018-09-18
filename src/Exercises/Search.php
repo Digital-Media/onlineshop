@@ -149,7 +149,7 @@ final class Search extends AbstractNormForm
     {
         //##%%
         return [];
-        //#%#%*/
+        //#%#%
         //%%search/doElasticSearch
     }
 

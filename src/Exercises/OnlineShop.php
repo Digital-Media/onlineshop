@@ -119,7 +119,7 @@ final class OnlineShop extends AbstractNormForm
     {
         //##%%
         return true;
-        //#%#%*/
+        //#%#%
         //%%index/isValidPid
     }
 
@@ -136,7 +136,7 @@ final class OnlineShop extends AbstractNormForm
     {
         //##%%
         return 0;
-        //#%#%*/
+        //#%#%
         //%%index/addToCart
     }
 
@@ -180,7 +180,7 @@ final class OnlineShop extends AbstractNormForm
                                    2 => array('idproduct' => 3,
                                               'product_name' => 'Almgrundstück',
                                               'price' => 100000,00));
-        //#%#%*/
+        //#%#%
         //%%index/fillpageArray
     }
 
@@ -271,7 +271,7 @@ final class OnlineShop extends AbstractNormForm
         // Both pages show the same 3 entries, because limiting the array to 2 entries works only
         // after selecting a result set from the database with a LIMIT clause.
         $page_count = 2;
-        //#%#%*/
+        //#%#%
         //TODO calculate $page_count. How many pages are needed to display result set
         //TODO Only self::ROW_COUNT entries ard displayed on each page.
         //%%index/setPaginationParameters
@@ -319,7 +319,7 @@ final class OnlineShop extends AbstractNormForm
     {
         //##%%
         return $product_count = 3;
-        //#%#%*/
+        //#%#%
         //%%index/setRowCount
     }
 }
