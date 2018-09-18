@@ -225,7 +225,6 @@ final class Solution extends AbstractNormForm
                     $this->logWriter->logInfo("Copying " . $filename . " to $solfile");
                     $this->copySolutionToTemplate($filename, $solhandle);
                 }
-                //$filename="";
             } elseif (preg_match("-//##%%-", $line)) {
                 $write=false;
             } elseif (preg_match("-//#%#%-", $line)) {
