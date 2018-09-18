@@ -127,7 +127,7 @@ final class MyCart extends AbstractNormForm
                                  'product_name' => 'Almgrundstück',
                                  'price' => 100000,00,
                                  'quantity' => 1));
-        //#%#%*/
+        //#%#%
         //%%mycart/fillpageArray
     }
 
@@ -150,7 +150,7 @@ final class MyCart extends AbstractNormForm
     {
         //##%%
         return true;
-        //#%#%*/
+        //#%#%
         //%%mycart/isValidPid
     }
 

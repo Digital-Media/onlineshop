@@ -157,7 +157,7 @@ final class Solution extends AbstractNormForm
         $solfile = $this->createFilename($class, '/../Exercises/', '.php');
         if (!file_exists($backupfile)) {
             copy($solfile, $backupfile);
-            $this->copySolutionToTemplate($solfile, $backupfile);
+            $this->mergeSolutionIntoTemplate($solfile, $backupfile);
             $this->logWriter->logInfo("Created backup file:  $backupfile.");
             $this->statusMessage = "Solution for Class $class created";
         } else {
@@ -199,10 +199,17 @@ final class Solution extends AbstractNormForm
     /**
      * Copy every part of the solution into template and write solution class file
      *
+     * case "-//%%-"
+     *      merge parts of solution into exercises instead of these lines
+     * case "-//##%%-"
+     *      do not copy given parts of the solution to final solution file.
+     * case -//#%#%-
+     *      end of given part of solution. start copying from backup file again.
+     *
      * @param $solfile string filename for solution class file
      * @param $backupfile string filename for backup file
      */
-    private function copySolutionToTemplate($solfile, $backupfile)
+    private function mergeSolutionIntoTemplate($solfile, $backupfile)
     {
         $write=true;
         $solhandle = fopen($solfile, 'w+');
@@ -210,26 +217,15 @@ final class Solution extends AbstractNormForm
         while (!feof($backuphandle)) {
             $line = fgets($backuphandle, 200);
             if (preg_match("-//%%-", $line)) {
-                $filename=$line;
-                // remove os specific line endings
-                // remove marker where the solution should be placed
-                // remove spaces
-                $filename=str_replace(PHP_EOL, "", str_replace("//%%", "/", str_replace(" ", "", $filename)));
-                // rebuild the path with os specific directory separator and add file extension
-                $filename = $this->createFilename($filename, '/../../../onlineshopsolution', '.inc.php');
+                $filename = $this->createSolutionFilename($line);
                 if (!file_exists($filename)) {
                     $this->logWriter->logInfo("File $filename does not exist!");
                     $this->errorMessages['error'] = "File $filename does not exist!";
                 } else {
                     $this->logWriter->logInfo("Copying " . $filename . " to $solfile");
-                    $tmphandle = fopen($filename, 'r');
-                    while (!feof($tmphandle)) {
-                        $solline = fgets($tmphandle, 200);
-                        fputs($solhandle, $solline, 200);
-                    }
-                    fclose($tmphandle);
+                    $this->copySolutionToTemplate($filename, $solhandle);
                 }
-                $filename="";
+                //$filename="";
             } elseif (preg_match("-//##%%-", $line)) {
                 $write=false;
             } elseif (preg_match("-//#%#%-", $line)) {
@@ -241,5 +237,28 @@ final class Solution extends AbstractNormForm
         }
         fclose($backuphandle);
         fclose($solhandle);
+    }
+
+    /**
+     * remove os specific line endings
+     * remove marker where the solution should be placed
+     * remove spaces
+     *
+     * @param $line string Marker, that solution file has to be copied to this line
+     * @return string filename and path to solution file for the given marker
+     */
+    private function createSolutionFilename($line) {
+        $filename=str_replace(PHP_EOL, "", str_replace("//%%", "/", str_replace(" ", "", $line)));
+        return $this->createFilename($filename, '/../../../onlineshopsolution', '.inc.php');
+
+    }
+
+    private function copySolutionToTemplate ($filename, $solhandle) {
+        $tmphandle = fopen($filename, 'r');
+        while (!feof($tmphandle)) {
+            $solline = fgets($tmphandle, 200);
+            fputs($solhandle, $solline, 200);
+        }
+        fclose($tmphandle);
     }
 }

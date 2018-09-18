@@ -65,7 +65,7 @@ final class Login extends AbstractNormForm
         //%%login/isValid
         //##%%
         $this->authenticateUser();
-        //#%#%*/
+        //#%#%
         return (count($this->errorMessages) === 0);
     }
 
@@ -103,7 +103,7 @@ final class Login extends AbstractNormForm
         $_SESSION['first_name']='John';
         $_SESSION['last_name']='Doe';
         return true;
-        //#%#%*/
+        //#%#%
         //%%login/authenticateUser
     }
 
@@ -117,7 +117,7 @@ final class Login extends AbstractNormForm
     {
         //##%%
         return true;
-        //#%#%*/
+        //#%#%
         //%%login/updateCart
     }
 }

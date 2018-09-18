@@ -95,7 +95,7 @@ final class Product extends AbstractNormForm
         return array( 0 => array('product_category_name' => 'Please Choose One'),
                       1 => array('product_category_name' => 'Fill with entries from database!'),
                       2 => array('product_category_name' => 'Yes, you should!'));
-        //#%#%*/
+        //#%#%
         //%%product/fillPTypeArray
     }
 
@@ -109,7 +109,7 @@ final class Product extends AbstractNormForm
     {
         //##%%
         return true;
-        //#%#%*/
+        //#%#%
         //%%product/isValidPType
     }
 
@@ -123,7 +123,7 @@ final class Product extends AbstractNormForm
     {
         //##%%
         return true;
-        //#%#%*/
+        //#%#%
         //%%product/isUniquePName
     }
 
