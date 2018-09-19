@@ -50,7 +50,7 @@ PHP Errors are logged in
 * the Apache error log ``tail -f /var/log/apache2/error.log`` or wherever it resides in your installation.
 
 Sample solutions from a solution folder can be copied into the exercise templates with the class src/Solution/Solution.php.
-The git repostitory, that holds the solution is private. If necessary ``TODO``s will guide you, what has to be done for completing the exercises. 
+The git repository, that holds the solution is private. If necessary ``TODO``s will guide you, what has to be done for completing the exercises. 
 For a better understanding read the PHPDoc comments, that describe the classes, methods, properties and constants and have a look at the provided example src/DBAccess/DBDemo.php. You can use ``onlineshop/src/onlinshop.sql`` to restore the MariaDB database provided for the excercises.
 
 For example the following line is replaced with the content of <solutionfolder>/index/construct.inc.php:  
@@ -77,7 +77,7 @@ Folder | Description
 ``templates`` | HTML templates for the TWIG template engine used in ``/src/*.php``.
 ``templates_c`` | Output folder for compiled TWIG templates.
 ``src`` | ``define.inc.php`` holds the constants to access the database. Scripts to load Data to MariaDB and ElasticSearch. A class diagramm for onlineshop.
-``src/DBAccess`` | Classes implemented for *OnlineShop*, including the class DBDemo, that shows how to use [NormForm](https://github.com/Digital-Media/normform), DBAccess and LogWriter. DBAjaxDemo demonstrates the usage of usage of AJAX with Normform. ESearchDemo demonstrates the usage of ElasticSearch.
+``src/DBAccess`` | Classes implemented for *OnlineShop*, including the class DBDemo, that shows how to use [NormForm](https://github.com/Digital-Media/normform), DBAccess and LogWriter. DBAjaxDemo demonstrates how to use AJAX with Normform. ESearchDemo demonstrates the usage of ElasticSearch.
 ``src/exercises`` | Classes to be implemented for *OnlineShop* exercises.
 ``src/Solution`` | The class Solution.php copies sample solutions to the marked lines in the exercises. CreateSolution.php and RestoreBackup.php do this in a scripted version, to demonstrate differences of OO PHP and scripted PHP.
 ``src/Utilities`` | The Trait Utilities provides static helper methods, that can be used in any context. The class LogWriter initializes monolog logging and provides methods to write personalized log files to ``onlineshop/src/Utilities/onlineshop.log`` according to PSR3.
