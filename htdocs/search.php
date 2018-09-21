@@ -32,9 +32,5 @@ try {
     $search = new Search($view);
     $search->normForm();
 } catch (Exception $e) {
-    if (DEBUG) {
-        echo "An error occured in file " . $e->getFile() . " on line " . $e->getLine() . ":" . $e->getMessage();
-    } else {
-        echo "<h2>Something went wrong</h2>";
-    }
+    echo "<h2>Something went wrong</h2>";
 }
