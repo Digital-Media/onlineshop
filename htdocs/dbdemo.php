@@ -31,5 +31,5 @@ try {
     $dbdemo = new DBDemo($view);
     $dbdemo->normForm();
 } catch (Exception $e) {
-    echo "Something went wrong.";
+    echo "<h2>Something went wrong</h2>";
 }
