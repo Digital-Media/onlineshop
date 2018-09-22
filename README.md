@@ -19,9 +19,9 @@ Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/med
 # Used technologies and requirements
 
 The exercises have been developed with [Vagrant](https://www.vagrantup.com/) and [Virtualbox](https://www.virtualbox.org/). 
-A [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev) with the installation of the web environment is hosted on GitHub.
+A [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev) with the installation of the web environment with MariaDB is hosted on GitHub.
 A [second Vagrantfile](https://github.com/Digital-Media/hgb-dbdev) with the installation of the web environment and the 
-search engine ElasticSearch is hosted on GitHub as an alternative environment.
+search engine ElasticSearch and Redis is hosted on GitHub as an alternative environment.
 But *OnlineShop* can be installed in a different environment as well. 
 [XAMPP](https://www.apachefriends.org/de/download.html) or [MAMP](https://www.mamp.info/de/)
 
@@ -38,8 +38,8 @@ PHP 7.1 is required to run the examples.
 * [CSS3 Flexbox](https://www.w3.org/TR/css-flexbox-1/)
 * [PHP-FIG PSR: PHP Standards Recommendations](https://www.php-fig.org/psr/)
 * [Monlog PSR3](https://github.com/Seldaek/monolog)
-* [ElasticSearch PHP Client 6.0](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/index.html) works
-only with second Vagrantfile.
+* [ElasticSearch PHP Client 6.0](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/index.html) (second Vagrantfile)
+* [Redis PHP Client](https://packagist.org/packages/predis/predis) (second Vagrantfile)
 
 
 The files, that have to be completed for the exercises, are stored in the subdirectory ``src/exercises``.
@@ -77,7 +77,7 @@ Folder | Description
 ``templates`` | HTML templates for the TWIG template engine used in ``/src/*.php``.
 ``templates_c`` | Output folder for compiled TWIG templates.
 ``src`` | ``define.inc.php`` holds the constants to access the database. Scripts to load Data to MariaDB and ElasticSearch. A class diagramm for onlineshop.
-``src/DBAccess`` | Classes implemented for *OnlineShop*, including the class DBDemo, that shows how to use [NormForm](https://github.com/Digital-Media/normform), DBAccess and LogWriter. DBAjaxDemo demonstrates how to use AJAX with Normform. ESearchDemo demonstrates the usage of ElasticSearch.
+``src/DBAccess`` | Classes implemented for *OnlineShop*, including the class DBDemo, that shows how to use [NormForm](https://github.com/Digital-Media/normform), DBAccess and LogWriter. DBAjaxDemo demonstrates how to use AJAX with Normform. ESearchDemo demonstrates the usage of ElasticSearch. RedisDemo demonstrates the usage of Redis.
 ``src/exercises`` | Classes to be implemented for *OnlineShop* exercises.
 ``src/Solution`` | The class Solution.php copies sample solutions to the marked lines in the exercises. CreateSolution.php and RestoreBackup.php do this in a scripted version, to demonstrate differences of OO PHP and scripted PHP.
 ``src/Utilities`` | The Trait Utilities provides static helper methods, that can be used in any context. The class LogWriter initializes monolog logging and provides methods to write personalized log files to ``onlineshop/src/Utilities/onlineshop.log`` according to PSR3.
