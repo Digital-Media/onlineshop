@@ -1,0 +1,45 @@
+{% include "header.html.twig" %}
+{% include "navigation.html.twig" %}
+<main class="Site-content">
+    <section class="Section">
+        <div class="Container">
+            <div id="messages">
+                {% include "errorMessages.html.twig" %}
+                {% include "statusMessage.html.twig" %}
+            </div>
+            <form action="{{ _server.SCRIPT_NAME }}" method="post" enctype="multipart/form-data">
+                <div class="InputCombo Grid-full">
+                    <label for="{{ redis_key.getName() }}" class="InputCombo-label">Redis Key</label>
+                    <input type="search" id="{{ redis_key.getName() }}" name="{{ redis_key.getName() }}" value="{{ redis_key.getValue() }}" class="InputCombo-field">
+                    <button type="submit" class="Button">Add</button>
+                </div>
+            </form>
+            <br>
+            <h2 class="Section-heading">List of Redis Entries</h2>
+            <div class="InputCombo Grid-full">
+                {% include "tablestyles.html.twig" %}
+                <table>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    {% if pageArray is defined %}
+                        {% for key, value in pageArray %}
+                            <tr>
+                                <td>{{ key }}</td>
+                                <td>{{ value }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td> No Entries found in Redis </td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+<!--<script src="../src/Exercises/js/index.js"></script>-->
+{%  include "footer.html.twig"  %}
