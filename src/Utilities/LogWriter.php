@@ -4,8 +4,10 @@ namespace Utilities;
 use Monolog\Logger;
 use Monolog\ErrorHandler;
 use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\RedisHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Processor\WebProcessor;
+use Predis;
 
 /**
  * Offers Methods to initialize monolog and log to onlineshop/src/Utilities/onlineshop.log.
@@ -28,12 +30,16 @@ class LogWriter
      * Registers all PHP errors to be logged by this logger
      * Adds a stream handler to the logger with level Logger::DEBUG
      */
-    private function __construct()
+    private function __construct(string $which_handler = 'files', $level = Logger::DEBUG, int $cap = 10)
     {
-        if (!isset(self::$logger)) {
+	if (!isset(self::$logger)) {
             self::$logger = new Logger('Shop');
             ErrorHandler::register(self::$logger);
-            $handler = new StreamHandler(__DIR__.'/onlineshop.log', Logger::DEBUG);
+			if ($which_handler === 'files') {
+                $handler = new StreamHandler(__DIR__.'/onlineshop.log', $level);
+			} else {
+				$handler = new RedisHandler(new Predis\Client(['scheme' => 'tcp', 'host' => '192.168.7.7', 'port' => 6379, 'password' => 'geheim']), "logs", $level, true, $cap);
+			}
             $handler->setFormatter(new LineFormatter("[%datetime%] %level_name%: %message% \n"));
             // next Line is for usage with WebProcessor
             //$handler->setFormatter(new LineFormatter("[%datetime%] %level_name%: %message% %extra% \n"));
@@ -86,8 +92,8 @@ class LogWriter
         self::$logger->addInfo($info);
     }
 
-    public static function getInstance()
+    public static function getInstance(string $which_handler = 'files', $level = Logger::DEBUG, int $cap = 10)
     {
-        return new LogWriter();
+        return new LogWriter($which_handler, $level, $cap);
     }
 }
