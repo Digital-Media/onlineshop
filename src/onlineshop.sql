@@ -164,10 +164,10 @@ DROP TABLE IF EXISTS `payment`;
 CREATE TABLE IF NOT EXISTS `payment` (
   `idpayment` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_iduser` bigint unsigned NOT NULL,
-  `paymenttype` varchar(45) NOT NULL,
-  `paymentstring1` varchar(50) NOT NULL,
-  `paymentstring2` varchar(50) DEFAULT NULL,
-  `paymentstring3` varchar(50) DEFAULT NULL,
+  `payment_type` varchar(45) NOT NULL,
+  `payment_string1` varchar(50) NOT NULL,
+  `payment_string2` varchar(50) DEFAULT NULL,
+  `payment_string3` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`idpayment`),
   KEY `user_iduser` (`user_iduser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
