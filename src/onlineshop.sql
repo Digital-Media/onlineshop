@@ -15,41 +15,103 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
--- --------------------------------------------------------
-
 --
--- Database: `onlineshop`
+-- Datenbank: `onlineshop`
 --
-
-DROP SCHEMA IF EXISTS `onlineshop` ;
-CREATE SCHEMA IF NOT EXISTS `onlineshop` DEFAULT CHARACTER SET utf8;
-USE onlineshop;
-
--- --------------------------------------------------------
-
--- 
--- Tabellen anlegen
---
+DROP SCHEMA onlineshop;
+CREATE SCHEMA IF NOT EXISTS `onlineshop` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `onlineshop`;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cart`
+-- Tabellenstruktur für Tabelle `address`
 --
 
+DROP TABLE IF EXISTS `address`;
+CREATE TABLE IF NOT EXISTS `address` (
+  `idaddress` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `street` varchar(100) NOT NULL,
+  `zipcode` varchar(10) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `country` varchar(100) NOT NULL,
+  `user_iduser` bigint unsigned NOT NULL,
+  `city_idcity` bigint unsigned NOT NULL,
+  PRIMARY KEY (`idaddress`),
+  KEY `userfk` (`user_iduser`),
+  KEY `cityfk` (`city_idcity`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- RELATIONEN DER TABELLE `address`:
+--   `city_idcity`
+--       `city` -> `idcity`
+--   `user_iduser`
+--       `user` -> `iduser`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `cart`
+--
+
+DROP TABLE IF EXISTS `cart`;
 CREATE TABLE IF NOT EXISTS `cart` (
   `session_id` varchar(250) NOT NULL,
   `product_idproduct` bigint NOT NULL,
   `product_name` varchar(100) NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `quantity` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`session_id`, `product_idproduct`)
+  `quantity` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`session_id`,`product_idproduct`)
 ) ENGINE=MEMORY DEFAULT CHARSET=utf8;
+
+INSERT INTO `cart` (`session_id`, `product_idproduct`, `product_name`, `price`, `quantity`) VALUES
+('1', 1, 'Passivhaus', 300000.00, 1),
+('1', 5, 'Talgrundstück', 10000.00, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orders`
+-- Tabellenstruktur für Tabelle `city`
+--
+
+DROP TABLE IF EXISTS `city`;
+CREATE TABLE IF NOT EXISTS `city` (
+  `idcity` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `PLZ` varchar(10) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `country_idcountry` bigint unsigned NOT NULL,
+  PRIMARY KEY (`idcity`),
+  KEY `countryfk` (`country_idcountry`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `country`
+--
+
+DROP TABLE IF EXISTS `country`;
+CREATE TABLE IF NOT EXISTS `country` (
+  `idcountry` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `ISOcode` char(2) NOT NULL,
+  PRIMARY KEY (`idcountry`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Daten der Tabelle `country`
+--
+
+insert into country set name = 'Austria', ISOcode = 'AT';
+insert into country set name = 'Deutschland', ISOcode = 'DE';
+insert into country set name = 'Schweiz', ISOcode = 'CH';
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `orders`
 --
 
 DROP TABLE IF EXISTS `orders`;
@@ -60,17 +122,17 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `date_ordered` datetime NOT NULL,
   `payment_type` varchar(45) NOT NULL,
   `payment_string1` varchar(50) NOT NULL,
-  `payment_string2` varchar(50) NULL,
-  `payment_string3` varchar(50) NULL,
+  `payment_string2` varchar(50) DEFAULT NULL,
+  `payment_string3` varchar(50) DEFAULT NULL,
   `instructions` varchar(100) NOT NULL,
   `delivery_address_line` varchar(150) NOT NULL,
   `delivery_zipcode` varchar(10) NOT NULL,
   `delivery_city` varchar(100) NOT NULL,
   `delivery_country` varchar(100) NOT NULL,
-  `billing_address_line` varchar(150) NULL,
-  `billing_zipcode` varchar(10) NULL,
-  `billing_city` varchar(100) NULL,
-  `billing_country` varchar(100) NULL,
+  `billing_address_line` varchar(150) DEFAULT NULL,
+  `billing_zipcode` varchar(10) DEFAULT NULL,
+  `billing_city` varchar(100) DEFAULT NULL,
+  `billing_country` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idorders`),
   KEY `user_fk` (`user_iduser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -78,19 +140,39 @@ CREATE TABLE IF NOT EXISTS `orders` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order_items`
+-- Tabellenstruktur für Tabelle `order_item`
 --
 
 DROP TABLE IF EXISTS `order_item`;
 CREATE TABLE IF NOT EXISTS `order_item` (
   `orders_idorders` bigint unsigned NOT NULL,
   `product_idproduct` bigint unsigned NOT NULL,
-  `quantity` int(11) unsigned NOT NULL,
+  `quantity` decimal(10,2) NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  PRIMARY KEY (`orders_idorders`, `product_idproduct`),
+  PRIMARY KEY (`orders_idorders`,`product_idproduct`),
   KEY `orders_fk` (`orders_idorders`),
   KEY `product_fk` (`product_idproduct`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `payment`
+--
+
+DROP TABLE IF EXISTS `payment`;
+CREATE TABLE IF NOT EXISTS `payment` (
+  `idpayment` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `user_iduser` bigint unsigned NOT NULL,
+  `paymenttype` varchar(45) NOT NULL,
+  `paymentstring1` varchar(50) NOT NULL,
+  `paymentstring2` varchar(50) DEFAULT NULL,
+  `paymentstring3` varchar(50) DEFAULT NULL,
+  `paymentstring4` varchar(50) DEFAULT NULL,
+  `paymentstring5` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`idpayment`),
+  KEY `user_iduser` (`user_iduser`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -115,7 +197,7 @@ CREATE TABLE IF NOT EXISTS `pentest` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product`
+-- Tabellenstruktur für Tabelle `product`
 --
 
 DROP TABLE IF EXISTS `product`;
@@ -126,28 +208,48 @@ CREATE TABLE IF NOT EXISTS `product` (
   `price` decimal(10,2) NOT NULL,
   `short_description` varchar(250) NOT NULL,
   `long_description` text NOT NULL,
-  `active` boolean NOT NULL DEFAULT TRUE,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`idproduct`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Daten für Tabelle `product`
+--
+
+INSERT INTO `product` (`idproduct`, `product_name`, `product_category_name`, `price`, `short_description`, `long_description`, `active`, `date_added`) VALUES
+(1, 'Passivhaus', '', 300000.00, 'Haus mit U-Wert<10kWh/am2', 'Haus mit U-Wert<10kWh/am2\r\n20m2 Solaranlage\r\n40m2 Photovoltaik\r\n7500l Regenwassertank, ideal an kalten Wintertagen', 1, '2009-12-28 15:45:03'),
+(2, 'Niedrigenergiehaus', '', 250000.00, 'Haus mit U-Wert<45kWh/am2', 'Haus mit U-Wert<45kWh/am2\r\n20 m2 Solaranlage, ideal an kalten Wintertagen', 0, '2009-12-28 15:45:44'),
+(3, 'Seegrundstück', '', 200000.00, 'Seegrundstück am Attersee', 'Seegrundstueck am Attersee mit Seeblick und Bergblick, ideal fuer heisse Sommertage', 1, '2009-12-29 16:15:42'),
+(4, 'Almgrundstück', '', 300000.00, 'Almgrundstück an einem Bergsee', 'Almgrundstück an einem Bergsee mit Zufahrtsstrasse, geschottert und Winterräumung, ideal fuer heiße Sommertage', 1, '2009-12-29 16:15:42'),
+(5, 'Talgrundstück', '', 10000.00, 'Grundstück am Talende', 'Talgrundstück am Ende des Steyerlingtales, wenig Sonne, dafuer viel kaltes Bachwasser direkt neben dem Grundstück, ideal für heiße Sommertage', 1, '2009-12-29 16:15:42');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_type`
+-- Tabellenstruktur für Tabelle `product_category`
 --
 
 DROP TABLE IF EXISTS `product_category`;
 CREATE TABLE IF NOT EXISTS `product_category` (
-  `idproduct_category` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `idproduct_category` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `product_category_name` varchar(45) NOT NULL,
   PRIMARY KEY (`idproduct_category`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Daten für Tabelle `product_category`
+--
+
+INSERT INTO `product_category` (`idproduct_category`, `product_category_name`) VALUES
+(1, 'Grundstück'),
+(2, 'Haus'),
+(3, 'Wohnung');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Tabellenstruktur für Tabelle `user`
 --
 
 DROP TABLE IF EXISTS `user`;
@@ -161,119 +263,89 @@ CREATE TABLE IF NOT EXISTS `user` (
   `active` char(128) DEFAULT NULL,
   `role` char(5) NOT NULL DEFAULT 'user',
   `date_registered` datetime NOT NULL,
-  `phone` varchar(45) NULL,
-  `mobile` varchar(45) NULL,
-  `fax` varchar(45) NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  `mobile` varchar(45) DEFAULT NULL,
+  `fax` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`iduser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Daten für Tabelle `user`
+--
+
+INSERT INTO `user` (`iduser`, `first_name`, `last_name`, `nick_name`, `email`, `password`, `active`, `role`, `date_registered`, `phone`, `mobile`, `fax`) VALUES
+(1, 'shop', 'user1', 'shopuser1', 'shopuser1@onlineshop.at', '906072001efddf3e11e6d2b5782f4777fe038739', NULL, 'user', '2009-12-22 16:45:04', NULL, NULL, NULL),
+(2, 'shop', 'user2', 'shopuser2', 'shopuser2@onlineshop.at', '906072001efddf3e11e6d2b5782f4777fe038739', 'bdb678676c3f52999829403edc381449', 'user', '2009-12-28 15:52:43', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Fremdschlüssel anlegen
+-- Tabellenstruktur für Tabelle `visit`
 --
 
--- --------------------------------------------------------
+DROP TABLE IF EXISTS `visit`;
+CREATE TABLE IF NOT EXISTS `visit` (
+  `idvisit` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ip_address` varchar(45) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_iduser` bigint unsigned DEFAULT NULL,
+  PRIMARY KEY (`idvisit`),
+  KEY `fk_visits_users1` (`user_iduser`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- RELATIONS FOR TABLE `orders`:
---   `users_id`
---       `users` -> `users_id`
+-- Daten für Tabelle `visit`
 --
 
+insert into visit ( `ip_address`, `timestamp`, `user_iduser`) values
+('10.28.14.123', NOW(), 1),
+('10.28.14.124', NOW(), 2),
+('10.28.14.123', NOW(), 1),
+('10.28.14.123', NOW(), 2),
+('10.28.14.125', NOW(), null);
+
+--
+-- Constraints der exportierten Tabellen
+--
+
+--
+-- Constraints der Tabelle `address`
+--
+ALTER TABLE `address`
+  ADD CONSTRAINT `address_ibfk_2` FOREIGN KEY (`city_idcity`) REFERENCES `city` (`idcity`),
+  ADD CONSTRAINT `address_ibfk_1` FOREIGN KEY (`user_iduser`) REFERENCES `user` (`iduser`);
+
+--
+-- Constraints der Tabelle `city`
+--
+ALTER TABLE `city`
+  ADD CONSTRAINT `city_ibfk_1` FOREIGN KEY (`country_idcountry`) REFERENCES `country` (`idcountry`);
+
+--
+-- Constraints der Tabelle `orders`
+--
 ALTER TABLE `orders`
-ADD CONSTRAINT `user_fk` FOREIGN KEY (`user_iduser`) REFERENCES `user` (`iduser`);
-
--- --------------------------------------------------------
+  ADD CONSTRAINT `user_fk` FOREIGN KEY (`user_iduser`) REFERENCES `user` (`iduser`);
 
 --
--- RELATIONS FOR TABLE `order_item`:
---   `idorder`
---       `orders` -> `orders_id`
---   `idproduct`
---       `product` -> `idproduct`
+-- Constraints der Tabelle `order_item`
 --
-
 ALTER TABLE `order_item`
-ADD CONSTRAINT `orders_fk` FOREIGN KEY (`orders_idorders`) REFERENCES `orders` (`idorders`);
-ALTER TABLE `order_item`
-ADD CONSTRAINT `product_fk` FOREIGN KEY (`product_idproduct`) REFERENCES `product` (`idproduct`);
-
--- --------------------------------------------------------
+  ADD CONSTRAINT `product_fk` FOREIGN KEY (`product_idproduct`) REFERENCES `product` (`idproduct`),
+  ADD CONSTRAINT `orders_fk` FOREIGN KEY (`orders_idorders`) REFERENCES `orders` (`idorders`);
 
 --
--- Insert der Daten
--- 
-
--- --------------------------------------------------------
+-- Constraints der Tabelle `payment`
+--
+ALTER TABLE `payment`
+  ADD CONSTRAINT `fk_payment_user` FOREIGN KEY (`user_iduser`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Dumping data for table `pentest`
+-- Constraints der Tabelle `visits`
 --
+ALTER TABLE `visit`
+  ADD CONSTRAINT `fk_visits_users1` FOREIGN KEY (`user_iduser`) REFERENCES `user` (`iduser`);
 
--- Die Spalten pentest_varchar1 und pentest_varchart2 dienen als Spalten für email und password, um Angriffe auf Login zu testen
-INSERT INTO `pentest` (`idpentest`, `email`, `password`, `active`, `role`) VALUES
-(1, 'shopuser1@onlineshop.at', 'geheim', null, 'admin'),
-(2, 'shopuser2@onlineshop.at', 'geheim', null, 'user');
-
--- --------------------------------------------------------
-
---
--- Dumping data for table `product`
---
-
-INSERT INTO `product` (`idproduct`, `product_name`, `price`, `short_description`, `long_description`, `active`, `date_added`) VALUES
-(1, 'Passivhaus', '300000.00', 'Haus mit U-Wert<10kWh/am2', 'Haus mit U-Wert<10kWh/am2\r\n20m2 Solaranlage\r\n40m2 Photovoltaik\r\n7500l Regenwassertank, ideal an kalten Wintertagen', 1, '2009-12-28 15:45:03'),
-(2, 'Niedrigenergiehaus', '250000.00', 'Haus mit U-Wert<45kWh/am2', 'Haus mit U-Wert<45kWh/am2\r\n20 m2 Solaranlage, ideal an kalten Wintertagen', 0, '2009-12-28 15:45:44'),
-(3, 'Seegrundstück', '200000.00', 'Seegrundstück am Attersee', 'Seegrundstück am Attersee mit Seeblick und Bergblick, ideal für heiße Sommertage', 1,'2009-12-29 16:15:42'),
-(4, 'Almgrundstück', '300000.00', 'Almgrundstück an einem Bergsee', 'Almgrundstück an einem Bergsee mit Zufahrtsstraße, geschottert und Winterräumung, ideal für heiße Sommertage', 1,'2009-12-29 16:15:42'),
-(5, 'Talgrundstück', '10000.00', 'Grundstück am Talende', 'Talgrundstück am Ende des Steyerlingtales, wenig Sonne, dafür viel kaltes Bachwasser direkt neben dem Grundstück, ideal für heiße Sommertage', 1,'2009-12-29 16:15:42');
-
---
--- Adding FULLTEXT Index for `product`
---
-
-ALTER TABLE product ADD FULLTEXT product_fulltext (product_name, short_description, long_description);
-ALTER TABLE product ADD FULLTEXT product_name_fulltext (product_name);
-
--- --------------------------------------------------------
-
---
--- Dumping data for table `product_category`
---
-
-INSERT INTO `product_category` (`idproduct_category`, `product_category_name`) VALUES
-(1, 'Grundstück'),
-(2, 'Haus'),
-(3, 'Wohnung');
-
--- --------------------------------------------------------
-
---
--- Dumping data for table `user`
---
-
--- Passwort der User shopuser1 und shopuser2 ist jeweils geheim
-INSERT INTO `user` (`iduser`, `first_name`, `last_name`, `nick_name`, `email`, `password`, `active`, `role`, `date_registered`) VALUES
-(1, 'shop', 'user1', 'shopuser1', 'shopuser1@onlineshop.at', '$2y$10$z678OArUJa9.mmbbOma2EuFIxpTWF9FFOr4kN8goyrcXImk7GthAe', NULL, 'user', '2009-12-22 16:45:04'),
-(2, 'shop', 'user2', 'shopuser2', 'shopuser2@onlineshop.at', '$2y$10$z678OArUJa9.mmbbOma2EuFIxpTWF9FFOr4kN8goyrcXImk7GthAe', 'bdb678676c3f52999829403edc381449', 'user', '2009-12-28 15:52:43');
-
--- --------------------------------------------------------
-
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`session_id`, `product_idproduct`, `product_name`, `price`, `quantity`) VALUES
-  ('1', 1, 'Passivhaus', 300000.00, 1),
-  ('1', 5, 'Talgrundstück', 10000.00, 1);
-
-
-
--- Anlegen des Users "onlineshop" wird bereits im Vagrantfile erledigt
--- Einkommentieren falls USER onlineshop bereits existiert
--- DROP USER IF EXISTS gibt es leider nicht
--- DROP USER 'onlineshop'@'localhost';
--- CREATE USER 'onlineshop'@'localhost' IDENTIFIED BY 'geheim';
--- GRANT USAGE ON onlineshop.* TO 'onlineshop'@'localhost' IDENTIFIED BY 'geheim' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
--- GRANT ALL PRIVILEGES ON `onlineshop`.* TO 'onlineshop'@'localhost';
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
