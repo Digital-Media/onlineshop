@@ -168,8 +168,6 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `paymentstring1` varchar(50) NOT NULL,
   `paymentstring2` varchar(50) DEFAULT NULL,
   `paymentstring3` varchar(50) DEFAULT NULL,
-  `paymentstring4` varchar(50) DEFAULT NULL,
-  `paymentstring5` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`idpayment`),
   KEY `user_iduser` (`user_iduser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
