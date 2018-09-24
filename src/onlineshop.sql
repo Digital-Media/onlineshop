@@ -68,7 +68,9 @@ CREATE TABLE IF NOT EXISTS `cart` (
 
 INSERT INTO `cart` (`session_id`, `product_idproduct`, `product_name`, `price`, `quantity`) VALUES
 ('1', 1, 'Passivhaus', 300000.00, 1),
-('1', 5, 'Talgrundstück', 10000.00, 1);
+('1', 5, 'Talgrundstück', 10000.00, 1),
+('2', 5, 'Talgrundstück', 10000.00, 2);
+
 
 -- --------------------------------------------------------
 
