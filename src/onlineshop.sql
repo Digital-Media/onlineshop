@@ -31,7 +31,7 @@ USE `onlineshop`;
 DROP TABLE IF EXISTS `address`;
 CREATE TABLE IF NOT EXISTS `address` (
   `idaddress` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `street` varchar(100) NOT NULL,
+  `address_line` varchar(100) NOT NULL,
   `user_iduser` bigint unsigned NOT NULL,
   `city_idcity` bigint unsigned NOT NULL,
   PRIMARY KEY (`idaddress`),
