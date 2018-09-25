@@ -32,9 +32,6 @@ DROP TABLE IF EXISTS `address`;
 CREATE TABLE IF NOT EXISTS `address` (
   `idaddress` bigint unsigned NOT NULL AUTO_INCREMENT,
   `street` varchar(100) NOT NULL,
-  `zipcode` varchar(10) NOT NULL,
-  `city` varchar(100) NOT NULL,
-  `country` varchar(100) NOT NULL,
   `user_iduser` bigint unsigned NOT NULL,
   `city_idcity` bigint unsigned NOT NULL,
   PRIMARY KEY (`idaddress`),
