@@ -237,3 +237,10 @@ curl -X PUT "localhost:9200/product_hyphen_decompounder/_doc/5" -H 'Content-Type
     "long_description" : "Talgrundstück am Ende des Steyerlingtales, wenig Sonne, dafür viel kaltes Bachwasser direkt neben dem Grundstück, ideal für heiße Sommertage"
 }
 '
+curl -X PUT "localhost:9200/product_hyphen_decompounder/_doc/6" -H 'Content-Type: application/json' -d '
+{
+    "product_name" : "Reihenhäuser",
+    "short_description" : "Häuser mit Mehrwert",
+    "long_description" : "Schöne Reihenhäuser im Grünen mit Blick in die Berge"
+}
+'
