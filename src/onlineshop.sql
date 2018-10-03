@@ -221,6 +221,9 @@ INSERT INTO `product` (`idproduct`, `product_name`, `product_category_name`, `pr
 (4, 'Almgrundstück', '', 300000.00, 'Almgrundstück an einem Bergsee', 'Almgrundstück an einem Bergsee mit Zufahrtsstrasse, geschottert und Winterräumung, ideal fuer heiße Sommertage', 1, '2009-12-29 16:15:42'),
 (5, 'Talgrundstück', '', 10000.00, 'Grundstück am Talende', 'Talgrundstück am Ende des Steyerlingtales, wenig Sonne, dafuer viel kaltes Bachwasser direkt neben dem Grundstück, ideal für heiße Sommertage', 1, '2009-12-29 16:15:42');
 
+CREATE FULLTEXT INDEX product_full_idx on product (product_name);
+
+
 -- --------------------------------------------------------
 
 --
