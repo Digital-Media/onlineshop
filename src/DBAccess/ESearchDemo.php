@@ -136,7 +136,7 @@ final class ESearchDemo extends AbstractNormForm
         }
         // A match query of ES is compared with SQL match against for the field product_name only
         // An ES index supports querying parts of the index. MariaDB does not.
-        // Addionally a word decompounder ist used for ES. For SQL MATCH AGAINST
+        // Additionally a word decompounder is used for ES. For SQL MATCH AGAINST.
         // Search terms for testing (M found by MariaDB, ES found by Elasticsearch):
         // "grund" (ES), "haus" (ES), "passivhaus" (M, ES), "almgrundstück" (M, ES) "haus alm" (), "almgrundstuck" (M, ES)
         // "ideal" ()
@@ -286,7 +286,7 @@ SQL;
     private function doElasticSearchMatchProductName(string $search): array
     {
         $params = [
-            "index" => "product_hyphen_decompounder",
+            "index" => "product",
             "type" => "_doc",
             "body" => [
                 "query" => [
@@ -341,7 +341,7 @@ SQL;
              }
         }';
         $params = [
-            "index" => "product_hyphen_decompounder",
+            "index" => "product",
             "type" => "_doc",
             "body" => $json
         ];
@@ -447,7 +447,7 @@ SQL;
           }
         }';
         $params = [
-            "index" => "product_hyphen_decompounder",
+            "index" => "product",
             "type" => "_doc",
             "from" => 0,
             "size" => 2,
