@@ -343,6 +343,8 @@ curl -X GET "localhost:9200/my_index/_search?pretty=true" -H 'Content-Type: appl
   "explain": true
 }
 '
+# Index settings
+curl -XGET "http://localhost:9200/my_index/_settings?pretty=true"
 
 # Deleting the index
 curl -X DELETE "localhost:9200/my_index"

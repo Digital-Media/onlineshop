@@ -156,3 +156,6 @@ curl -X PUT "localhost:9200/product/_doc/5" -H 'Content-Type: application/json' 
 
 # Get all indices
 curl -X GET "localhost:9200/_cat/indices?v"
+
+# Index settings
+curl -XGET "http://localhost:9200/product/_settings?pretty=true"
