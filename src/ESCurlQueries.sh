@@ -37,6 +37,8 @@ curl -X POST "localhost:9200/my_index/_analyze?pretty=true" -H 'Content-Type: ap
 # Deleting the index
 curl -X DELETE "localhost:9200/my_index"
 
+# Examples for the index product created with ESCreateIndex.sh
+
 # Counting the entries
 curl -XGET 'http://localhost:9200/product/_count?pretty=true'
 
@@ -112,7 +114,7 @@ curl -X GET "localhost:9200/product/_search" -H 'Content-Type: application/json'
 # Testing different analyzers of the index
 
 # If using only a text field ES uses the standard analyzer without custom filtering
-curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
+curl -X POST "localhost:9200/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
 {
   "text": "Schöne Reihenhäuser im Grünen mit Blick in die Berge"
 }
@@ -120,7 +122,7 @@ curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: app
 
 # Providing an analyzer forces ES to use the given one. In this case the standard analyzer.
 # That gives the same result as above
-curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
+curl -X POST "localhost:9200/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
 {
   "analyzer": "standard",
   "text": "Schöne Reihenhäuser im Grünen mit Blick in die Berge"
@@ -224,5 +226,87 @@ curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: app
 {
   "analyzer": "german_stop",
   "text": "Schöne Reihenhäuser im Grünen mit Blick in die Berge"
+}
+'
+
+# Index with multi fields
+curl -X PUT "localhost:9200/my_index" -H 'Content-Type: application/json' -d'
+{
+  "mappings": {
+    "_doc": {
+      "properties": {
+        "text": {
+          "type": "text",
+          "fields": {
+            "german": {
+              "type":     "text",
+              "analyzer": "german"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+'
+
+# Adding two entries
+curl -X PUT "localhost:9200/my_index/_doc/1" -H 'Content-Type: application/json' -d'
+  { "text": "Schöne neue Häuser" }
+'
+curl -X PUT "localhost:9200/my_index/_doc/2" -H 'Content-Type: application/json' -d'
+  { "text": "Schönes neues Haus" }
+'
+
+# standard analyzer
+curl -X POST "localhost:9200/my_index/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
+  { "text": "Schöne neue Häuser" }
+'
+curl -X POST "localhost:9200/my_index/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
+  { "text": "Schönes neues Haus" }
+'
+
+# german analyzer
+curl -X POST "localhost:9200/my_index/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
+  {
+    "analyzer" : "german" ,
+    "text": "Schöne neue Häuser"
+  }
+'
+curl -X POST "localhost:9200/my_index/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
+  {
+    "analyzer" : "german" ,
+    "text": "Schönes neues Haus"
+  }
+'
+
+# Relevanz is different for these two entries in the following search queries
+curl -X GET "localhost:9200/my_index/_search?pretty=true" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "multi_match": {
+      "query": "Schönes neues Haus",
+      "fields": [
+        "text",
+        "text.german"
+      ],
+      "type": "most_fields"
+    }
+  }
+}
+'
+
+curl -X GET "localhost:9200/my_index/_search?pretty=true" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "multi_match": {
+      "query": "Schöne neue Häuser",
+      "fields": [
+        "text",
+        "text.german"
+      ],
+      "type": "most_fields"
+    }
+  }
 }
 '

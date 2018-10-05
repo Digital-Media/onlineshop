@@ -2,9 +2,7 @@
 # Deleting the index, to rebuild it
 curl -X DELETE "localhost:9200/product"
 
-# Creating the index product.
-# Normally you would not define so many analyzers, they are for demonstration purposes
-# standard, german_decompounder and german_stop would be enough
+# Creating the index product with multiple analyzers
 curl -X PUT "localhost:9200/product" -H 'Content-Type: application/json' -d'
 {
    "settings":{
