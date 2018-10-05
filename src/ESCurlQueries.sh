@@ -280,7 +280,7 @@ curl -X POST "localhost:9200/my_index/_analyze?pretty=true" -H 'Content-Type: ap
   }
 '
 
-# Relevanz is different for these two entries in the following search queries
+# Relevance is different for these two entries in the following search queries. Sort is different in results
 curl -X GET "localhost:9200/my_index/_search?pretty=true" -H 'Content-Type: application/json' -d'
 {
   "query": {
@@ -310,3 +310,39 @@ curl -X GET "localhost:9200/my_index/_search?pretty=true" -H 'Content-Type: appl
   }
 }
 '
+
+# Explain different relevance for these two entries
+curl -X GET "localhost:9200/my_index/_search?pretty=true" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "multi_match": {
+      "query": "Schönes neues Haus",
+      "fields": [
+        "text",
+        "text.german"
+      ],
+      "type": "most_fields"
+    }
+  },
+  "explain": true
+}
+'
+
+curl -X GET "localhost:9200/my_index/_search?pretty=true" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "multi_match": {
+      "query": "Schöne neue Häuser",
+      "fields": [
+        "text",
+        "text.german"
+      ],
+      "type": "most_fields"
+    }
+  },
+  "explain": true
+}
+'
+
+# Deleting the index
+curl -X DELETE "localhost:9200/my_index"
