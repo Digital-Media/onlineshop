@@ -222,7 +222,7 @@ final class Solution extends AbstractNormForm
                     $this->logWriter->logInfo("File $filename does not exist!");
                     $this->errorMessages['error'] = "File $filename does not exist!";
                 } else {
-                    $this->logWriter->logInfo("Copying " . $filename . " to $solfile");
+                    $this->logWriter->logInfo("Copying  $filename to $solfile");
                     $this->copySolutionToTemplate($filename, $solhandle);
                 }
             } elseif (preg_match("-//##%%-", $line)) {
