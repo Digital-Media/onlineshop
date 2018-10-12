@@ -222,16 +222,16 @@ final class OnlineShop extends AbstractNormForm
             $sort='pid';
         }
         switch ($sort) {
-            case 'pid':
-                return 'idproduct ASC';
-            case 'pname':
-                return 'product_name ASC';
+        case 'pid':
+            return 'idproduct ASC';
+        case 'pname':
+            return 'product_name ASC';
                 break;
-            case 'price':
-                return 'price ASC';
+        case 'price':
+            return 'price ASC';
                 break;
-            default:
-                return 'idproduct ASC';
+        default:
+            return 'idproduct ASC';
         }
     }
 
