@@ -247,7 +247,7 @@ final class Solution extends AbstractNormForm
      * @return string filename and path to solution file for the given marker
      */
     private function createSolutionFilename($line) {
-        $filename=str_replace(PHP_EOL, "", str_replace("//%%", "/", str_replace(" ", "", $line)));
+        $filename=str_replace("\r", "", str_replace("\n", "", str_replace("//%%", "/", str_replace(" ", "", $line))));
         return $this->createFilename($filename, '/../../../onlineshopsolution', '.inc.php');
 
     }
