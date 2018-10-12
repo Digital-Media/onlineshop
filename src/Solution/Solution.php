@@ -38,8 +38,6 @@ use Utilities\LogWriter;
  *
  * During Restore the backup is copied to the original class filename und the backup file is deleted.
  *
- *
- *
  * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package onlineshop
  * @version 2018
@@ -129,18 +127,17 @@ final class Solution extends AbstractNormForm
      *
      * c create solution
      * r restore template
-     *
      */
     protected function business(): void
     {
         $action = substr($this->current_action[0], 0, 1);
         switch ($action) {
-            case "c":
-                $this->createSolution($this->class);
-                break;
-            case "r":
-                $this->restoreTemplate($this->class);
-                break;
+        case "c":
+            $this->createSolution($this->class);
+            break;
+        case "r":
+            $this->restoreTemplate($this->class);
+            break;
         }
         $this->currentView->setParameter(new GenericParameter("statusMessage", $this->statusMessage));
         $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
@@ -243,16 +240,18 @@ final class Solution extends AbstractNormForm
      * remove marker where the solution should be placed
      * remove spaces
      *
-     * @param $line string Marker, that solution file has to be copied to this line
+     * @param  $line string Marker, that solution file has to be copied to this line
      * @return string filename and path to solution file for the given marker
      */
-    private function createSolutionFilename($line) {
+    private function createSolutionFilename($line) 
+    {
         $filename=str_replace("\r", "", str_replace("\n", "", str_replace("//%%", "/", str_replace(" ", "", $line))));
         return $this->createFilename($filename, '/../../../onlineshopsolution', '.inc.php');
 
     }
 
-    private function copySolutionToTemplate ($filename, $solhandle) {
+    private function copySolutionToTemplate($filename, $solhandle) 
+    {
         $tmphandle = fopen($filename, 'r');
         while (!feof($tmphandle)) {
             $solline = fgets($tmphandle, 200);
