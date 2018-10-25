@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    $("#dbdemoform").submit(function (event) {
-        $.post("dbajaxdemo.php", $( "#dbdemoform" ).serialize(), function (data) {
+    $("#dbajaxdemoform").submit(function (event) {
+        $.post("dbajaxdemo.php", $( "#dbajaxdemoform" ).serialize(), function (data) {
             $("#messages").empty();
             if (data.errorMessages){
                 let errMsg  = '<div class="Error">' +
@@ -27,7 +27,7 @@ $(document).ready(function () {
                         '</tr>\n';
                     $(newEntry).appendTo("#table");
                 }
-                $('#dbdemoform')[0].reset();
+                $('#dbajaxdemoform')[0].reset();
             }
         }, "json").fail(function () {
             console.log("Es gab ein Problem mit der Anfrage.");
