@@ -18,7 +18,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 -- Datenbank: `onlineshop`
 --
-DROP SCHEMA onlineshop;
+DROP SCHEMA  IF EXISTS onlineshop;
 CREATE SCHEMA IF NOT EXISTS `onlineshop` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `onlineshop`;
 
