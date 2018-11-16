@@ -275,8 +275,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`iduser`, `first_name`, `last_name`, `nick_name`, `email`, `password`, `active`, `role`, `date_registered`, `phone`, `mobile`, `fax`) VALUES
-(1, 'shop', 'user1', 'shopuser1', 'shopuser1@onlineshop.at', '906072001efddf3e11e6d2b5782f4777fe038739', NULL, 'user', '2009-12-22 16:45:04', NULL, NULL, NULL),
-(2, 'shop', 'user2', 'shopuser2', 'shopuser2@onlineshop.at', '906072001efddf3e11e6d2b5782f4777fe038739', 'bdb678676c3f52999829403edc381449', 'user', '2009-12-28 15:52:43', NULL, NULL, NULL);
+(1, 'shop', 'user1', 'shopuser1', 'shopuser1@onlineshop.at', '$2y$10$IO4DIPMzORQgxQz0cYi/1.RtEWeG5AYK90PsrAq1xKVINXDsyoivG', NULL, 'user', '2009-12-22 16:45:04', NULL, NULL, NULL),
+(2, 'shop', 'user2', 'shopuser2', 'shopuser2@onlineshop.at', '$2y$10$IO4DIPMzORQgxQz0cYi/1.RtEWeG5AYK90PsrAq1xKVINXDsyoivG', 'bdb678676c3f52999829403edc381449', 'user', '2009-12-28 15:52:43', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
