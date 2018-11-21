@@ -11,7 +11,7 @@ Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/med
 
 # Basic usage
 
-* ``cd <code>`` which should be accessible for your web server.
+* ``cd <path-to-code>`` which should be accessible for your web server.
 * ``sudo git clone https://github.com/Digital-Media/onlineshop.git onlineshop``
 * ``cd onlineshop``
 * ``composer install``
@@ -19,9 +19,9 @@ Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/med
 # Used technologies and requirements
 
 The exercises have been developed with [Vagrant](https://www.vagrantup.com/) and [Virtualbox](https://www.virtualbox.org/). 
-A [Vagrantfile](https://github.com/Digital-Media/hgb-phpdev) with the installation of the web environment with MariaDB is hosted on GitHub.
-A [second Vagrantfile](https://github.com/Digital-Media/hgb-dbdev) with the installation of the web environment and the 
-search engine ElasticSearch and Redis is hosted on GitHub as an alternative environment.
+A [Vagrantfile](https://github.com/Digital-Media/fhooe-webdev) with the installation of the web environment with MariaDB is hosted on GitHub.
+Furthermore the installation contains the 
+search engine ElasticSearch and Redis as Session Store or Store for monolog.
 But *OnlineShop* can be installed in a different environment as well. 
 [XAMPP](https://www.apachefriends.org/de/download.html) or [MAMP](https://www.mamp.info/de/)
 
@@ -37,21 +37,25 @@ PHP 7.1 is required to run the examples.
 * [TWIG Templates](https://twig.symfony.com/)
 * [CSS3 Flexbox](https://www.w3.org/TR/css-flexbox-1/)
 * [PHP-FIG PSR: PHP Standards Recommendations](https://www.php-fig.org/psr/)
-* [Monlog PSR3](https://github.com/Seldaek/monolog)
-* [ElasticSearch PHP Client 6.0](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/index.html) (second Vagrantfile)
-* [Redis PHP Client](https://packagist.org/packages/predis/predis) (second Vagrantfile)
+* [Monolog PSR3](https://github.com/Seldaek/monolog)
+* [ElasticSearch PHP Client 6.0](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/index.html)
+* [Redis PHP Client](https://packagist.org/packages/predis/predis)
 
 
 The files, that have to be completed for the exercises, are stored in the subdirectory ``src/exercises``.
 All other files are for reference.
 
 PHP Errors are logged in
-* ``onlineshop/src/onlineshop.log``
-* the Apache error log ``tail -f /var/log/apache2/error.log`` or wherever it resides in your installation.
+* ``onlineshop/src/Utilities/onlineshop.log``
+* or the Apache error log ``tail -f /var/log/apache2/error.log`` or wherever it resides in your installation.
 
 Sample solutions from a solution folder can be copied into the exercise templates with the class src/Solution/Solution.php.
 The git repository, that holds the solution is private. If necessary ``TODO``s will guide you, what has to be done for completing the exercises. 
-For a better understanding read the PHPDoc comments, that describe the classes, methods, properties and constants and have a look at the provided example src/DBAccess/DBDemo.php. You can use ``onlineshop/src/onlinshop.sql`` to restore the MariaDB database provided for the excercises.
+For a better understanding read the PHPDoc comments, that describe the classes, methods, properties and constants 
+and have a look at the provided examples in ``src/DBAccess/`` especially at ``DBDemo.php`` 
+and ``DBAccess`` for queries against MariaDB. 
+You can use ``onlineshop/src/onlinshop.sql`` to restore the MariaDB database provided for the exercises.
+You can use ``onlineshop/src/ESCreateIndex.sh`` to restore the ElasticSearch Index provided for the exercises.
 
 For example the following line is replaced with the content of <solutionfolder>/index/construct.inc.php:  
     
@@ -80,7 +84,7 @@ Folder | Description
 ``src/DBAccess`` | Classes implemented for *OnlineShop*, including the class DBDemo, that shows how to use [NormForm](https://github.com/Digital-Media/normform), DBAccess - a wrapper class for PDO to access MariaDB,  and LogWriter - a class that uses monolog for logging. DBAjaxDemo demonstrates how to use AJAX with Normform. ESearchDemo demonstrates the usage of ElasticSearch. RedisDemo demonstrates the usage of Redis.
 ``src/exercises`` | Classes to be implemented for *OnlineShop* exercises.
 ``src/Solution`` | The class Solution.php copies sample solutions to the marked lines in the exercises. CreateSolution.php and RestoreBackup.php do this in a scripted version, to demonstrate differences of OO PHP and scripted PHP.
-``src/Utilities`` | The Trait Utilities provides static helper methods, that can be used in any context. The class LogWriter initializes monolog logging and provides methods to write personalized log files to ``onlineshop/src/Utilities/onlineshop.log`` according to PSR3.
+``src/Utilities`` | The Trait ``Utilities`` provides static helper methods, that can be used in any context. The class LogWriter initializes monolog logging and provides methods to write personalized log files to ``onlineshop/src/Utilities/onlineshop.log`` according to PSR3.
 ``vendor`` | Third party libraries installed with composer: [NormForm](https://github.com/Digital-Media/normform), [TWIG Templates](https://twig.symfony.com/), Javascript Libraries ...
 
 A basic class diagramm for OnlineShop (built with http://www.umlet.com/umletino/
