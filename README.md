@@ -87,6 +87,4 @@ Folder | Description
 ``src/Utilities`` | The Trait ``Utilities`` provides static helper methods, that can be used in any context. The class LogWriter initializes monolog logging and provides methods to write personalized log files to ``onlineshop/src/Utilities/onlineshop.log`` according to PSR3.
 ``vendor`` | Third party libraries installed with composer: [NormForm](https://github.com/Digital-Media/normform), [TWIG Templates](https://twig.symfony.com/), Javascript Libraries ...
 
-A basic class diagramm for OnlineShop (built with http://www.umlet.com/umletino/
-
-![OnlineShop Klassendiagramm](src/KlassenDiagrammOnlineShop.png "OnlineShop Class Diagram")
+A basic class diagramm for OnlineShop (built with http://www.umlet.com/umletino/ can be found at src/onlineshop.
