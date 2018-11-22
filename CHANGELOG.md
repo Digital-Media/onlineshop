@@ -8,11 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Issue with ClassDiagramOnlineShop.png
 
-## [4.0.2] - 2018-11-22
+## [4.0.2] - 2018-10-17
 ### Fixed
 - AJAX Issue
 
-## [4.0.1] - 2018-11-22
+## [4.0.1] - 2018-10-15
 ### Fixed
 - Problem with line endings
 
