@@ -272,6 +272,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 --
 -- Daten für Tabelle `user`
+-- Passwords have been generated with password_hash() of PHP. Both passwords are "geheim"
 --
 
 INSERT INTO `user` (`iduser`, `first_name`, `last_name`, `nick_name`, `email`, `password`, `active`, `role`, `date_registered`, `phone`, `mobile`, `fax`) VALUES
