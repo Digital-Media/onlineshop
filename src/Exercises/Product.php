@@ -29,7 +29,7 @@ final class Product extends AbstractNormForm
     const LONGDESC = "longdesc";
 
     /**
-     * @var string $dbAccess  Database handler for access to database
+     * @var object $dbAccess  Database handler for access to database
      */
     private $dbAccess;
 

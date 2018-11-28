@@ -38,7 +38,7 @@ final class MyCart extends AbstractNormForm
     const PID = 'pid';
 
     /**
-     * @var string $dbAccess  Database handler for access to database
+     * @var object $dbAccess  Database handler for access to database
      */
     private $dbAccess;
 

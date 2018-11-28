@@ -39,12 +39,12 @@ final class Search extends AbstractNormForm
     const SEARCH = 'search';
 
     /**
-     * @var string $dbAccess  Database handler for access to database
+     * @var object $dbAccess  Database handler for access to database
      */
     private $dbAccess;
 
     /**
-     * @var string $esClient  Client to access ElasticSearch
+     * @var object $esClient  Client to access ElasticSearch
      */
     private $esClient;
 

@@ -35,7 +35,7 @@ final class Register extends AbstractNormForm
     const PASSWORD_REPEAT = "password_repeat";
 
     /**
-     * @var string $dbAccess  Database handler for access to database
+     * @var object $dbAccess  Database handler for access to database
      */
     private $dbAccess;
 
