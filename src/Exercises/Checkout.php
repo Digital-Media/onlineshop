@@ -31,7 +31,7 @@ final class Checkout extends AbstractNormForm
     use Utilities;
 
     /**
-     * @var string $dbAccess  Database handler for access to database
+     * @var object $dbAccess  Database handler for access to database
      */
     private $dbAccess;
 

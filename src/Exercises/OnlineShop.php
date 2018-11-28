@@ -43,7 +43,7 @@ final class OnlineShop extends AbstractNormForm
     const ROW_COUNT = 2;
 
     /**
-     * @var string $dbAccess Database handler for access to database
+     * @var object $dbAccess Database handler for access to database
      */
     private $dbAccess;
 
