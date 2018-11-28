@@ -97,6 +97,8 @@ final class Login extends AbstractNormForm
      */
     private function authenticateUser(): bool
     {
+        //TODO use $old_session_id=1 for testing purpose as provided in onlineshop.cart
+        //TODO when the whole shop works, you can switch to session_id()
         //##%%
         $_SESSION['iduser']=1;
         $_SESSION[IS_LOGGED_IN] = Utilities::generateLoginHash();
