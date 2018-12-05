@@ -199,10 +199,10 @@ class DBAccess
      *
      * In case of an error the SQL statement is dumped with debugDumpParams()
      *
-     * @return array Plain array with the result set of the SQL statement, if result is only a single row.
+     * @return array|bool Plain array with the result set of the SQL statement, if result is only a single row.
      * @throws DatabaseException passes a comprehensive error page built from PDOExeption $e to PHP exception handling
      */
-    public function fetchSingle():array
+    public function fetchSingle()
     {
         try {
             return $this->stmt->fetch();
