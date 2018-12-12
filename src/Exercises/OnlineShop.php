@@ -47,6 +47,8 @@ final class OnlineShop extends AbstractNormForm
      */
     private $dbAccess;
 
+    //%%index/constants
+
     /**
      * Shop constructor.
      *
