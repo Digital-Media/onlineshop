@@ -29,12 +29,12 @@ final class OnlineShop extends AbstractNormForm
      * Constants for a HTML attribute in <input name='ptype' id='ptype' ... >, <label for='ptype' ... >
      * --> $_POST[self::PTYPE] and GET-Parameters, sent by links
      *
-     * @var string START Key for $_GET and $_SESSION entry to define the starting entry of the displayed product list
+     * @var string OFFSET Key for $_GET and $_SESSION entry to define the starting entry of the displayed product list
      *                   @see src/basetemplates/pagination.html.twig
      * @var string SORT Key for $_GET- and $_SESSION entry, that defines the sort order
      * @var string SEARCH Key for $_POST entry for the search field
      * @var string PID Key for $_POST entry of the AddToCart button
-     * @var string DISPLAY defines the number of entries displayed per page
+     * @var string ROW_COUNT defines the number of entries displayed per page
      */
     const OFFSET = 'offset';
     const SORT = 'sort';
