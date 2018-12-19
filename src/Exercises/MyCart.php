@@ -77,7 +77,7 @@ final class MyCart extends AbstractNormForm
     }
 
     /**
-     * Validates the user input sent via AJAX
+     * Validates the user input
      *
      * Error messages are stored in the array $errorMessages[].
      *
