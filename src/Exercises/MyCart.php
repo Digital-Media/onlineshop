@@ -35,7 +35,9 @@ final class MyCart extends AbstractNormForm
      * --> $_POST[self::PTYPE]
      */
     const QUANTITY = 'quantity';
-    const PID = 'pid';
+
+    //%%mycart/constants
+
 
     /**
      * @var object $dbAccess  Database handler for access to database
