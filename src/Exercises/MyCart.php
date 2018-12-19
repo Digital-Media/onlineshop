@@ -119,14 +119,9 @@ final class MyCart extends AbstractNormForm
     /**
      * Validates if the pid in $_POST['pid'] exists in onlineshop.product.
      *
-     * Use Utilities::isInt to avoid requests to the database with values, that are not integer, which can't exist.
-     *
-     * $_POST['pid'] is an array, but only a array with one entry is valid, because each button AddToCart can
-     * send only one pid. More entries in the array indicate, that someone manipulated the request.
-     *
      * Each key in $_POST['pid'] is tested against onlineshop.product, if it exists, to avoid forced browsing.
      *
-     * @param string $pid onlineshop.product.idproduct, that has to exist
+     * @param string $pid onlineshop.product.idproduct, that has to exist and to be active
      *
      * @return bool false, if pid is not a positiv integer or 0, or doesn't exist in the database.
      * @throws DatabaseException
