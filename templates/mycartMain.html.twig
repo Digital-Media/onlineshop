@@ -22,7 +22,7 @@
                             {% for key, value in pageArray %}
                                 <tr>
                                     <td>{{ pageArray[key]['product_idproduct'] }}</td>
-                                    <td>{{ pageArray[key]['product_namey'] }}</td>
+                                    <td>{{ pageArray[key]['product_name'] }}</td>
                                     <td>{{ pageArray[key]['price'] }}</td>
                                     <td>
                                         <input id="{{ pageArray[key]['product_idproduct'] }}" type="number" name="quantity[{{ pageArray[key]['product_idproduct'] }}]" min="0" max="10" value="{{ pageArray[key]['quantity'] }}" class="input_qty"/>
