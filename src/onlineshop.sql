@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `cart` (
   `product_idproduct` bigint NOT NULL,
   `product_name` varchar(100) NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `quantity` decimal(10,2) NOT NULL,
+  `quantity` INT NOT NULL,
   PRIMARY KEY (`session_id`,`product_idproduct`)
 ) ENGINE=MEMORY DEFAULT CHARSET=utf8;
 
