@@ -41,22 +41,7 @@ final class MyCart extends AbstractNormForm
      * @var object $dbAccess  Database handler for access to database
      */
     private $dbAccess;
-
-    /**
-     * @var string $delete_array  array to store the pids to delete from onlineshop.cart to demonstrate
-     *                            reuse of prepared statements. prepare once execute many times in deleteFromCart()
-     */
-    /*--
-    private $delete_array;
-    //*/
-    /**
-     * @var string $update_array  array to store the pids to update in onlineshop.cart to demonstrate
-     *                            reuse of prepared statements. prepare once execute many times in updateCart()
-     */
-    /*--
-    private $update_array;
-    //*/
-
+    
     /**
      * MyCart constructor.
      *
