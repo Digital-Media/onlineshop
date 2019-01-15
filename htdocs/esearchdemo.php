@@ -37,4 +37,5 @@ try {
     $dbdemo->normForm();
 } catch (Exception $e) {
     echo "<h2>Something went wrong</h2>";
+    echo $e;
 }
