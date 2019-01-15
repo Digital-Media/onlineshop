@@ -32,5 +32,6 @@ try {
     $search = new Search($view);
     $search->normForm();
 } catch (Exception $e) {
+    echo $e;
     echo "<h2>Something went wrong</h2>";
 }
