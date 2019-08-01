@@ -38,7 +38,7 @@ PHP 7.1 is required to run the examples.
 * [CSS3 Flexbox](https://www.w3.org/TR/css-flexbox-1/)
 * [PHP-FIG PSR: PHP Standards Recommendations](https://www.php-fig.org/psr/)
 * [Monolog PSR3](https://github.com/Seldaek/monolog)
-* [ElasticSearch PHP Client 6.0](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/index.html)
+* [ElasticSearch PHP Client](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/index.html)
 * [Redis PHP Client](https://packagist.org/packages/predis/predis)
 
 
