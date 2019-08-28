@@ -12,7 +12,7 @@ Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/med
 # Basic usage
 
 * ``cd <path-to-code>`` which should be accessible for your web server.
-* ``sudo git clone https://github.com/Digital-Media/onlineshop.git onlineshop``
+* ``git clone https://github.com/Digital-Media/onlineshop.git onlineshop``
 * ``cd onlineshop``
 * ``composer install``
 
