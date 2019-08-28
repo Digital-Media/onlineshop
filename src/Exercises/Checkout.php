@@ -130,7 +130,7 @@ final class Checkout extends AbstractNormForm
      */
     private function totalSum(): string
     {
-        //%%checkout/totalsum
+        //%%checkout/totalSum
     }
 
     /**
