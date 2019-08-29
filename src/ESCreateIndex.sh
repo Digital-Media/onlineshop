@@ -21,8 +21,8 @@ curl -X PUT "localhost:9200/product" -H 'Content-Type: application/json' -d'
             },
             "german_dict_decompounder":{
                "type":"dictionary_decompounder",
-               "word_list_path":"analysis/dictionary-de.txt",
-               "hyphenation_patterns_path":"analysis/de_DR.xml",
+               "word_list_path":"/etc/elasticsearch/analysis/dictionary-de.txt",
+               "hyphenation_patterns_path":"/etc/elasticsearch/analysis/de_DR.xml",
                "only_longest_match":true,
                "min_subword_size":3
             },
@@ -90,7 +90,6 @@ curl -X PUT "localhost:9200/product" -H 'Content-Type: application/json' -d'
       }
    },
    "mappings":{
-      "_doc":{
          "properties":{
             "product_name":{
                "type":"text",
@@ -113,7 +112,6 @@ curl -X PUT "localhost:9200/product" -H 'Content-Type: application/json' -d'
             }
          }
       }
-   }
 }
 '
 
