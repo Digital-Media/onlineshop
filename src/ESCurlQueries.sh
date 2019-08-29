@@ -233,7 +233,6 @@ curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: app
 curl -X PUT "localhost:9200/my_index" -H 'Content-Type: application/json' -d'
 {
   "mappings": {
-    "_doc": {
       "properties": {
         "text": {
           "type": "text",
@@ -245,7 +244,6 @@ curl -X PUT "localhost:9200/my_index" -H 'Content-Type: application/json' -d'
           }
         }
       }
-    }
   }
 }
 '
