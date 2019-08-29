@@ -1,6 +1,6 @@
 .idea
 cache
-templates_c
+templates_c/*
 vendor
 sami.phar
 src/Utilities/onlineshop.log
