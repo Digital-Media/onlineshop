@@ -19,13 +19,14 @@ Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/med
 # Used technologies and requirements
 
 The exercises have been developed with [Vagrant](https://www.vagrantup.com/) and [Virtualbox](https://www.virtualbox.org/). 
-A [Vagrantfile](https://github.com/Digital-Media/fhooe-webdev) with the installation of the web environment with MariaDB is hosted on GitHub.
+A [Vagrantfile](https://github.com/Digital-Media/fhooe-webdev) with the installation of the web environment with MariaDB is hosted on GitHub. 
 Furthermore the installation contains the 
 search engine ElasticSearch and Redis as Session Store or Store for monolog.
+If you use the Vagrantfile you can use v4.x. Starting v5.0.0 ElasticSearch 7.3.1 is used for the Search-Examples. We will provide a Vagrantfile for this later. A the moment we offer a VMWare VDI mit a Horizon Client to our Students.
 But *OnlineShop* can be installed in a different environment as well. 
 [XAMPP](https://www.apachefriends.org/de/download.html) or [MAMP](https://www.mamp.info/de/)
 
-PHP 7.1 is required to run the examples.
+PHP 7.1 is required to run the examples. But they are tested up to PHP 7.3.
 
 * [HTML5](https://www.w3.org/TR/html5/)
 * [CSS3](https://www.w3.org/Style/CSS/specs)
