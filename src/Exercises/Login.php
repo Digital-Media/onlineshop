@@ -16,12 +16,12 @@ use Utilities\Utilities;
  *
  * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package OnlineShop
- * @version 2.0.2
+ * @version 5.0.2
  */
 final class Login extends AbstractNormForm
 {
-    // make trait Utilities accessible via $this->
     use Utilities;
+
     /**
      * Constants for a HTML attribute in <input name='ptype' id='ptype' ... >, <label for='ptype' ... >
      * --> $_POST[self::PTYPE]
@@ -80,7 +80,7 @@ final class Login extends AbstractNormForm
      */
     protected function business(): void
     {
-        isset($_SESSION[REDIRECT]) ? $redirect= $_SESSION['redirect'] : $redirect='index.php';
+        isset($_SESSION[REDIRECT]) ? $redirect = $_SESSION['redirect'] : $redirect = 'index.php';
         // replace the following line with a solution for AJAX, when using AJAX
         View::redirectTo($redirect);
     }
@@ -100,10 +100,10 @@ final class Login extends AbstractNormForm
         //TODO use $old_session_id=1 for testing purpose as provided in onlineshop.cart
         //TODO when the whole shop works, you can switch to session_id()
         //##%%
-        $_SESSION['iduser']=1;
+        $_SESSION['iduser'] = 1;
         $_SESSION[IS_LOGGED_IN] = Utilities::generateLoginHash();
-        $_SESSION['first_name']='John';
-        $_SESSION['last_name']='Doe';
+        $_SESSION['first_name'] = 'John';
+        $_SESSION['last_name'] = 'Doe';
         return true;
         //#%#%
         //%%login/authenticateUser
