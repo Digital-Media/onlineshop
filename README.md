@@ -11,10 +11,13 @@ Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/med
 
 # Basic usage
 
+* If Using VMware Horizon: Login to VMware Image ``mkdir public_html``
+* Indepent of installation type
 * ``cd <path-to-code>`` which should be accessible for your web server.
 * ``git clone https://github.com/Digital-Media/onlineshop.git onlineshop``
 * ``cd onlineshop``
 * ``composer install``
+* Depending on your installation you may have to give write-acces for your webserver to special directories (onlineshop/templates_c, onlincshop/src/Utilities). ``chmod -R 777 onlineshop`` will suffice for a developmentenvironment
 
 # Used technologies and requirements
 
