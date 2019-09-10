@@ -28,8 +28,8 @@ use Utilities\Utilities;
  */
 final class MyCart extends AbstractNormForm
 {
-    // make trait Utilities accessible via $this->
     use Utilities;
+
     /**
      * Constant for a HTML attribute in <input name='ptype' id='ptype' ... >, <label for='ptype' ... >
      * --> $_POST[self::PTYPE]

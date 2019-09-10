@@ -16,7 +16,7 @@ use PDO;
  *
  * @author Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package OnlineShop
- * @version 2.0.2
+ * @version 5.0.2
  */
 final class Register extends AbstractNormForm
 {

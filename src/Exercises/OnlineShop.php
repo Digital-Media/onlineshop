@@ -23,8 +23,8 @@ use PDO;
  */
 final class OnlineShop extends AbstractNormForm
 {
-    // make trait Utilities accessible via $this->
     use Utilities;
+
     /**
      * Constants for a HTML attribute in <input name='ptype' id='ptype' ... >, <label for='ptype' ... >
      * --> $_POST[self::PTYPE] and GET-Parameters, sent by links
@@ -194,7 +194,7 @@ final class OnlineShop extends AbstractNormForm
     private function setSearch(): string
     {
         if (isset($_POST[self::SEARCH])) {
-            $_SESSION[self::SEARCH]=$_POST[self::SEARCH];
+            $_SESSION[self::SEARCH] = $_POST[self::SEARCH];
             return $_POST[self::SEARCH];
         } elseif (!isset($_POST[self::SEARCH]) && isset($_SESSION[self::SEARCH])) {
             return $_SESSION[self::SEARCH];
@@ -216,24 +216,24 @@ final class OnlineShop extends AbstractNormForm
     private function setOrderBy(): string
     {
         if (isset($_GET[self::SORT]) && in_array($_GET[self::SORT], array('pid','pname','price'))) {
-            $_SESSION[self::SORT]=$_GET[self::SORT];
-            $sort=$_GET[self::SORT];
+            $_SESSION[self::SORT] = $_GET[self::SORT];
+            $sort = $_GET[self::SORT];
         } elseif (!isset($_GET[self::SORT]) && isset($_SESSION[self::SORT])) {
-            $sort=$_SESSION[self::SORT];
+            $sort = $_SESSION[self::SORT];
         } else {
-            $sort='pid';
+            $sort = 'pid';
         }
         switch ($sort) {
-        case 'pid':
-            return 'idproduct ASC';
-        case 'pname':
-            return 'product_name ASC';
+            case 'pid':
+                return 'idproduct ASC';
+            case 'pname':
+                return 'product_name ASC';
                 break;
-        case 'price':
-            return 'price ASC';
+            case 'price':
+                return 'price ASC';
                 break;
-        default:
-            return 'idproduct ASC';
+            default:
+                return 'idproduct ASC';
         }
     }
 
@@ -279,10 +279,12 @@ final class OnlineShop extends AbstractNormForm
         //%%index/setPaginationParameters
         $this->currentView->setParameter(new GenericParameter("page_count", $page_count));
 
-        if (isset($_GET[self::OFFSET]) && Utilities::isInt($_GET[self::OFFSET]) && ($_GET[self::OFFSET] < $product_count)) {
-            $offset= (int) $_GET[self::OFFSET];
+        if (isset($_GET[self::OFFSET]) &&
+            Utilities::isInt($_GET[self::OFFSET]) &&
+            ($_GET[self::OFFSET] < $product_count)) {
+            $offset = (int) $_GET[self::OFFSET];
         } else {
-            $offset=0;
+            $offset = 0;
         }
         $offset_previous = $offset - self::ROW_COUNT;
         $this->currentView->setParameter(new GenericParameter("offset_previous", $offset_previous));

@@ -16,18 +16,18 @@ use Utilities\Utilities;
  * See /src/onlineshop.sql for a insert command to create some.
  *
  * With the "Buy Now" button a order is finalized.
- * The entries in the table onlineshop.cart, that belong to the current session, are transfered to onlineshop.order_item.
+ * The entries in the table onlineshop.cart, that belong to the current session,
+ * are transfered to onlineshop.order_item.
  * An entry, that stands for the whole order, is created in onlineshop.orders.
  * One order in onlineshop.cart is connected via equal entries in the field onlineshop.cart.session_id.
  * On success a status message is set and all entries in onlineshop.cart are deleted.
  *
  * @author  Martin Harrer <martin.harrer@fh-hagenberg.at>
  * @package OnlineShop
- * @version 2.0.2
+ * @version 5.0.2
  */
 final class Checkout extends AbstractNormForm
 {
-    // make trait Utilities accessible via $this->
     use Utilities;
 
     /**
@@ -72,7 +72,8 @@ final class Checkout extends AbstractNormForm
     /**
      * The data from onlineshop.cart are transfered to onlineshop.orders and onlineshop.order_item
      *
-     * Because the order is split up into two tables, the inserts have to be enclose by "begin transaction" and "commit".
+     * Because the order is split up into two tables,
+     * the inserts have to be enclose by "begin transaction" and "commit".
      * If both inserts succeed, the order is deleted from onlineshop.cart.
      * The delete also has to be within "begin transaction" and "commit".
      * After the commit a statusMessage is set to an appropriate value, stating that the order was successful.
