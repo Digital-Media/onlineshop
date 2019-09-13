@@ -8,7 +8,7 @@
     ],
     "type": "project",
     "require": {
-        "php": "^7.1",
+        "php": "^7.3",
         "fhooe/normform": "^1.0",
         "elasticsearch/elasticsearch": "~6.0",
         "monolog/monolog": "^1.23",
