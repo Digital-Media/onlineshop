@@ -33,7 +33,6 @@ PHP 7.1 is required to run the examples. But they are tested up to PHP 7.3.
 
 * [HTML5](https://www.w3.org/TR/html5/)
 * [CSS3](https://www.w3.org/Style/CSS/specs)
-* [PHP 7.0](http://php.net/manual/en/migration70.new-features.php)
 * [PHP 7.1](http://php.net/manual/en/migration71.new-features.php)
 * [MariaDB](https://mariadb.org/)
 * [PDO-Datenbankschnittstelle](http://php.net/manual/en/book.pdo.php)
