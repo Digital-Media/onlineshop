@@ -92,6 +92,13 @@ final class Login extends AbstractNormForm
      * session_regenerate_id() is used for that.
      * After that the corresponding session_ids in onlineshop.cart have to be replaced with the new one.
      *
+     * In the table onlineshop.user the BCRYPT algorithm ist used for hashing onlineshop.user.password.
+     * This was done in PHP 5.6 with password_hash(... , PASSWORD_DEFAULT)
+     *
+     * With PHP 7.3 the challange is to bring older hashes to the strongest hash, that is actually available.
+     * Therefore password_get_info(), password_verify() and password_needs_rehash() are used to store
+     *  a argon2 hash in onlineshop.user.password, after a successful login to the old password hash.
+     *
      * @return bool true, if email+password match a row in onlineshop.user, else false.
      * @throws DatabaseException
      */
@@ -112,7 +119,7 @@ final class Login extends AbstractNormForm
     /**
      * Replaces the session_ids in onlineshop.cart after the session has been regenerated after a successful login.
      *
-     * @return bool true, wenn das update gut gegangen ist. false, wenn das nicht der Fall ist.
+     * @return bool true, if update succeeds - false, if it fails.
      * @throws DatabaseException
      */
     private function updateCart($old_session_id, $new_session_id)
@@ -122,4 +129,5 @@ final class Login extends AbstractNormForm
         //#%#%
         //%%login/updateCart
     }
+        //%%login/updateUser
 }
