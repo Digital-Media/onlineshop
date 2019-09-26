@@ -17,7 +17,7 @@ Visit us at https://www.fh-ooe.at/en/hagenberg-campus/studiengaenge/bachelor/med
 * ``git clone https://github.com/Digital-Media/onlineshop.git onlineshop``
 * ``cd onlineshop``
 * ``composer install``
-* Depending on your installation you may have to give write-acces for your webserver to special directories (onlineshop/templates_c, onlincshop/src/Utilities). ``chmod -R 777 onlineshop`` will suffice for a developmentenvironment
+* Depending on your installation you may have to give write-acces for your webserver to special directories (onlineshop/templates_c, onlincshop/src/Utilities). ``chmod -R 777 onlineshop`` will suffice for a development environment
 
 # Used technologies and requirements
 
