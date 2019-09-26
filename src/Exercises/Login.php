@@ -95,9 +95,9 @@ final class Login extends AbstractNormForm
      * In the table onlineshop.user the BCRYPT algorithm ist used for hashing onlineshop.user.password.
      * This was done in PHP 5.6 with password_hash(... , PASSWORD_DEFAULT)
      *
-     * With PHP 7.3 the challange is to bring older hashes to the strongest hash, that is currently available.
+     * With PHP 7.3 the challenge is to update older hashes to the strongest hash, that is currently available.
      * Therefore password_get_info(), password_verify() and password_needs_rehash() are used to store
-     *  a argon2 hash in onlineshop.user.password, after a successful login to the old password hash.
+     * an argon2 hash in onlineshop.user.password, after a successful login against the old password hash.
      *
      * @return bool true, if email+password match a row in onlineshop.user, else false.
      * @throws DatabaseException
