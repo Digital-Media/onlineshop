@@ -54,7 +54,7 @@ trait Utilities
      */
     public static function isPhone(string $string): bool
     {
-        $phone_pattern = "/^(?!(?:\d*-){5,})(?!(?:\d* ){5,})\+?[\d- ]+$/";
+        $phone_pattern = "/^(?!(?:\d*-){5,})(?!(?:\d* ){5,})\+?[\d\- ]+$/";
         if (preg_match($phone_pattern, $string)) {
             return true;
         } else {
