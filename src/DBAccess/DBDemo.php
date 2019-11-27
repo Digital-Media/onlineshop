@@ -157,7 +157,7 @@ SQL;
         $this->dbAccess->prepareQuery($query, true);
         // The next two lines do the same due to "use Utilities" at the begin of the class declaration
         // $params = array(':ptype' => Utilities::sanitizeFilter($_POST[self::PTYPE]));
-        $params = array(':ptype' => $this->sanitizeFilter($_POST[self::PTYPE]));
+        $params = array(':ptype' => $_POST[self::PTYPE]);
         $this->dbAccess->executeStmt($params);
     }
 }
