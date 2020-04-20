@@ -174,26 +174,6 @@ CREATE TABLE IF NOT EXISTS `payment` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pentest`
---
-
-DROP TABLE IF EXISTS `pentest`;
-CREATE TABLE IF NOT EXISTS `pentest` (
-  `idpentest` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(100) NOT NULL,
-  `password` char(128) NOT NULL,
-  `active` char(128) DEFAULT NULL,
-  `role` char(5) NOT NULL DEFAULT 'user',
-  `pt_varchar1` varchar(255) NULL,
-  `pt_varchar2` varchar(255) NULL,
-  `pt_int` int NULL,
-  `pt_decimal` decimal(10,2) NULL,
-  PRIMARY KEY (`idpentest`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Tabellenstruktur für Tabelle `product`
 --
 
