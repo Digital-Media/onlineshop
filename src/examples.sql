@@ -50,7 +50,7 @@ create table description (
 alter table product
     add constraint desc_fk
         foreign key (did)
-        references description (did);
+            references description (did);
 
 -- -------- 1 : 1 recursive relationship --------------
 
@@ -105,7 +105,8 @@ alter table teammembers
             references employee2 (pid);
 
 alter table teammembers
-    add constraint primary key (teamleader, teammember);
+    add constraint
+        primary key (teamleader, teammember);
 
 -- ------- fan trap 0NF ---------------------
 
@@ -144,10 +145,10 @@ create table division1 (
 ) engine=InnoDB default charset=utf8 auto_increment=1;
 
 create table branch1 (
-                       idbranch bigint unsigned not null auto_increment,
-                       division_iddivision bigint unsigned not null,
-                       primary key (idbranch),
-                       key (division_iddivision)
+    idbranch bigint unsigned not null auto_increment,
+    division_iddivision bigint unsigned not null,
+    primary key (idbranch),
+    key (division_iddivision)
 ) engine=InnoDB default charset=utf8 auto_increment=1;
 
 alter table staff1
@@ -195,22 +196,22 @@ WHERE  s.division_iddivision = d.iddivision
 -- ------ FKs can be null, to demonstrate chasm trap -------------------------------
 
 create table division2 (
-                           iddivision bigint unsigned not null auto_increment,
-                           primary key (iddivision)
+    iddivision bigint unsigned not null auto_increment,
+    primary key (iddivision)
 ) engine=InnoDB default charset=utf8 auto_increment=1;
 
 create table branch2 (
-                        idbranch bigint unsigned not null auto_increment,
-                        division_iddivision bigint unsigned null,
-                        primary key (idbranch),
-                        key (division_iddivision)
+    idbranch bigint unsigned not null auto_increment,
+    division_iddivision bigint unsigned null,
+    primary key (idbranch),
+    key (division_iddivision)
 ) engine=InnoDB default charset=utf8 auto_increment=1;
 
 create table staff2 (
-                       idstaff bigint unsigned not null auto_increment,
-                       branch_idbranch bigint unsigned null,
-                       primary key (idstaff),
-                       key (branch_idbranch)
+    idstaff bigint unsigned not null auto_increment,
+    branch_idbranch bigint unsigned null,
+    primary key (idstaff),
+    key (branch_idbranch)
 ) engine=InnoDB default charset=utf8 auto_increment=1;
 
 alter table staff2
@@ -263,32 +264,30 @@ WHERE
 -- ------ fan trap 3NF with additional FK to shortcut staff and division --------
 
 create table division3 (
-                           iddivision bigint unsigned not null auto_increment,
-                           primary key (iddivision)
+    iddivision bigint unsigned not null auto_increment,
+    primary key (iddivision)
 ) engine=InnoDB default charset=utf8 auto_increment=1;
 
 create table branch3 (
-                         idbranch bigint unsigned not null auto_increment,
-                         division_iddivision bigint unsigned not null,
-                         primary key (idbranch),
-                         key (division_iddivision)
+    idbranch bigint unsigned not null auto_increment,
+    division_iddivision bigint unsigned not null,
+    primary key (idbranch),
+    key (division_iddivision)
 ) engine=InnoDB default charset=utf8 auto_increment=1;
 
 create table staff3 (
-                        idstaff bigint unsigned not null auto_increment,
-                        branch_idbranch bigint unsigned not null,
-                        division_iddivision bigint unsigned not null,
-                        primary key (idstaff),
-                        key (branch_idbranch),
-                        key (division_iddivision)
+    idstaff bigint unsigned not null auto_increment,
+    branch_idbranch bigint unsigned not null,
+    division_iddivision bigint unsigned not null,
+    primary key (idstaff),
+    key (branch_idbranch),
+    key (division_iddivision)
 ) engine=InnoDB default charset=utf8 auto_increment=1;
 
 alter table staff3
     add constraint br_fk2
         foreign key (branch_idbranch)
-            references branch3 (idbranch);
-
-alter table staff3
+            references branch3 (idbranch),
     add constraint div_fk4
         foreign key (division_iddivision)
             references division3 (iddivision);
