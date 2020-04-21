@@ -17,7 +17,7 @@ USE alternate_er;
 CREATE TABLE payment1 (
     idpayment bigint unsigned NOT NULL AUTO_INCREMENT,
     user_iduser bigint unsigned NOT NULL,
-    owner_name varchar(50) NULL,
+    owner_name varchar(50) NOT NULL,
     card_number varchar(50) NULL,
     expiration_date varchar(50) NULL,
     bank_code varchar(50) NULL,
@@ -35,10 +35,10 @@ CREATE TABLE payment1 (
 CREATE TABLE credit_card2 (
     idpayment bigint unsigned NOT NULL AUTO_INCREMENT,
     user_iduser bigint unsigned NOT NULL,
-    owner_name varchar(50) NULL,
-    card_number varchar(50) NULL,
-    expiration_date varchar(50) NULL,
-    pin varchar(50) NULL,
+    owner_name varchar(50) NOT NULL,
+    card_number varchar(50) NOT NULL,
+    expiration_date varchar(50) NOT NULL,
+    pin varchar(50) NOT NULL,
     PRIMARY KEY (idpayment),
     KEY (user_iduser)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
@@ -46,11 +46,11 @@ CREATE TABLE credit_card2 (
 CREATE TABLE bank_account2 (
     idpayment bigint unsigned NOT NULL AUTO_INCREMENT,
     user_iduser bigint unsigned NOT NULL,
-    owner_name varchar(50) NULL,
-    bank_code varchar(50) NULL,
-    account_number varchar(50) NULL,
-    bank_name varchar(50) NULL,
-    collection_authorisation varchar(50) NULL,
+    owner_name varchar(50) NOT NULL,
+    bank_code varchar(50) NOT NULL,
+    account_number varchar(50) NOT NULL,
+    bank_name varchar(50) NOT NULL,
+    collection_authorisation varchar(50) NOT NULL,
     PRIMARY KEY (idpayment),
     KEY (user_iduser)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
@@ -58,10 +58,10 @@ CREATE TABLE bank_account2 (
 CREATE TABLE mobile_payment2 (
     idpayment bigint unsigned NOT NULL AUTO_INCREMENT,
     user_iduser bigint unsigned NOT NULL,
-    owner_name varchar(50) NULL,
-    provider_name varchar(50) NULL,
-    customer_number varchar(50) NULL,
-    mobile_number varchar(50) NULL,
+    owner_name varchar(50) NOT NULL,
+    provider_name varchar(50) NOT NULL,
+    customer_number varchar(50) NOT NULL,
+    mobile_number varchar(50) NOT NULL,
     PRIMARY KEY (idpayment),
     KEY (user_iduser)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
@@ -71,25 +71,25 @@ CREATE TABLE mobile_payment2 (
 CREATE TABLE payment3 (
     idpayment bigint unsigned NOT NULL AUTO_INCREMENT,
     user_iduser bigint unsigned NOT NULL,
-    owner_name varchar(50) NULL,
+    owner_name varchar(50) NOT NULL,
     PRIMARY KEY (idpayment),
     KEY (user_iduser)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE credit_card3 (
     idpayment bigint unsigned NOT NULL AUTO_INCREMENT,
-    card_number varchar(50) NULL,
-    expiration_date varchar(50) NULL,
-    pin varchar(50) NULL,
+    card_number varchar(50) NOT NULL,
+    expiration_date varchar(50) NOT NULL,
+    pin varchar(50) NOT NULL,
     PRIMARY KEY (idpayment)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE bank_account3 (
     idpayment bigint unsigned NOT NULL AUTO_INCREMENT,
-    bank_code varchar(50) NULL,
-    account_number varchar(50) NULL,
-    bank_name varchar(50) NULL,
-    collection_authorisation varchar(50) NULL,
+    bank_code varchar(50) NOT NULL,
+    account_number varchar(50) NOT NULL,
+    bank_name varchar(50) NOT NULL,
+    collection_authorisation varchar(50) NOT NULL,
     PRIMARY KEY (idpayment)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
@@ -122,8 +122,8 @@ CREATE TABLE payment4 (
     idpayment bigint unsigned NOT NULL AUTO_INCREMENT,
     user_iduser bigint unsigned NOT NULL,
     owner_name varchar(50) NOT NULL,
-    paymentcol1_key varchar(50) NULL,
-    paymentcol1_value varchar(50) NULL,
+    paymentcol1_key varchar(50) NOT NULL,
+    paymentcol1_value varchar(50) NOT NULL,
     paymentcol2_key varchar(50) NULL,
     paymentcol2_value varchar(50) NULL,
     paymentcol3_key varchar(50) NULL,
@@ -139,7 +139,7 @@ CREATE TABLE payment4 (
 CREATE TABLE payment5 (
     idpayment bigint unsigned NOT NULL AUTO_INCREMENT,
     user_iduser bigint unsigned NOT NULL,
-    owner_name varchar(50) NULL,
+    owner_name varchar(50) NOT NULL,
     PRIMARY KEY (idpayment),
     KEY (user_iduser)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
@@ -148,7 +148,7 @@ CREATE TABLE attribute_types (
     idattribute_types bigint unsigned NOT NULL AUTO_INCREMENT,
     attribute_name  varchar(255) NOT NULL,
     attribute_property  varchar(255) NOT NULL,
-    attr_is_null bool,
+    attr_is_null bool NOT NULL,
     PRIMARY KEY (idattribute_types)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
@@ -156,37 +156,37 @@ CREATE TABLE attributes (
     idattributes bigint unsigned NOT NULL AUTO_INCREMENT,
     idattribute_types bigint unsigned NOT NULL,
     idpayment bigint unsigned NOT NULL,
-    PRIMARY KEY (idattribute_types, idpayment),
+    PRIMARY KEY (idattributes),
     KEY (idattribute_types),
     KEY (idpayment)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE data_int (
-    idattributes bigint unsigned NOT NULL AUTO_INCREMENT,
+    idattributes bigint unsigned NOT NULL,
     attribute_value bigint NOT NULL,
     PRIMARY KEY (idattributes)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE data_varchar (
-    idattributes bigint unsigned NOT NULL AUTO_INCREMENT,
+    idattributes bigint unsigned NOT NULL,
     attribute_value varchar(255) NOT NULL,
     PRIMARY KEY (idattributes)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE data_decimal (
-    idattributes bigint unsigned NOT NULL AUTO_INCREMENT,
-    attribute_value decimal(10,2) NULL,
+    idattributes bigint unsigned NOT NULL,
+    attribute_value decimal(10,2) NOT NULL,
     PRIMARY KEY (idattributes)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE data_date (
-    idattributes bigint unsigned NOT NULL AUTO_INCREMENT,
+    idattributes bigint unsigned NOT NULL,
     attribute_value date NOT NULL,
     PRIMARY KEY (idattributes)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE data_text (
-    idattributes bigint unsigned NOT NULL AUTO_INCREMENT,
+    idattributes bigint unsigned NOT NULL,
     attribute_value text NOT NULL,
     PRIMARY KEY (idattributes)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
