@@ -1,3 +1,4 @@
-\. /var/www/html/code/onlineshop/src/onlineshop.sql
+-- \. /var/www/html/code/onlineshop/src/onlineshop.sql
 use onlineshop;
--- 2
+-- 1
+
