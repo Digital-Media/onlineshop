@@ -61,7 +61,7 @@ final class DBDemo extends AbstractNormForm
     public function __construct(View $defaultView)
     {
         parent::__construct($defaultView);
-        $this->logWriter = LogWriter::getInstance();
+        //$this->logWriter = LogWriter::getInstance();
         $this->dbAccess = new DBAccess(DSN, DB_USER, DB_PWD, DB_NAMES, DB_COLLATION);
         $this->currentView->setParameter(new GenericParameter("pageArray", $this->fillPageArray()));
         // uncomment following lines to demonstrate error_handling
@@ -96,8 +96,8 @@ final class DBDemo extends AbstractNormForm
         }
         $this->currentView->setParameter(new GenericParameter("errorMessages", $this->errorMessages));
         // Debugging without echo, print_r, var_dump
-        $this->logWriter->logInfo("Sent POST Array");
-        $this->logWriter->logDebug($_POST);
+        //$this->logWriter->logInfo("Sent POST Array");
+        //$this->logWriter->logDebug($_POST);
         return (count($this->errorMessages) === 0);
     }
 
