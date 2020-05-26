@@ -21,7 +21,7 @@ use PDO;
  * XSS is prevented by the TWIG template engine, that escapes variables sent to a template automatically.
  *
  * This page lists the content of onlineshop.product and of ES indizes to demonstrate different search option
- * of MariaDB and Elasticsearch. For index definitions @see src/onlineshop.sql and src/ESCreateIndizes.sh
+ * of MariaDB and Elasticsearch. For index definitions @see src/onlineshop.Data_MDB_ES and src/ESCreateIndizes.sh
  *
  * Class ESearchDemo is final, because it makes no sense to derive a class from it.
  *

@@ -13,7 +13,7 @@ use Utilities\Utilities;
  *
  * In case your index.php doesn't work,
  * you can create dummy entries in onlineshop.cart with SessionID=1 for testing purpose.
- * See /src/onlineshop.sql for a insert command to create some.
+ * See /src/onlineshop.Data_MDB_ES for a insert command to create some.
  *
  * The cart is filled with the AddToCart button on the page index.php.
  * With the button "Update Cart" on the page mycart.php a user can alter the quantity for each product and store it in
