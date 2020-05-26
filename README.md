@@ -29,7 +29,7 @@ If you use the Vagrantfile you can use v4.x. Starting v5.0.0 ElasticSearch 7.3.1
 But *OnlineShop* can be installed in a different environment as well. 
 [XAMPP](https://www.apachefriends.org/de/download.html) or [MAMP](https://www.mamp.info/de/)
 
-PHP 7.1 is required to run the examples. But they are tested up to PHP 7.3.
+PHP 7.1 is required to run the examples. But they are tested up to PHP 7.4.
 
 * [HTML5](https://www.w3.org/TR/html5/)
 * [CSS3](https://www.w3.org/Style/CSS/specs)
@@ -45,7 +45,7 @@ PHP 7.1 is required to run the examples. But they are tested up to PHP 7.3.
 * [Redis PHP Client](https://packagist.org/packages/predis/predis)
 
 
-The files, that have to be completed for the exercises, are stored in the subdirectory ``src/exercises``.
+The files, that have to be completed for the exercises, are stored in the subdirectory ``src/Exercises``.
 All other files are for reference.
 
 PHP Errors are logged in
@@ -57,8 +57,8 @@ The git repository, that holds the solution is private. If necessary ``TODO``s w
 For a better understanding read the PHPDoc comments, that describe the classes, methods, properties and constants 
 and have a look at the provided examples in ``src/DBAccess/`` especially at ``DBDemo.php`` 
 and ``DBAccess`` for queries against MariaDB. 
-You can use ``onlineshop/src/onlinshop.sql`` to restore the MariaDB database provided for the exercises.
-You can use ``onlineshop/src/ESCreateIndex.sh`` to restore the ElasticSearch Index provided for the exercises.
+You can use ``onlineshop/src/Data_MDB_ES/onlinshop.sql`` to restore the MariaDB database provided for the exercises.
+You can use ``onlineshop/src/Data_MDB_ES/ESCreateIndex.sh`` to restore the ElasticSearch Index provided for the exercises.
 
 For example the following line is replaced with the content of <solutionfolder>/index/construct.inc.php:  
     
@@ -89,5 +89,3 @@ Folder | Description
 ``src/Solution`` | The class Solution.php copies sample solutions to the marked lines in the exercises. CreateSolution.php and RestoreBackup.php do this in a scripted version, to demonstrate differences of OO PHP and scripted PHP.
 ``src/Utilities`` | The Trait ``Utilities`` provides static helper methods, that can be used in any context. The class LogWriter initializes monolog logging and provides methods to write personalized log files to ``onlineshop/src/Utilities/onlineshop.log`` according to PSR3.
 ``vendor`` | Third party libraries installed with composer: [NormForm](https://github.com/Digital-Media/normform), [TWIG Templates](https://twig.symfony.com/), Javascript Libraries ...
-
-A basic class diagramm for OnlineShop (built with http://www.umlet.com/umletino/ can be found at onlineshop/src/ClassDiagramOnlineShop.png.
