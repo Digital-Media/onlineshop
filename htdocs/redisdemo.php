@@ -8,7 +8,7 @@ require "../vendor/autoload.php";
 require_once '../src/defines.inc.php';
 
 ini_set("session.save_handler", "redis");
-ini_set("session.save_path", "tcp://127.0.0.1:6379?auth=geheim");
+ini_set("session.save_path", "tcp://localhost:6379?auth=geheim");
 session_start();
 
 use DBAccess\RedisDemo;
@@ -34,5 +34,6 @@ try {
     $redisdemo = new RedisDemo($view);
     $redisdemo->normForm();
 } catch (Exception $e) {
-    echo "<h2>Something went wrong</h2>";
+    echo $e->getMessage() . " on line " . $e->getLine() . " in file " . $e->getFile();
+    echo "<br> Type StartRedis.sh to start Redis. To stop Redis type StopRedis.sh";
 }

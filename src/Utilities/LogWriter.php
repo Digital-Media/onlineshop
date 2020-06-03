@@ -38,7 +38,7 @@ class LogWriter
             if ($which_handler === 'files') {
                 $handler = new StreamHandler(__DIR__.'/onlineshop.log', $level);
             } else {
-                $handler = new RedisHandler(new Predis\Client(['scheme' => 'tcp', 'host' => '192.168.7.7', 'port' => 6379, 'password' => 'geheim']), "logs", $level, true, $cap);
+                $handler = new RedisHandler(new Predis\Client(['scheme' => 'tcp', 'host' => 'localhost', 'port' => 6379, 'password' => 'geheim']), "logs", $level, true, $cap);
             }
             $handler->setFormatter(new LineFormatter("[%datetime%] %level_name%: %message% \n"));
             // next Line is for usage with WebProcessor
