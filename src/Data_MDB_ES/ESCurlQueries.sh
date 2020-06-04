@@ -177,7 +177,8 @@ curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: app
 {
   "analyzer": "german_stemmer",
   "text": "Schöne Reihenhäuser im Grünen mit Blick in die Berge erreichbar über eine Straße"
-}'
+}
+'
 
 # Using the analyzer german defined during index creation for a test text.
 curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
