@@ -453,7 +453,7 @@ SQL;
             "size" => 2,
             "body" => $json
         ];
-        //var_dump($params['body']);
+        var_dump($params['body']);
         // Debugging without echo, print_r, var_dump
         $this->logWriter->logInfo($params['body']);
         $result = $this->esClient->search($params);
@@ -471,14 +471,13 @@ SQL;
     private function fillPageArrayPaging(array $result): array
     {
 
-        $id[1]= intval($result['hits']['hits'][0]['_id']);
-        $id[2]= isset($result['hits']['hits'][1]['_id']) ? intval($result['hits']['hits'][1]['_id']) : 0;
+        $id[1]= 1; #intval($result['hits']['hits'][0]['_id']);
+        $id[2]= 2; #isset($result['hits']['hits'][1]['_id']) ? intval($result['hits']['hits'][1]['_id']) : 0;
         $query = <<<SQL
                 SELECT idproduct, product_name, price
                 FROM product
                 WHERE idproduct in (:id1, :id2)
 SQL;
-
         $this->dbAccess->prepareQuery($query, true);
         $this->dbAccess->bindValueByType(':id1', $id[1], PDO::PARAM_INT);
         $this->dbAccess->bindValueByType(':id2', $id[2], PDO::PARAM_INT);

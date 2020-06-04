@@ -33,8 +33,8 @@ try {
         ]
     );
     // Creates a new Product object and triggers the NormForm process
-    $dbdemo = new ESearchDemo($view);
-    $dbdemo->normForm();
+    $esdemo = new ESearchDemo($view);
+    $esdemo->normForm();
 } catch (Exception $e) {
     echo "<h2>Something went wrong</h2>";
     echo $e;

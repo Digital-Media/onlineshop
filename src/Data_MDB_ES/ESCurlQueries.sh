@@ -61,7 +61,8 @@ curl -X GET "localhost:9200/product/_search" -H 'Content-Type: application/json'
             }
         }
     }
-}}'
+}
+'
 
 # Matching search terms in product_name with standard analyzer
 curl -X GET "localhost:9200/product/_search" -H 'Content-Type: application/json' -d'
@@ -73,7 +74,8 @@ curl -X GET "localhost:9200/product/_search" -H 'Content-Type: application/json'
             }
         }
     }
-}}'
+}
+'
 
 # Matching search terms in product_name with standard analyzer
 curl -X GET "localhost:9200/product/_search" -H 'Content-Type: application/json' -d'
@@ -85,7 +87,8 @@ curl -X GET "localhost:9200/product/_search" -H 'Content-Type: application/json'
             }
         }
     }
-}}'
+}
+'
 
 # Using pagination for the matching results
 curl -X GET "localhost:9200/product/_search" -H 'Content-Type: application/json' -d'
@@ -98,7 +101,9 @@ curl -X GET "localhost:9200/product/_search" -H 'Content-Type: application/json'
             }
         }
     }
-}}'
+}
+'
+
 curl -X GET "localhost:9200/product/_search" -H 'Content-Type: application/json' -d'
 {
   "from" : 2, "size" : 2,
@@ -109,7 +114,8 @@ curl -X GET "localhost:9200/product/_search" -H 'Content-Type: application/json'
             }
         }
     }
-}}'
+}
+'
 
 # Testing different analyzers of the index
 
@@ -136,18 +142,21 @@ curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: app
   "text": "Reihenhäuser"
 }
 '
+
 curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
 {
   "field": "short_description",
   "text": "Häuser mit Mehrwert"
 }
 '
+
 curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
 {
   "field": "long_description",
   "text": "Schöne Reihenhäuser im Grünen mit Blick in die Berge"
 }
 '
+
 curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
 {
   "field": "search",
@@ -168,8 +177,7 @@ curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: app
 {
   "analyzer": "german_stemmer",
   "text": "Schöne Reihenhäuser im Grünen mit Blick in die Berge erreichbar über eine Straße"
-}
-'
+}'
 
 # Using the analyzer german defined during index creation for a test text.
 curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
@@ -209,8 +217,7 @@ curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: app
 {
   "analyzer": "german_decompound",
   "text": "Almgrundstueck an einem Bergsee"
-}
-'
+}'
 
 # Using the analyzer german_dict_decompound, that uses a intelligent algorithm to decompound words
 # before they are compared to a german dictionary

@@ -35,5 +35,5 @@ try {
     $redisdemo->normForm();
 } catch (Exception $e) {
     echo $e->getMessage() . " on line " . $e->getLine() . " in file " . $e->getFile();
-    echo "<br> Type StartRedis.sh to start Redis. To stop Redis type StopRedis.sh";
+    echo "<br> Type StartRedis.sh to start Redis. To stop Redis type StopRedis.sh/opt";
 }
