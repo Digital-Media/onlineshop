@@ -218,7 +218,8 @@ curl -X POST "localhost:9200/product/_analyze?pretty=true" -H 'Content-Type: app
 {
   "analyzer": "german_decompound",
   "text": "Almgrundstueck an einem Bergsee"
-}'
+}
+'
 
 # Using the analyzer german_dict_decompound, that uses a intelligent algorithm to decompound words
 # before they are compared to a german dictionary
@@ -260,6 +261,7 @@ curl -X PUT "localhost:9200/my_index" -H 'Content-Type: application/json' -d'
 curl -X PUT "localhost:9200/my_index/_doc/1" -H 'Content-Type: application/json' -d'
   { "text": "Schöne neue Häuser" }
 '
+
 curl -X PUT "localhost:9200/my_index/_doc/2" -H 'Content-Type: application/json' -d'
   { "text": "Schönes neues Haus" }
 '
@@ -268,6 +270,7 @@ curl -X PUT "localhost:9200/my_index/_doc/2" -H 'Content-Type: application/json'
 curl -X POST "localhost:9200/my_index/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
   { "text": "Schöne neue Häuser" }
 '
+
 curl -X POST "localhost:9200/my_index/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
   { "text": "Schönes neues Haus" }
 '
@@ -279,6 +282,7 @@ curl -X POST "localhost:9200/my_index/_analyze?pretty=true" -H 'Content-Type: ap
     "text": "Schöne neue Häuser"
   }
 '
+
 curl -X POST "localhost:9200/my_index/_analyze?pretty=true" -H 'Content-Type: application/json' -d'
   {
     "analyzer" : "german" ,
@@ -349,6 +353,7 @@ curl -X GET "localhost:9200/my_index/_search?pretty=true" -H 'Content-Type: appl
   "explain": true
 }
 '
+
 # Index settings
 curl -XGET "http://localhost:9200/my_index/_settings?pretty=true"
 
